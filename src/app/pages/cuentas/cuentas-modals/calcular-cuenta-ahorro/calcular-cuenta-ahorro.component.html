@@ -1,0 +1,161 @@
+<p-toast></p-toast>
+<br>
+<form [formGroup]="formCalculoInteres" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+
+        <div class="md:col-span-1">
+            <label for="tipoPlan" class="block mb-1 text-sm">Plan</label>
+            <p-autoComplete id="tipoPlan" class="w-full" name="tipoPlan" formControlName="tipoPlan"
+                [suggestions]="filteredElementTipoPlan" (completeMethod)="filterElementCompleteTipoPlan($event)"
+                optionLabel="nombre" emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.nombre}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message *ngIf="formCalculoInteres.get('tipoPlan')?.dirty && !formCalculoInteres.get('tipoPlan')?.valid"
+                severity="error" variant="simple" size="small">
+                No es una opción
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="tipoAjuste" class="block mb-1 text-sm">Tipo de Ajuste</label>
+            <p-autoComplete id="tipoAjuste" class="w-full" name="tipoAjuste" formControlName="tipoAjuste"
+                [suggestions]="filteredElementTipoAjuste" (onSelect)="onSelectTipoAjuste($event)"
+                (completeMethod)="filterElementCompleteTipoAjuste($event)" optionLabel="desElemento"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.desElemento}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message
+                *ngIf="formCalculoInteres.get('tipoAjuste')?.dirty && !formCalculoInteres.get('tipoAjuste')?.valid"
+                severity="error" variant="simple" size="small">
+                No es una opción
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="codigoComercio" class="block mb-1 text-sm">Comercio</label>
+            <p-autoComplete id="codigoComercio" class="w-full" name="codigoComercio" formControlName="codigoComercio"
+                [suggestions]="filteredElementCodigoComercio"
+                (completeMethod)="filterElementCodigoComercio($event, codigosComercio)" optionLabel="valCadLargo"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.valCadLargo}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message
+                *ngIf="formCalculoInteres.get('codigoComercio')?.dirty && !formCalculoInteres.get('codigoComercio')?.valid"
+                severity="error" variant="simple" size="small">
+                No es una opción
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="importe" class="block mb-1 text-sm">Importe</label>
+            <p-inputNumber id="importe" class="w-full" name="importe" formControlName="importe" locale="en-US" minFractionDigits="2"
+                maxFractionDigits="2" [inputStyle]="{'text-align': 'right'}" autocomplete="off"
+                appendTo="body"></p-inputNumber>
+            <p-message *ngIf="formCalculoInteres.get('importe')?.dirty && !formCalculoInteres.get('importe')?.valid"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="referencia" class="block mb-1 text-sm">Referencia</label>
+            <input id="referencia" class="w-full" type="text" autocomplete="off" pInputText name="referencia"
+                formControlName="referencia" autocomplete="on" placeholder="">
+            <p-message
+                *ngIf="formCalculoInteres.get('referencia')?.dirty && !formCalculoInteres.get('referencia')?.valid"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="glosa" class="block mb-1 text-sm">Glosa</label>
+            <input id="glosa" class="w-full" type="text" autocomplete="off" pInputText name="glosa" formControlName="glosa"
+                autocomplete="on" placeholder="">
+            <p-message *ngIf="formCalculoInteres.get('glosa')?.dirty && !formCalculoInteres.get('glosa')?.valid"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaAjuste" class="block mb-1 text-sm">Fecha Ajuste</label>
+
+            <p-datepicker id="fechaAjuste" class="w-full" (ngModelChange)="getTasas($event)" yearRange="2020:2050"
+                formControlName="fechaAjuste" dateFormat="dd/mm/yy" [showIcon]="true" inputId="monthpicker"
+                [showOnFocus]="false" />
+            <p-message
+                *ngIf="formCalculoInteres.get('fechaAjuste')?.dirty && (formCalculoInteres.get('fechaAjuste')?.hasError('required') || formCalculoInteres.get('fechaAjuste')?.hasError('fechaInvalida'))"
+                severity="error" variant="simple" size="small">
+                Fecha inválida. Usa formato dd/mm/yyyy
+            </p-message>            
+        </div>
+        <div class="md:col-span-2">
+            <label for="nombreArchivo" class="block mb-1 text-sm">Archivo sustento (pdf, jpeg, png, xlsx)</label>
+            <input class="w-full" id="nombreArchivo" type="text" autocomplete="off" pInputText name="nombreArchivo"
+                formControlName="nombreArchivo" readonly>
+            <p-message
+                *ngIf="formCalculoInteres.get('nombreArchivo')?.dirty && !formCalculoInteres.get('nombreArchivo')?.valid"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-3">
+            <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
+                maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+                invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
+                (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
+                chooseLabel="Seleccionar archivo"></p-fileUpload>
+        </div>
+        <div class="md:col-span-3">
+            <p-table [value]="historialTasas" resizableColumns="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th scope="col" style="text-align: center;">Incio Vigencia</th>
+                        <th scope="col" style="text-align: center;">Fin Vigencia</th>
+                        <th scope="col" style="text-align: right;">Tasa</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr style="cursor: pointer;">
+                        <td style="text-align: center;">{{rowData.fechaInicio | date:'dd/MM/yyyy'}} </td>
+                        <td style="text-align: center;">{{rowData.fechaFin | date:'dd/MM/yyyy'}} </td>
+                        <td style="text-align: right;">{{rowData.tasa | number:'1.2-2'}} </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+            <p-button label="  Calcular Ajuste" [disabled]="formCalculoInteres.invalid" (click)="particionarTasas()" (keydown.enter)="particionarTasas()" (keydown)="particionarTasas()" />
+        </div>
+        <div class="md:col-span-3">
+            <p-table [value]="particiones" resizableColumns="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 30%;" scope="col">Transacción</th>
+                        <th style="width: 30%;" scope="col">Glosa</th>
+                        <th style="width: 13.3%;" scope="col" style="text-align: right;">Monto</th>
+                        <th style="width: 13.3%;" scope="col" style="text-align: right;">tasa</th>
+                        <th style="width: 13.3%;" scope="col" style="text-align: right;">Importe</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr style="cursor: pointer;">
+                        <td style="width: 30%;">{{rowData.transaccion}}</td>
+                        <td style="width: 30%;">{{rowData.glosa}}</td>
+                        <td style="width: 13.3%;" style="text-align: right;">{{rowData.monto |
+                            number:'1.2-2'}}</td>
+                        <td style="width: 13.3%;" style="text-align: right;">{{rowData.tasa |
+                            number:'1.2-2'}}</td>
+                        <td style="width: 13.3%;" style="text-align: right;">{{rowData.importe |
+                            number:'1.2-2'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+            <p-button label="Aceptar" [disabled]="formCalculoInteres.invalid || !particiones.length || disableButton"
+                (click)="ajustarSaldo()" (keydown.enter)="ajustarSaldo()"/>
+        </div>
+    </div>
+</form>

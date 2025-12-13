@@ -1,0 +1,319 @@
+<p-toast></p-toast>
+<br>
+<form novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1">
+            <span class="font-bold">Titular: </span> <span class="secondary-text">{{datosCliente.nombresApellidos}}</span>
+        </div>
+        <div class="md:col-span-2">
+            <span class="font-bold">DNI: </span> <span class="secondary-text">{{datosCliente.numDocIdentidad}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Cuenta: </span> <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
+        </div>
+        <div class="md:col-span-2">
+            <span class="font-bold">Celular: </span> <span class="secondary-text">{{datosCliente.telefono}}</span>
+        </div>
+        <p-divider  class="md:col-span-3" />
+        <div class="md:col-span-1" *ngIf="showCardContainer">
+            <span class="font-bold">Tarjeta:&nbsp; </span> <span class="secondary-text">{{datosMovimiento.tarjeta}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Importe:&nbsp; </span> <span class="secondary-text">{{datosMovimiento.monto !== null ?
+                (datosMovimiento.monto | currency:"&nbsp;":"symbol":'1.2-2') : '---'}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Moneda:&nbsp; </span> <span class="secondary-text">{{tipoCuenta?.moneda}}</span>
+        </div>
+
+        <div class="md:col-span-1">
+            <span class="font-bold">ID movimiento:&nbsp; </span> <span class="secondary-text">{{datosMovimiento.idMovimiento}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Tipo: &nbsp;</span> <span class="secondary-text">{{datosMovimiento.tipoMovimiento}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha de proceso: &nbsp;</span> <span class="secondary-text">{{datosMovimiento.fechaContable
+                | date:'dd/MM/yyyy'}}</span>
+        </div>
+        <div class="md:col-span-3">
+            <p-tabs value="0">
+                <p-tablist>
+                    <p-tab value="0">Datos Principales</p-tab>
+                    <p-tab value="1">Datos Adicionales</p-tab>
+                    <p-tab value="2" [disabled]='disableTabAjuste'>Datos Ajuste</p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel value="0">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-3">
+                                <h4><u>Transacción</u></h4>
+                            </div>                            
+                            <div class="md:col-span-1">
+                                <span class="font-bold" *ngIf="datosMovimiento.transaccionRequest">Referencia: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements ?
+                                    datosMovimiento.transaccionRequest.dataElements.retrievalReferenceNumber :
+                                    datosMovimiento.referenciaExterna}}</span>
+                            </div>
+                            <div class="md:col-span-2">
+                                <span class="font-bold">Descripción: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.descripcion}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Cod. de descripción: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.codigoClasificacionTransaccion}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Nro. de autorización: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.codigoAutorizacion}}</span>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="datosMovimiento.transaccionRequest">
+                                <span class="font-bold">Método de entrada: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.posEntryMode}}</span>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="datosMovimiento.transaccionRequest">
+                                <span class="font-bold">ECI: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.posConditionCode}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Reversado: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.reversado ? 'Sí' : 'No'}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Fecha de movimiento: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.fechaTransaccion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                            </div>
+                            <div class="md:col-span-3">
+                                <h4 *ngIf="datosMovimiento.transaccionRequest"><u>Datos del comercio</u></h4>
+                            </div>                            
+                            <div *ngIf="datosMovimiento.transaccionRequest">
+                                <div class="md:col-span-1">
+                                    <span class="font-bold">Código: &nbsp;</span>
+                                    <span
+                                        class="secondary-text">{{datosMovimiento.transaccionRequest.commerceCode}}</span>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <span class="font-bold">Nombre: &nbsp;</span>
+                                    <span
+                                        class="secondary-text">{{datosMovimiento.transaccionRequest.commerceName}}</span>
+                                </div>
+                                <div class="md:col-span-1">
+                                    <span class="font-bold">Actividad: &nbsp;</span>
+                                    <span
+                                        class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.merchantType}}</span>
+                                </div>
+                            </div>
+                            <div class="md:col-span-3">
+                                <h4 *ngIf="datosMovimiento.transaccionRequest"><u>Localización</u></h4>
+                            </div>                            
+                            <div *ngIf="datosMovimiento.transaccionRequest">
+                                <div class="md:col-span-1">
+                                    <span class="font-bold">País: &nbsp;</span>
+                                    <span
+                                        class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.countryCode}}
+                                        {{datosMovimiento.transaccionRequest.dataElements?.country}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabpanel>
+                    <p-tabpanel value="1">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4"
+                            *ngIf="datosRequest && datosRequest.originAccountData">
+                            <h4><u>Cuenta origen</u></h4>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Nombres: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.principalName}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Tipo de documento: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.documentType}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de documento: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.identDocNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de cuenta: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.accountNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de celular: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.cellPhoneNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Banco: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.originAccountData.entityCode}}</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4"
+                            *ngIf="datosRequest && datosRequest.destinationAccountData">
+                            <h4><u>Cuenta destino</u></h4>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Nombres: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.principalName}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Tipo de documento: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.destinationAccountData.documentType}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de documento: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.identDocNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de cuenta: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.accountNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Número de celular: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.cellPhoneNumber}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Banco: &nbsp;</span>
+                                <span class="secondary-text">{{datosRequest.destinationAccountData.entityCode}}</span>
+                            </div>
+
+                        </div>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-3">
+                                <h4><u>Información adicional</u></h4>
+                            </div>                            
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Importe: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.monto !== null ? (datosMovimiento.monto |
+                                    currency:"&nbsp;":"symbol":'1.2-2') : '---'}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Moneda: &nbsp;</span> <span class="secondary-text">{{tipoCuenta?.codigoMoneda}}
+                                    {{tipoCuenta?.moneda}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Importe divisa: &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.monto !== null ? (datosMovimiento.monto |
+                                    currency:"&nbsp;":"symbol":'1.2-2') : '---'}}</span>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="datosMovimiento.transaccionRequest">
+                                <span class="font-bold">Moneda divisa: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.transactionCurrencyCode}}
+                                    {{datosMovimiento.transaccionRequest.dataElements?.currency}}</span>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="datosMovimiento.transaccionRequest">
+                                <span class="font-bold">Cambio aplicado: &nbsp;</span>
+                                <span
+                                    class="secondary-text">{{datosMovimiento.transaccionRequest.dataElements?.conversionRate
+                                    | currency:"&nbsp;":"symbol":'1.4-4'}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Red &nbsp;</span>
+                                <span class="secondary-text">{{datosMovimiento.descOrigenInt}}</span>
+                            </div>
+                        </div>
+                    </p-tabpanel>
+                    <p-tabpanel value="2">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Id Ajuste: &nbsp;</span> 
+                                <span class="secondary-text">{{datosAjuste?.idAjuste}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Nro. Operación: &nbsp;</span> 
+                                <span class="secondary-text">{{datosAjuste?.nroOperacion}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Tipo Ajuste: &nbsp;</span> 
+                                <span class="secondary-text">{{datosAjuste?.descTipoAjuste}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Fecha: &nbsp;</span> 
+                                <span class="secondary-text">{{datosAjuste?.fechaAjuste |
+                                    date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Código Comercio: &nbsp;</span> <span
+                                    class="secondary-text">{{datosAjuste?.codigoComercio}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Archivo: &nbsp;</span> 
+                                <span class="secondary-text">
+                                    <a href="javascript:void(0)" matTooltipPosition="above" matTooltip="Ver archivo"
+                                        *ngIf="datosAjuste?.archivoSustento"
+                                        (click)="openDialogVerArchivo(datosAjuste?.archivoSustento, datosAjuste?.nombreSustento)">{{datosAjuste?.nombreSustento}}
+                                        <em class="pi pi-download"></em></a>
+
+                                </span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Referencia &nbsp;</span> <span
+                                    class="secondary-text">{{datosAjuste?.referencia}}</span>
+                            </div>
+                            <div class="md:col-span-2">
+                                <span class="font-bold">Glosa: &nbsp;</span> <span class="secondary-text">{{datosAjuste?.glosa}}</span>
+                            </div>
+                            <div class="md:col-span-1">
+                                <span class="font-bold">Usuario Creación &nbsp;</span> <span
+                                    class="secondary-text">{{datosAjuste?.usuarioCreacion}}</span>
+                            </div>
+                            <div class="md:col-span-3" *ngIf="datosAjusteDetalle.length > 0">
+                                <h4><u>Detalle de ajuste</u></h4>
+                                <p-table [value]="datosAjusteDetalle">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="width: 20%; text-align: left;" scope="col">
+                                                Plan
+                                            </th>
+                                            <th style="width: 10%" scope="col">
+                                                Importe
+                                            </th>
+                                            <th style="width: 10%" scope="col">
+                                                Tasas
+                                            </th>
+                                            <th style="width: 35%; text-align: left;" scope="col">
+                                                Descripción
+                                            </th>
+                                            <th style="width: 15%; text-align: center;" scope="col">
+                                                Estado
+                                            </th>
+                                            <th style="width: 10%; text-align: center;" scope="col">
+                                                Usuario
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData>
+                                        <tr>
+                                            <td style="text-align: left;">{{ rowData.plan }}</td>
+                                            <td>{{ rowData.monto| number: "1.2-2" }}</td>
+                                            <td>{{ rowData.tasa | number: "1.2-2" }}</td>
+                                            <td style="text-align: left;">{{ rowData.descripcion }}</td>
+                                            <td style="text-align: center;">
+                                                <span *ngIf="rowData.estadoSolicitud == 1" class="p-tag p-tag-success"
+                                                    style="font-size: 12px;">{{ rowData.estadoSolicitudDescripcion
+                                                    }}</span>
+                                                <a *ngIf="rowData.estadoSolicitud != 1" href="javascript:void(0)"
+                                                    matTooltipPosition="above" matTooltip="Reintentar ajuste"
+                                                    (click)="reintentarAjuste(rowData.idCabeceraAjuste, rowData.idDetalleAjuste, rowData.request)">
+                                                    <span class="p-tag p-tag-danger" style="font-size: 12px;"> {{
+                                                        rowData.estadoSolicitudDescripcion }}</span>
+                                                </a>
+                                            </td>
+                                            <td>{{ rowData.usuario }}</td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </p-tabpanel>
+                </p-tabpanels>
+            </p-tabs>
+        </div>
+        <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+            <p-button label="Cerrar" />
+        </div>
+    </div>
+</form>

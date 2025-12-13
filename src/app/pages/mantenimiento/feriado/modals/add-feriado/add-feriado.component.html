@@ -1,0 +1,59 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <form [formGroup]="form">
+        <div class="md:col-span-1">
+            <label for="descripcion" class="block mb-1 text-sm">Descripcion</label>
+            <input id="descripcion" class="w-full" type="text" name="descripcion" formControlName="descripcion" pInputText
+                autocomplete="off">
+            <p-message *ngIf="form.get('descripcion')?.dirty && form.get('descripcion')?.errors?.['required']"
+                severity="error" text="Es requerido">
+            </p-message>
+
+            <p-message *ngIf="form.get('descripcion')?.dirty && form.get('descripcion')?.errors?.['maxlength']"
+                severity="error" text="Máximo 50 caracteres">
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="descripcionTipoFecha" class="block mb-1 text-sm">Seleccionar el tipo de fecha</label>
+            <p-select id="descripcionTipoFecha"  class="w-full" formControlName="tipoFecha" [options]="tipoFecha"
+                optionLabel="descripcionTipoFecha" optionValue="tipoFecha" placeholder="Seleccione tipo">
+            </p-select>
+            <p-message *ngIf="form.get('tipoFecha')?.dirty && form.get('tipoFecha')?.errors?.['required']"
+                severity="error" text="Es requerido">
+            </p-message>
+            <p-message *ngIf="form.get('tipoFecha')?.dirty && form.get('tipoFecha')?.errors?.['maxlength']"
+                severity="error" text="Máximo 50 caracteres">
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="fecha" class="block mb-1 text-sm">Fecha</label>
+            <p-datepicker id="fecha" class="w-full" formControlName="fecha" dateFormat="dd/mm/yy" yearRange="1940:2030"
+                appendTo="body" />
+            <p-message *ngIf="form.get('fecha')?.dirty && form.get('fecha')?.errors?.['required']" severity="error"
+                text="Es requerido">
+            </p-message>
+            <p-message *ngIf="form.get('fecha')?.dirty && form.get('fecha')?.errors?.['maxlength']" severity="error"
+                text="Máximo 50 caracteres">
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="isRepeat" class="block mb-1 text-sm">¿Repetir?</label>
+            <p-toggleswitch name="isRepeat" formControlName="isRepeat" />
+             <p-message *ngIf="form.get('isRepeat')?.dirty && form.get('isRepeat')?.errors?.['required']" severity="error"
+                text="Es requerido">
+            </p-message>
+            <p-message *ngIf="form.get('isRepeat')?.dirty && form.get('isRepeat')?.errors?.['maxlength']" severity="error"
+                text="Máximo 50 caracteres">
+            </p-message>
+            <p-inputSwitch name="isRepeat" formControlName="isRepeat"></p-inputSwitch>            
+        </div>
+        <div class="md:col-span-1 flex items-end justify-end  footer-modal">           
+            <p-button label="Cancelar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" />
+            <p-button label="Aceptar" [text]="true" severity="secondary" *ngIf="!config.data.isEdit"
+                [disabled]="!form.valid" (click)="addFeriado()" (keydown.enter)="addFeriado()"/>
+            <p-button label="Actualizar" [text]="true" severity="secondary" *ngIf="config.data.isEdit"
+                [disabled]="!form.valid" (click)="updateFeriado()" (keydown.enter)="updateFeriado()"/>
+        </div>
+    </form>
+</div>

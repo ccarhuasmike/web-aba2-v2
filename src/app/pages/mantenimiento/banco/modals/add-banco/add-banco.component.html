@@ -1,0 +1,21 @@
+<p-toast></p-toast>
+<br>
+
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <form [formGroup]="formAddBanco">
+        <div class="md:col-span-1">
+            <label for="codBanco" class="block mb-1 text-sm">Código Banco</label>
+            <input  id="codBanco" class="w-full" type="text" name="codBanco" formControlName="codBanco" pInputText autocomplete="off">
+        </div>
+        <div class="md:col-span-1">
+            <label for="nombreBanco" class="block mb-1 text-sm">Nombre Banco</label>
+            <input id="nombreBanco" class="w-full" type="text" name="nombreBanco" formControlName="nombreBanco" pInputText autocomplete="off">
+        </div>
+        <div class="md:col-span-1 flex items-end justify-end  footer-modal">     
+            <p-button label="Guardar" [text]="true" severity="secondary"  *ngIf="isUpdate" [disabled]="!formAddBanco.valid || disableButtonAdd" (click)="addBanco()" (keydown.enter)="addBanco()" (keydown)="addBanco()" />
+            <p-button label="Actualizar" [text]="true" severity="secondary" *ngIf="!isUpdate" [disabled]="disableButtonUpdate" (click)="updateBanco()" (keydown.enter)="updateBanco()" (keydown)="updateBanco()" />
+            <p-button label="Cerrar"  (click)="close()" (keydown.enter)="close()" (keydown)="close()" />
+        </div>
+    </form>
+</div>
+

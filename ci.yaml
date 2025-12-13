@@ -1,0 +1,28 @@
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: equipo-DevOps/Web
+      ref: web-security
+
+trigger:
+  - develop
+  - qa
+  - main
+
+pool:
+  name: Azure Pipelines
+  vmImage: 'ubuntu-latest'
+  demands:
+    - maven
+    - java
+  
+stages:
+- template: stages.yaml@templates
+  parameters:
+   NodeVersion: 20.19.3
+   ComandDev: run build
+   ComandQa: run build-qa
+   ComandProd: run build-prod
+   SourceFolderBuild: 'dist/fuse'
+   TargetFolderBuild: 'dist'

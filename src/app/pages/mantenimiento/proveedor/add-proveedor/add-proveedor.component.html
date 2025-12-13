@@ -1,0 +1,377 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <p-stepper [value]="activeStep">
+        <p-step-item [value]="1">
+            <p-step>¿Que tipo de proveedor deseas crear?</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                        <form [formGroup]="formTipoProveedor" novalidate>
+                            <div class="md:col-span-1">
+                                <label for="tipoProveedor" class="block mb-1 text-sm">Tipo proveedor(*)</label>
+                                <p-autoComplete id="tipoProveedor" class="w-full" name="tipoProveedor" formControlName="tipoProveedor"
+                                    [suggestions]="filteredElement"
+                                    (completeMethod)="filterElement($event, tipoProveedor)"
+                                    (ngModelChange)="changeModelTipoProveedor($event, 'proveedor')"
+                                    optionLabel="descripcion" emptyMessage='Sin resultados' [dropdown]="true"
+                                    appendTo="body">
+                                    <ng-template let-element>
+                                        <div>{{element.descripcion}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                        </form>
+                        <div class="md:col-span-1 flex items-end justify-end  footer-modal">
+                            <p-button label="Siguiente" [disabled]="!formTipoProveedor.valid"
+                                (click)="nextStep(formTipoProveedor,2)" (keydown.enter)="nextStep(formTipoProveedor,2)"/>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+        <p-step-item [value]="2">
+            <p-step [disabled]="!formInfoBasicaProveedor.valid">Informacion basica proveedor</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <form [formGroup]="formInfoBasicaProveedor" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="md:col-span-1">
+                                <label for="isPartner" class="block mb-1 text-sm">¿Registrara vinculación con otro
+                                    proveedor?&nbsp;</label>
+                                <p-toggleswitch id="isPartner" formControlName="isPartner" (onChange)="onChangeSwitch($event)" />
+                                <p-message severity="error" text="Debe activar esta opción"
+                                    *ngIf="formInfoBasicaProveedor.get('isPartner')?.dirty && formInfoBasicaProveedor.get('isPartner')?.hasError('requiredTrue')">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-2">
+                                <div *ngIf="formInfoBasicaProveedor.get('isPartner')?.value === true">
+                                    <label for="proveedor" class="block mb-1 text-sm">Proveedores</label>
+                                    <p-autoComplete class="w-full" name="proveedor" formControlName="proveedor"
+                                        [suggestions]="filteredElement"
+                                        (completeMethod)="filterElementProveedor($event, proveedores)"
+                                        (ngModelChange)="changeModelProveedor($event, 'proveedor')"
+                                        optionLabel="nombreGenerico" emptyMessage="Sin resultados" [dropdown]="true"
+                                        appendTo="body">
+                                        <ng-template let-element>
+                                            <div>{{ element.nombreGenerico }}</div>
+                                        </ng-template>
+                                    </p-autoComplete>
+                                    <p-message severity="error" text="Debe seleccionar un proveedor válido" *ngIf="
+                                    formInfoBasicaProveedor.get('proveedor')?.dirty &&
+                                    formInfoBasicaProveedor.get('proveedor')?.invalid
+                                    "></p-message>
+                                </div>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="tipoDocumento" class="block mb-1 text-sm">Tipo documento</label>
+                                <p-autoComplete class="w-full" name="tipoDocumento" formControlName="tipoDocumento"
+                                    [suggestions]="filteredElement"
+                                    (completeMethod)="filterElement($event, tipoDocumentoProveedor)"
+                                    (ngModelChange)="changeModelTipoDocumento($event, 'proveedor')"
+                                    optionLabel="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
+                                    appendTo="body">
+                                    <ng-template let-element>
+                                        <div>{{ element.descripcion }}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                                <p-message severity="error" text="Debe seleccionar un tipo de documento válido" *ngIf="
+                                    formInfoBasicaProveedor.get('tipoDocumento')?.invalid &&
+                                    (formInfoBasicaProveedor.get('tipoDocumento')?.dirty ||
+                                    formInfoBasicaProveedor.get('tipoDocumento')?.touched)
+                                ">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="nroDocumento" class="block mb-1 text-sm">Número documento</label>
+                                <input type="text" class="w-full" pInputText name="nroDocumento"
+                                    formControlName="nroDocumento" autocomplete="off"
+                                    [pKeyFilter]="nroCaracterProveedor === 12 ? 'alphanum' : 'pint'"
+                                    [style]="{ 'text-transform': 'uppercase' }" [attr.minlength]="nroCaracterProveedor"
+                                    [attr.maxlength]="nroCaracterProveedor" #valorDocumento />
+                                <small class="text-right block mt-1 text-color-secondary"
+                                    *ngIf="nroCaracterProveedor !== 0">
+                                    {{ valorDocumento.value.length || 0 }} / {{ nroCaracterProveedor }}
+                                </small>
+                                <p-message severity="error" text="Debe ingresar un número de documento válido" *ngIf="
+                                    formInfoBasicaProveedor.get('nroDocumento')?.invalid &&
+                                    (formInfoBasicaProveedor.get('nroDocumento')?.dirty ||
+                                    formInfoBasicaProveedor.get('nroDocumento')?.touched)
+                                ">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label for="idc"  class="block mb-1 text-sm">IDC</label>
+                                <input id="idc" type="text" class="w-full" autocomplete="off" pInputText name="idc"
+                                    pKeyFilter="pint" formControlName="idc">
+                            </div>
+                            <div class="md:col-span-1" *ngIf="formTipoProveedor.get('tipoProveedor')?.value?.id=='01'">
+                                <label for="primerNombre"  class="block mb-1 text-sm">Primer Nombre(*)</label>
+                                <input id="primerNombre" type="text" class="w-full" autocomplete="off" pInputText name="primerNombre"
+                                    formControlName="primerNombre">
+                                <p-message severity="error" text="Es requerido" *ngIf="
+                                    formInfoBasicaProveedor.get('primerNombre')?.dirty &&
+                                    formInfoBasicaProveedor.get('primerNombre')?.invalid
+                                    ">
+                                </p-message>
+
+                            </div>
+                            <div class="md:col-span-1" *ngIf="formTipoProveedor.get('tipoProveedor')?.value?.id=='01'">
+                                <label for="segundoNombre"  class="block mb-1 text-sm">Segundo Nombre</label>
+                                <input id="segundoNombre" type="text" class="w-full" autocomplete="off" pInputText name="segundoNombre"
+                                    formControlName="segundoNombre">
+                                <p-message severity="error" text="Es requerido" *ngIf="
+                                    formInfoBasicaProveedor.get('segundoNombre')?.dirty &&
+                                    formInfoBasicaProveedor.get('segundoNombre')?.invalid
+                                    ">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="formTipoProveedor.get('tipoProveedor')?.value?.id=='01'">
+                                <label for="primerApellido" class="block mb-1 text-sm">Primer apellido(*)</label>
+                                <input id="primerApellido" type="text" class="w-full" autocomplete="off" pInputText name="primerApellido"
+                                    formControlName="primerApellido">
+                                <p-message severity="error" text="Es requerido" *ngIf="
+                                    formInfoBasicaProveedor.get('primerApellido')?.dirty &&
+                                    formInfoBasicaProveedor.get('primerApellido')?.invalid
+                                    ">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-1" *ngIf="formTipoProveedor.get('tipoProveedor')?.value?.id=='01'">
+                                <label for="segundoApellido"  class="block mb-1 text-sm">Segundo apellido(*)</label>
+                                <input id="segundoApellido" type="text" class="w-full" autocomplete="off" pInputText name="segundoApellido"
+                                    formControlName="segundoApellido">
+                                <p-message severity="error" text="Es requerido" *ngIf="
+                                    formInfoBasicaProveedor.get('segundoApellido')?.dirty &&
+                                    formInfoBasicaProveedor.get('segundoApellido')?.invalid
+                                    ">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-3 flex flex-wrap gap-2">
+                                <p-button label="Atrás" severity="secondary" (click)="prevStep(1)" (keydown.enter)="prevStep(1)" (keydown)="prevStep(1)" />
+                                <p-button label="Siguiente" [disabled]="!formInfoBasicaProveedor.valid"
+                                    (click)="nextStep(formInfoBasicaProveedor,3)" (keydown.enter)="nextStep(formInfoBasicaProveedor,3)"/>
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+        <p-step-item [value]="3">
+            <p-step [disabled]="!formInfoContactoProveedor.valid">Datos Contacto</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <form [formGroup]="formInfoContactoProveedor">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="md:col-span-1">
+                                <label for="nombre" class="block mb-1 text-sm">Nombre(*)</label>
+                                <input id="nombre" type="text" class="w-full" pInputText autocomplete="off" name="nombre"
+                                    formControlName="nombre" appendTo="body">
+                                <p-message severity="error" text="formato inválido" *ngIf="
+                                    formInfoContactoProveedor.get('nombre')?.dirty &&
+                                    formInfoContactoProveedor.get('nombre')?.invalid
+                                    "></p-message>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="correo" class="block mb-1 text-sm">Correo(*)</label>
+                                <input id="correo" type="text" class="w-full" pInputText autocomplete="off" name="correo"
+                                    formControlName="correo" appendTo="body">
+                                <p-message severity="error" text="formato inválido" *ngIf="
+                                    formInfoContactoProveedor.get('correo')?.dirty &&
+                                    formInfoContactoProveedor.get('correo')?.invalid
+                                    "></p-message>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="telefono" class="block mb-1 text-sm">Teléfono(*)</label>
+                                <input id="telefono" type="text" class="w-full" pInputText autocomplete="off" pKeyFilter="pint"
+                                    name="telefono" formControlName="telefono" appendTo="body">
+                                <p-message severity="error" text="formato inválido" *ngIf="
+                                    formInfoContactoProveedor.get('telefono')?.dirty &&
+                                    formInfoContactoProveedor.get('telefono')?.invalid
+                                    "></p-message>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="celular" class="block mb-1 text-sm">Celular(*)</label>
+                                <input id="celular" type="text" class="w-full" pInputText autocomplete="off" pKeyFilter="pint"
+                                    name="celular" formControlName="celular" appendTo="body" [attr.maxlength]="9">
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="anexo" class="block mb-1 text-sm">Anexo</label>
+                                <input id="anexo" type="text" class="w-full" pInputText autocomplete="off" name="anexo"
+                                    pKeyFilter="pint" formControlName="anexo" />
+                                <p-message
+                                    *ngIf="formInfoContactoProveedor.get('anexo')?.dirty && formInfoContactoProveedor.get('anexo')?.invalid"
+                                    severity="error" text="Es requerido">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-2 flex flex-wrap gap-2">
+                                <p-button label="Atrás" severity="secondary" (click)="prevStep(2)" (keydown.enter)="prevStep(2)" (keydown)="prevStep(2)" />
+                                <p-button label="Siguiente" [disabled]="!formInfoContactoProveedor.valid"
+                                    (click)="nextStep(formInfoContactoProveedor,4)" (keydown)="nextStep(formInfoContactoProveedor,4)" />
+                            </div>
+
+                        </div>
+                    </form>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+        <p-step-item [value]="4">
+            <p-step [disabled]="!formDatosDireccion.valid">Datos Dirección</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <form [formGroup]="formDatosDireccion" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            <div class="md:col-span-3">
+                                <label for="direccion"  class="block mb-1 text-sm">Dirección(*)</label>
+                                <input id="direccion" type="text" class="w-full" pInputText autocomplete="off" name="direccion"
+                                    formControlName="direccion">
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="departamento" class="block mb-1 text-sm">Departamento</label>
+                                <p-autoComplete id="departamento" class="w-full" name="departamento" formControlName="departamento"
+                                    [suggestions]="filteredElement"
+                                    (completeMethod)="filterElement($event, departamento)" optionLabel="descripcion"
+                                    (onSelect)="changeModelDepartamento()" emptyMessage="Sin resultados"
+                                    [dropdown]="true" appendTo="body">
+                                    <ng-template let-element>
+                                        <div>{{ element.descripcion }}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                                <p-message
+                                    *ngIf="formDatosDireccion.get('departamento')?.dirty && formDatosDireccion.get('departamento')?.invalid"
+                                    severity="error" text="No es una opción">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="provincia" class="block mb-1 text-sm">Provincia</label>
+                                <p-autoComplete id="provincia" class="w-full" name="provincia" formControlName="provincia"
+                                    [suggestions]="filteredElement" (completeMethod)="filterElement($event, provincia)"
+                                    optionLabel="descripcion" (onSelect)="changeModelProvincia()"
+                                    emptyMessage="Sin resultados" [dropdown]="true" appendTo="body">
+                                    <ng-template let-element>
+                                        <div>{{ element.descripcion }}</div>
+                                    </ng-template>
+                                </p-autoComplete>                              
+                                <p-message
+                                    *ngIf="formDatosDireccion.get('provincia')?.dirty && formDatosDireccion.get('provincia')?.invalid"
+                                    severity="error" text="No es una opción">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-1">
+                                <label for="distrito" class="w-full">Distrito</label>
+                                <p-autoComplete id="distrito" class="w-full" name="distrito" formControlName="distrito"
+                                    [suggestions]="filteredElement" (completeMethod)="filterElement($event, distrito)"
+                                    optionLabel="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
+                                    appendTo="body">
+                                    <ng-template let-element>
+                                        <div>{{ element.descripcion }}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                                <p-message
+                                    *ngIf="formDatosDireccion.get('distrito')?.dirty && formDatosDireccion.get('distrito')?.invalid"
+                                    severity="error" text="No es una opción">
+                                </p-message>
+                            </div>
+                            <div class="md:col-span-3 flex flex-wrap gap-2">
+                                <p-button label="Atrás" severity="secondary" (click)="prevStep(3)" (keydown.enter)="prevStep(3)" (keydown)="prevStep(3)" />
+                                <p-button label="Siguiente" [disabled]="!formDatosDireccion.valid"
+                                    (click)="nextStep(formDatosDireccion,5)" (keydown.enter)="nextStep(formDatosDireccion,5)" />
+                            </div>
+                        </div>
+                    </form>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+        <p-step-item [value]="5">
+            <p-step [disabled]="!formAddCuentas.valid">Datos Cuentas</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                        <div class="md:col-span-1">
+                            <p-button icon="pi pi-id-card" label="Agregar Cuenta" (click)="agregarCuenta()" (keydown.enter)="agregarCuenta()" (keydown)="agregarCuenta()"></p-button>
+                        </div>
+                        <div class="md:col-span-1 mb-4">
+                            <form [formGroup]="formAddCuentas" novalidate class="p-col-12">
+                                <div formArrayName="cuentas">
+                                    <div *ngFor="let cuenta of cuentas.controls; index as i" [formGroupName]="i"
+                                        class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                                        <div class="md:col-span-1">
+                                            <label for="banco" class="block mb-1 text-sm">Banco </label>
+                                            <p-autoComplete id="banco" class="w-full" name="banco" formControlName="banco"
+                                                [suggestions]="filteredElement"
+                                                (completeMethod)="filterElementBanco($event, banco)"
+                                                (ngModelChange)="changeModelBanco($event, 'banco',i)"
+                                                optionLabel="nombre" emptyMessage='Sin resultados' [dropdown]="true"
+                                                appendTo="body">
+                                                <ng-template let-element>
+                                                    <div>{{element.nombre}}</div>
+                                                </ng-template>
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="md:col-span-1">
+                                            <label for="tipoCuenta" class="block mb-1 text-sm">Tipo de cuenta </label>
+                                            <p-autoComplete id="tipoCuenta" class="w-full" name="tipoCuenta"
+                                                formControlName="tipoCuenta" [suggestions]="filteredElement"
+                                                (completeMethod)="filterElement($event, tipoCuenta)"
+                                                (ngModelChange)="changeModelTipoCuenta($event, 'tipoCuenta',i)"
+                                                optionLabel="descripcion" emptyMessage='Sin resultados'
+                                                [dropdown]="true" appendTo="body">
+                                                <ng-template let-element>
+                                                    <div>{{element.descripcion}}</div>
+                                                </ng-template>
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="md:col-span-1">
+                                            <label for="tipoMoneda" class="block mb-1 text-sm">Tipo de moneda </label>
+                                            <p-autoComplete id="tipoMoneda" name="tipoMoneda" formControlName="tipoMoneda"
+                                                [suggestions]="filteredElement" class="w-full"
+                                                (completeMethod)="filterElement($event, tipoMoneda)"
+                                                (ngModelChange)="changeModelTipoMoneda($event, 'tipoMoneda',i)"
+                                                optionLabel="descripcion" emptyMessage='Sin resultados'
+                                                [dropdown]="true" appendTo="body">
+                                                <ng-template let-element>
+                                                    <div>{{element.descripcion}}</div>
+                                                </ng-template>
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="md:col-span-1">
+                                            <label for="numCuenta" class="block mb-1 text-sm">núm. cuenta</label>
+                                            <input id="numCuenta" type="text" class="w-full" pInputText name="numCuenta"
+                                                formControlName="numCuenta" autocomplete="off">
+                                        </div>
+                                        <div class="md:col-span-1 mt-6">
+                                            <p-button (click)="quitarCuenta(i)" label="" icon="pi pi-trash" (keydown.enter)="quitarCuenta(i)"
+                                                class="ui-button-danger" matTooltipPosition="above"
+                                                matTooltip="Eliminar">
+                                            </p-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="md:col-span-1 flex flex-wrap gap-2">
+                            <p-button label="Atrás" severity="secondary" (click)="prevStep(4)" (keydown.enter)="prevStep(4)" (keydown)="prevStep(4)" />
+                            <p-button label="Siguiente" [disabled]="!formAddCuentas.get('cuentas')?.valid"
+                                (click)="nextStep(formAddCuentas,6)" (keydown)="nextStep(formAddCuentas,6)" />
+                        </div>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+        <p-step-item [value]="6">
+            <p-step [disabled]="!formAddCuentas.valid">Confirmar datos</p-step>
+            <p-step-panel>
+                <ng-template #content let-activateCallback="activateCallback">
+                    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                        <div class="md:col-span-1">
+                            <p>¿Estás seguro de crear al proveedor?, presiona en crear para finalizar</p>
+                        </div>
+                        <div class="md:col-span-1 flex flex-wrap gap-2">
+                            <p-button label="Atrás" severity="secondary" (click)="prevStep(5)" (keydown.enter)="prevStep(5)" (keydown)="prevStep(5)" />
+                            <p-button label="Crear" (click)="crearProveedor()" (keydown.enter)="crearProveedor()" (keydown)="crearProveedor()" />
+                        </div>
+                    </div>
+                </ng-template>
+            </p-step-panel>
+        </p-step-item>
+    </p-stepper>
+</div>

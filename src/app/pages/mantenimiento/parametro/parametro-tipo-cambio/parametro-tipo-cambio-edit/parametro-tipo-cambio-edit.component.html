@@ -1,0 +1,7 @@
+<app-parametro-edit
+    [formEdit]="formEdit"
+    [groups]="groups"
+    [filteredElement]="filteredElement"
+    (filterElementEmitter)="filterElement($event, groups)"
+    (submitEmitter)="editParametro()">
+</app-parametro-edit>

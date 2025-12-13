@@ -1,0 +1,51 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-start gap-2">
+        <button pButton label="Agregar" icon="pi pi-plus" (click)="openDialogAdd()"></button>
+    </div>
+    <div class="md:col-span-1">
+        <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idBanco" [rows]="rows" [value]="data"
+            [totalRecords]="data.length" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Código Banco</th>
+                    <th scope="col">Nombre</th>
+                </tr>
+                <tr id="tableWithIcon">
+                    <th scope="col" style="text-align: center; min-width: 39px;">
+                        <p-button icon="pi pi-refresh" severity="secondary" pTooltip="Refrescar" showDelay="1000"
+                            hideDelay="300" (click)="getBancos()" (keydown.enter)="getBancos()" rounded raised />
+                    </th>
+                    <th scope="col">
+                        <input class="w-full" pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'codigo', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input class="w-full" pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'nombre', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                <tr id="tableWithDetails">
+                    <td style="text-align: center; width: 39px;">
+                        <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"
+                            icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>                        
+                    </td>
+                    <td>{{rowData.codigo}}</td>
+                    <td>{{rowData.nombre}}</td>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="3" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

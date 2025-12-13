@@ -1,0 +1,87 @@
+<p-toast></p-toast>
+<br>
+<form [formGroup]="formAjustar" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-1">
+            <label for="tipoAjuste" class="block mb-1 text-sm">Tipo ajuste</label>
+            <p-autoComplete id="tipoAjuste" class="w-full" name="tipoAjuste" formControlName="tipoAjuste"
+                [suggestions]="filteredElementTipoAjuste"
+                (completeMethod)="filterElementTipoAjuste($event, tiposAjuste)" field="desElemento"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.desElemento}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message *ngIf="formAjustar.get('tipoAjuste')?.dirty && !formAjustar.get('tipoAjuste')?.valid"
+                severity="error" variant="simple" size="small">
+                No es una opción
+            </p-message>
+
+        </div>
+        <div class="md:col-span-1">
+            <label for="importe" class="block mb-1 text-sm">Importe</label>
+            <p-inputNumber id="importe" class="w-full" name="importe" formControlName="importe" locale="en-US" minFractionDigits="2"
+                maxFractionDigits="2" [inputStyle]="{'text-align': 'right'}" autocomplete="off" appendTo="body">
+            </p-inputNumber>
+            <p-message *ngIf="formAjustar.get('importe')?.dirty && !formAjustar.get('importe')?.valid" severity="error"
+                variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="referencia" class="block mb-1 text-sm">Referencia</label>
+            <input id="referencia" class="w-full" type="text" autocomplete="off" pInputText name="referencia"
+                formControlName="referencia" autocomplete="on" placeholder="">
+            <p-message *ngIf="formAjustar.get('referencia')?.dirty && !formAjustar.get('referencia')?.valid"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="glosa" class="block mb-1 text-sm">Glosa</label>
+            <input id="glosa" class="w-full" type="text" autocomplete="off" pInputText name="glosa" formControlName="glosa"
+                autocomplete="on" placeholder="">
+            <p-message *ngIf="formAjustar.get('glosa')?.dirty && !formAjustar.get('glosa')?.valid "
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+
+            
+        </div>
+        <div class="md:col-span-1">
+            <label for="codigoComercio" class="block mb-1 text-sm">Comercio</label>
+            <p-autoComplete id="codigoComercio" class="w-full" name="codigoComercio" formControlName="codigoComercio"
+                [suggestions]="filteredElementCodigoComercio"
+                (completeMethod)="filterElementCodigoComercio($event, codigosComercio)" field="valCadLargo"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.valCadLargo}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <mat-error
+                [ngStyle]="{'display': formAjustar.get('codigoComercio')?.dirty && !formAjustar.get('codigoComercio')?.valid ? 'block' : 'none' }">
+                No es una opción
+            </mat-error>
+        </div>
+        <div class="md:col-span-2">
+            <label for="nombreArchivo" class="block mb-1 text-sm">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+            <input id="nombreArchivo" class="w-full" type="text" autocomplete="off" pInputText name="nombreArchivo"
+                formControlName="nombreArchivo" readonly>
+            <mat-error
+                [ngStyle]="{'display': formAjustar.get('nombreArchivo')?.dirty && !formAjustar.get('nombreArchivo')?.valid ? 'block' : 'none' }">
+                Es requerido
+            </mat-error>
+        </div>
+        <div class="md:col-span-2">
+            <p-fileUpload class="w-full" name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
+                maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+                invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
+                (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
+                chooseLabel="Seleccionar archivo"></p-fileUpload>
+        </div>
+        <div class="md:col-span-2 flex items-end justify-end gap-2 footer-modal">
+            <p-button label="Aceptar" [disabled]="formAjustar.invalid || loadingFile || disableButton"
+                (click)="ajustarSaldo()" (keydown.enter)="ajustarSaldo()"/>
+        </div>
+    </div>
+</form>

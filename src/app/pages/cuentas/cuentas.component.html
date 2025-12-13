@@ -1,0 +1,87 @@
+<div class="card">
+
+    <form [formGroup]="formBusqueda" novalidate>
+        <button pButton label="Filtrar" icon="pi pi-filter" (click)="mostrarFiltro = !mostrarFiltro">
+        </button>
+        
+        <div *ngIf="mostrarFiltro" class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+            <div class="md:col-span-1">
+                <label for="tipoFiltro" class="block mb-1 text-sm">Tipo de Búsqueda</label>
+                <p-select id="tipoFiltro" class="w-full" formControlName="tipoFiltro" (onChange)="changeModelTipoDocumento($event)"
+                    [options]="tipoBusqueda" optionLabel="field" optionValue="id"
+                    placeholder="Seleccione Tipo de Búsqueda">
+                </p-select>
+            </div>
+            <div class="md:col-span-1" *ngIf="formBusqueda.value.tipoFiltro == '0'">
+                <label for="tipoDocumento" class="block mb-1 text-sm">Tipo Documento</label>
+                <p-select id="tipoDocumento" class="w-full" formControlName="tipoDocumento" (onChange)="changeModelTipoDocumento($event)"
+                    [options]="documentos" optionLabel="descripcion" optionValue="id" placeholder="Seleccione tipo">
+                </p-select>
+            </div>
+            <div class="md:col-span-1" *ngIf="formBusqueda.value.tipoFiltro == '0'">
+                <label for="nroDocumento" class="block mb-1 text-sm">N° Documento</label>
+                <input id="nroDocumento" class="w-full" formControlName="nroDocumento" #doc pInputText type="text"
+                    placeholder="Ingrese N° Documento" [attr.minlength]="nroCaracter" [attr.maxlength]="nroCaracter"
+                    [style]="{'text-transform': 'uppercase'}" autocomplete="off"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />              
+            </div>               
+            <div 
+            *ngIf="formBusqueda.value.tipoFiltro == '3'"
+            [ngClass]="formBusqueda.value!.tipoFiltro == 3 ? 'md:col-span-1' : 'md:col-span-2'"
+            >
+                <label for="nroCuenta" class="block mb-1 text-sm">Nro Tarjeta</label>
+                <input id="nroCuenta" class="w-full" formControlName="nroCuenta" #accountTarjeta pInputText type="text"
+                    placeholder="Ingrese Nro Tarjeta" [attr.minlength]="16" [attr.maxlength]="16" autocomplete="off"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />                                 
+            </div>
+            <div class="col-span-1 flex items-end justify-end gap-2">             
+                <button pButton label="Buscar" icon="pi pi-search" (click)="buscar()">
+                </button>
+                <button pButton label="Limpiar" icon="pi pi-times" class="p-button-outlined" (click)="limpiar()">
+                </button>
+            </div>
+        </div>
+    </form>
+    <br>
+    <br>
+    <p-table #dt1 [value]="datosCuentas"
+        class="mi-tabla-personalizada"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        [showCurrentPageReport]="true" dataKey="idCuenta" [rows]="10" [columns]="cols" [loading]="loading"
+        [rowHover]="true" [showGridlines]="true" [paginator]="true" responsiveLayout="scroll"
+        [totalRecords]="datosCuentas.length">
+        <ng-template #header let-columns>
+            <tr>
+                <th scope="col" *ngFor="let col of columns" [ngStyle]="{'text-align': col.align}">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-rowData style="cursor: pointer;">
+            <tr [pContextMenuRow]="rowData" (click)="goToAccount(rowData)" (keydown)="goToAccount(rowData)" tabindex="0">
+                <td>{{ rowData.producto }}</td>
+                <td>{{rowData.nombresApellidos}}</td>
+                <td style="text-align: center;">{{rowData.numeroCuenta}}</td>
+                <td style="text-align: center;">
+                    <span [ngClass]="rowData.codEstadoCuenta == '01' ? 'p-tag p-tag-success' : 
+                                     rowData.codEstadoCuenta == '02' ? 'p-tag p-tag-warning': 'p-tag p-tag-danger'"
+                        style="font-size: 12px;">{{rowData.motivoBloqueo}}</span>
+                </td>
+                <td style="text-align: center;">{{rowData.fechaApertura| date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td style="text-align: center;">{{rowData.fechaBaja | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                <td style="text-align: center;">{{rowData.desCodTipoDoc}}</td>
+                <td style="text-align: center;">{{rowData.numDocIdentidad}}</td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">No customers found.</td>
+            </tr>
+        </ng-template>
+        <ng-template #loadingbody>
+            <tr>
+                <td colspan="8">Loading customers data. Please wait.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

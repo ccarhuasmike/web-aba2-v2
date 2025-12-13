@@ -1,0 +1,70 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <form [formGroup]="formAddCuentas">
+        <div formArrayName="cuentas">
+            <div class="p-grid p-fluid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <p-button icon="pi pi-id-card" label="Agregar Cuenta" (click)="agregarCuenta()" (keydown.enter)="agregarCuenta()" (keydown)="agregarCuenta()"></p-button>
+                </div>
+                <div *ngFor="let cuenta of cuentas.controls; index as i" [formGroupName]="i">
+                    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                        <div class="md:col-span-1">
+                            <label for="banco" class="block mb-1 text-sm">Banco </label>
+                            <p-autoComplete id="banco" class="w-full" name="banco" formControlName="banco"
+                                [suggestions]="filteredElement" (completeMethod)="filterElementBanco($event, banco)"
+                                (ngModelChange)="changeModelBanco($event, 'banco',i)" optionLabel="nombre"
+                                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                                <ng-template let-element>
+                                    <div>{{element.nombre}}</div>
+                                </ng-template>
+                            </p-autoComplete>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="tipoCuenta" class="block mb-1 text-sm">Tipo de cuenta </label>
+                            <p-autoComplete id="tipoCuenta" class="w-full" name="tipoCuenta" formControlName="tipoCuenta"
+                                [suggestions]="filteredElement" (completeMethod)="filterElement($event, tipoCuenta)"
+                                (ngModelChange)="changeModelTipoCuenta($event, 'tipoCuenta',i)"
+                                optionLabel="descripcion" emptyMessage='Sin resultados' [dropdown]="true"
+                                appendTo="body">
+                                <ng-template let-element>
+                                    <div>{{element.descripcion}}</div>
+                                </ng-template>
+                            </p-autoComplete>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="tipoMoneda" class="block mb-1 text-sm">Tipo de moneda </label>
+                            <p-autoComplete id="tipoMoneda" class="w-full" name="tipoMoneda" formControlName="tipoMoneda"
+                                [suggestions]="filteredElement" (completeMethod)="filterElement($event, tipoMoneda)"
+                                (ngModelChange)="changeModelTipoCuenta($event, 'tipoMoneda',i)"
+                                optionLabel="descripcion" emptyMessage='Sin resultados' [dropdown]="true"
+                                appendTo="body">
+                                <ng-template let-element>
+                                    <div>{{element.descripcion}}</div>
+                                </ng-template>
+                            </p-autoComplete>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="numCuenta" class="block mb-1 text-sm">núm. cuenta</label>
+                            <input id="numCuenta" type="text" class="w-full" pInputText name="numCuenta" formControlName="numCuenta"
+                                autocomplete="off">
+                        </div>
+                        <div class="md:col-span-1 flex items-end justify-end gap-2">
+                            <p-button (click)="quitarCuenta(i)" label="" icon="pi pi-trash" class="ui-button-danger" (keydown.enter)="quitarCuenta(i)"
+                                matTooltipPosition="above" matTooltip="Eliminar">
+                            </p-button>
+                            <p-button [disabled]="!cuenta.valid" (click)="saveCuenta(i)" label="" icon="pi pi-save" (keydown.enter)="saveCuenta(i)"
+                                class="ui-button-danger" matTooltipPosition="above" matTooltip="Guardar Cuenta">
+                            </p-button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="md:col-span-2 flex items-end justify-end gap-2 footer-modal">
+                    <p-button label="Cerrar"  (click)="cerrarCuenta()" (keydown.enter)="cerrarCuenta()"
+                         />
+                </div>  
+            </div>
+        </div>
+    </form>
+</div>

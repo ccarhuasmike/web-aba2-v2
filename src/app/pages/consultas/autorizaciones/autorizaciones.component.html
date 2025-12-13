@@ -1,0 +1,483 @@
+<div class="card">
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+        <div class="md:col-span-1">
+            <form [formGroup]="formBusqueda" novalidate>
+                <button pButton label="Filtrar" icon="pi pi-filter" (click)="mostrarFiltro = !mostrarFiltro">
+                </button>
+                <div *ngIf="mostrarFiltro" class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                    <div class="md:col-span-1">
+                        <label>Tipo de Documento</label>
+                        <p-autoComplete name="tipoDocumento" formControlName="tipoDocumento"
+                            [suggestions]="filteredElementTipoDocumento" optionLabel="descripcion"
+                            emptyMessage='Sin resultados' [dropdown]="true"
+                            (completeMethod)="filterElementTipoDocumento($event, tipoDocumento)"
+                            (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body">
+                            <ng-template let-element>
+                                <div>{{element.descripcion}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label>Nro. de Documento</label>
+                        <input type="text" pInputText name="nroDocumento" formControlName="nroDocumento"
+                            (input)="onInputChangeNumeroDocumento()" [attr.minlength]="nroCaracter"
+                            [attr.maxlength]="nroCaracter" autocomplete="off">
+                    </div>
+                    <div class="md:col-span-1">
+                        <label>Nro. Tarjeta</label>
+                        <input type="text" pInputText name="nroTarjeta" formControlName="nroTarjeta"
+                            (input)="onInputChangeNumeroTarjeta()" [attr.minlength]="16" [attr.maxlength]="16"
+                            autocomplete="off"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                    </div>
+                    <div class="md:col-span-1">
+                        <p-button (click)="searchCuenta()" label="" icon="pi pi-search" styleClass="p-button-sm"
+                            matTooltipPosition="above" matTooltip="Buscar Cuentas" [disabled]="formBusqueda.invalid">
+                        </p-button>
+                        <p-button (click)="clearFilterCuenta()" label="" icon="pi pi-trash" styleClass="p-button-sm"
+                            matTooltipPosition="above" matTooltip="Limpiar filtros">
+                        </p-button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="md:col-span-1">
+            <p-table #dt resizableColumns="true" rowExpandMode="single"
+                styleClass="p-datatable-striped p-datatable-gridlines"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+                [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idCuenta" [columns]="cols" [rows]="rows"
+                [value]="datosCuentas" [totalRecords]="datosCuentas.length" [loading]="loadingCuentas">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr id="tableWithIcon" [pContextMenuRow]="rowData" (click)="selectCuenta(rowData)"
+                        style="cursor: pointer;">
+                        <td>{{rowData.producto}}</td>
+                        <td>{{rowData.nombresApellidos}}</td>
+                        <td>{{rowData.numeroCuenta}}</td>
+                        <td>
+                            <span [ngClass]="
+                                        rowData.codEstadoCuenta == '01' ? 'p-tag p-tag-success' : 
+                                        rowData.codEstadoCuenta == '02' ? 'p-tag p-tag-warning': 'p-tag p-tag-danger'"
+                                style="font-size: 12px;">{{rowData.motivoBloqueo}}
+                            </span>
+                        </td>
+                        <td>{{rowData.fechaApertura | date:'DD/MM/YYYY'}}</td>
+                        <td>{{rowData.fechaBaja | date:'DD/MM/YYYY'}}</td>
+                        <td>{{rowData.desCodTipoDoc}}</td>
+                        <td>{{rowData.numDocIdentidad}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8" style="text-align:left">Sin registros encontrados</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="md:col-span-1">
+            <div class="fuse-card">
+                <form *ngIf="uidCuenta" [formGroup]="formBusquedaAutorizaciones">
+                    <div class="p-12 pb-0" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+                        fxLayoutAlign.gt-xs="space-between center">
+                        <div class="h1 p-col-12">Autorizaciones</div>
+                    </div>
+                    <div class="p-12 pb-0 p-grid p-fluid" fxLayoutAlign="center center">
+                        <div class="p-col-12 p-md-6 p-xl-4">
+                            <label>Cuenta &nbsp;</label>
+                            <input type="text" autocomplete="off" pInputText name="numeroCuenta"
+                                [(ngModel)]="numeroCuenta" [ngModelOptions]="{standalone: true}" readonly>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-xl-4">
+                            <label>Fecha rango</label>
+                            <!-- <p-calendar formControlName="fechaRangoAutorizaciones"
+                                                (ngModelChange)="changeModelFechaRangoAutorizaciones($event)"
+                                                [locale]="es" dateFormat="dd/mm/yy" [monthNavigator]="true"
+                                                [yearNavigator]="true" yearRange="1940:2030" selectionMode="range"
+                                                [readonlyInput]="true" appendTo="body"></p-calendar> -->
+                        </div>
+                        <div class="p-col-12 p-md-6 p-xl-4">
+                            <label>Cód. de operación &nbsp;</label>
+                            <input type="text" autocomplete="off" pInputText name="codigoOperacion"
+                                formControlName="codigoOperacion">
+                        </div>
+                        <div class="p-col-12 p-md-6 p-xl-4">
+                            <label>Cód. de grupo &nbsp;</label>
+                            <input type="text" autocomplete="off" pInputText name="codigoGrupo"
+                                formControlName="codigoGrupo">
+                        </div>
+                        <div class="p-col-12 p-md-6 p-xl-4">
+                            <label>Cód. de entrada &nbsp;</label>
+                            <input type="text" autocomplete="off" pInputText name="codigoEntrada"
+                                formControlName="codigoEntrada">
+                        </div>
+                        <div class="p-md-1" style="padding-top: 30px;">
+                            <p-button (click)="searchCuentaAutorizaciones()" label="" icon="pi pi-search"
+                                styleClass="p-button-sm" matTooltipPosition="above" matTooltip="Buscar">
+                            </p-button>
+                        </div>
+                        <div class="p-md-1" style="padding-top: 30px;">
+                            <p-button (click)="clearFilterCuentaAutorizaciones()" label="" icon="pi pi-trash"
+                                styleClass="p-button-sm" matTooltipPosition="above" matTooltip="Limpiar filtros">
+                            </p-button>
+                        </div>
+                        <div class="p-md-1" style="padding-top: 20px; margin-top: auto;"
+                            *appDisableContentByRole="[roles.ATENCION_CLIENTE_N4,roles.ATENCION_CLIENTE_N3,roles.ATENCION_CLIENTE_N2,roles.ATENCION_CLIENTE_N1]">
+                            <div style="float: right;">
+                                <input [ngClass]="{grayColor: datosAutorizaciones.length==0}" class="grayColor"
+                                    [disabled]="datosAutorizaciones.length==0" (click)="exportExcel()"
+                                    matTooltipPosition="below" matTooltip="Descargar excel" mat-mini-fab type="image"
+                                    src="/assets/images/img/excel.png" width="60" height="25">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <p-table #dt2 resizableColumns="true" rowExpandMode="single"
+                    styleClass="p-datatable-striped p-datatable-gridlines"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+                    [paginator]="true" [showCurrentPageReport]="false" [filterDelay]="0" dataKey="idTransaccion"
+                    [first]="first" [rows]="rows" [value]="datosAutorizaciones"
+                    [totalRecords]="datosAutorizaciones.length" [loading]="loadingAutorizaciones"
+                    [reorderableColumns]="true" [resizableColumns]="true" columnResizeMode="expand">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th scope="col" pReorderableColumn pResizableColumn></th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Id Transacción</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Fecha Transacción
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Fecha Proceso</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Cod. Descripción
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Descripción</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Referencia</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Código Autorización
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Importe</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Red (descripción)
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Estado Confirmación
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Estado Autorización
+                            </th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Reversado</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Cod. Rechazo</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Num. Tarjeta</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Token</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Id Transacción
+                                Original</th>
+                            <th scope="col" pReorderableColumn pResizableColumn>Razón Estado</th>
+                        </tr>
+                        <tr id="tableWithIcon">
+                            <th scope="col" style="text-align: center; width: 39px;">
+                                <!-- <button mat-icon-button color="primary"
+                                                        (click)="searchCuentaAutorizaciones()" matTooltipPosition="below"
+                                                        matTooltip="Refrescar" [disabled]="!uidCuenta">
+                                                         <mat-icon>refresh</mat-icon> -
+                                                    </button> -->
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'idTransaccion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'fechaTransaccion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'fechaConfirmacion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'transaccionResponse.ftcCode', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'transaccionResponse.ftcDescription', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'referencia', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'codigoAutorizacion', 'startsWith')"
+                                    placeholder="">
+
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'transaccionProcesada.monto', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'descOrigenInt', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'estadoConfirmacion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'estadoAutorizacion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'estadoReversado', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'codigoRechazo', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'tarjeta.enmascarado', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'tarjeta.token', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'transaccionResponse.financialTransaction.parentTransactionId', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                            <th scope="col">
+                                <input pInputText type="text"
+                                    (input)="dt2.filter($event.target.value, 'motivoTransaccion', 'startsWith')"
+                                    placeholder="">
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                        <tr id="tableWithDetails">
+                            <td style="text-align: center;">
+                                <div style="display: flex; justify-content: space-around;">
+                                    <div>
+                                        <button mat-button style="padding: 0px 2px;"
+                                            (click)="openDialogDetalleAutorizacion(rowData)"
+                                            matTooltip="Detalle Autorización">
+                                            <!-- <mat-icon>touch_app </mat-icon> -->
+                                        </button>
+                                    </div>
+                                    <!-- <div
+                                                            *appDisableContentByRole="[roles.PLAFT, roles.ATENCION_CLIENTE, roles.OPERACION_CONTABLE, roles.FRAUDE, roles.CONSULTA]">
+                                                            <button mat-button style="padding: 0px 2px;" *ngIf="
+                                                                    !rowData.reversado &&
+                                                                    rowData.estadoConfirmacion == 'PENDING' &&
+                                                                    (
+                                                                        (
+                                                                            rowData.descOrigen == '02' && 
+                                                                            (
+                                                                                rowData.codigoOperacion == '00' || 
+                                                                                rowData.codigoOperacion == '21' || 
+                                                                                rowData.codigoOperacion == '01' ||
+                                                                                rowData.codigoOperacion == '02' ||
+                                                                                rowData.codigoOperacion == '11'
+                                                                            )
+                                                                        ) ||
+                                                                        (
+                                                                            rowData.descOrigen == '03' && 
+                                                                            (
+                                                                                rowData.codigoOperacion == '01' || 
+                                                                                rowData.codigoOperacion == '20' || 
+                                                                                rowData.codigoOperacion == '00'
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                " (click)="openDialogLiberarManualAutorizacion(rowData)"
+                                                                matTooltip="Liberar Autorización">
+                                                                <mat-icon
+                                                                    style="margin-right: 0px;">lock_open</mat-icon>
+                                                            </button>
+                                                        </div> -->
+                                </div>
+                            </td>
+                            <td>{{rowData.idTransaccion}}</td>
+                            <td>{{rowData.fechaTransaccion}}</td>
+                            <td>{{rowData.fechaConfirmacion}}</td>
+                            <td>{{rowData.transaccionResponse.ftcCode}}</td>
+                            <td>{{rowData.transaccionResponse.ftcDescription}}</td>
+                            <td>{{rowData.referencia}}</td>
+                            <td>{{rowData.codigoAutorizacion}}</td>
+                            <td>{{rowData.transaccionProcesada.monto |
+                                currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                            <td>{{rowData.descOrigenInt}}</td>
+                            <td>
+                                <div *ngIf="rowData.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
+                                    <span></span>
+                                </div>
+                                <ng-template #estadoConfirmacion>
+                                    <div [ngSwitch]="rowData.estadoConfirmacion">
+                                        <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success"
+                                            style="font-size: 12px;">{{rowData.estadoConfirmacion}}</span>
+                                        <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning"
+                                            style="font-size: 12px;">{{rowData.estadoConfirmacion}}</span>
+                                        <span *ngSwitchDefault class="p-tag p-tag-danger"
+                                            style="font-size: 12px;">{{rowData.estadoConfirmacion}}</span>
+                                    </div>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <div [ngSwitch]="rowData.estadoAutorizacion">
+                                    <span *ngSwitchCase="'AUTHORIZED'" class="p-tag p-tag-success"
+                                        style="font-size: 12px;">{{rowData.estadoAutorizacion}}</span>
+                                    <span *ngSwitchCase="'REJECTED'" class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{rowData.estadoAutorizacion}}</span>
+                                    <span *ngSwitchCase="'REVERSED'" class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{rowData.estadoAutorizacion}}</span>
+                                    <span *ngSwitchDefault class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{rowData.estadoAutorizacion}}</span>
+                                </div>
+                            </td>
+                            <td>{{rowData.estadoReversado}}</td>
+                            <td>{{rowData.codigoRechazo}}</td>
+                            <td>
+                                <!-- <span
+                                                        *appDisableContentByRole="[roles.ATENCION_CLIENTE, roles.ATENCION_CLIENTE_TD, roles.CONSULTA, roles.PLAFT, roles.TI]">
+                                                        <button *ngIf="rowData.tarjeta.token" mat-icon-button
+                                                            matTooltipPosition="above"
+                                                            matTooltip="Mostrar/Ocultar tarjeta"
+                                                            (click)="visibilidadTarjeta(rowData)"
+                                                            style="padding-right: 25px;">
+                                                            <mat-icon
+                                                                *ngIf="!rowData.tarjeta.numTarjetaVisible">visibility</mat-icon>
+                                                            <mat-icon
+                                                                *ngIf="rowData.tarjeta.numTarjetaVisible">visibility_off</mat-icon>
+                                                        </button>
+                                                    </span> -->
+                                <span *ngIf="!rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.enmascarado}}</span>
+                                <span
+                                    *ngIf="rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.desenmascarado}}</span>
+                            </td>
+                            <td>{{rowData.tarjeta.token}}</td>
+                            <td>{{rowData.transaccionResponse.financialTransaction.parentTransactionId}}
+                            </td>
+                            <td>{{rowData.motivoTransaccion}}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="19" style="text-align:left">Sin registros encontrados</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="page-layout carded fullwidth">
+    <div class="top-bg accent"></div>
+    <div class="center">
+        <div class="header accent" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+            fxLayoutAlign.gt-xs="space-between center">
+            <div style="padding-left: 5px;" class="p-grid p-align-center">
+                <!-- <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    assignment_turned_in
+                </mat-icon> -->
+
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="content">
+                <div class="toolbar px-24" fxLayout="row" fxLayoutAlign="center center" style="z-index: 3; ">
+
+                    <!-- <mat-accordion class="example-headers-align" style="width: 1000px;" multi>
+                        <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                     <mat-icon>search</mat-icon> 
+                                    Búsqueda de Autorizaciones
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+
+                            <form [formGroup]="formBusqueda" novalidate>
+                                <div class="p-grid p-fluid" fxLayoutAlign="center center">
+                                    <div [ngClass]="{'p-col-3': showSearchCard, 'p-col-5': !showSearchCard}">
+                                        <label>Tipo de Documento</label>
+                                        <p-autoComplete name="tipoDocumento" formControlName="tipoDocumento"
+                                            [suggestions]="filteredElementTipoDocumento" field="descripcion"
+                                            emptyMessage='Sin resultados' [dropdown]="true"
+                                            (completeMethod)="filterElementTipoDocumento($event, tipoDocumento)"
+                                            (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body">
+                                            <ng-template let-element>
+                                                <div>{{element.descripcion}}</div>
+                                            </ng-template>
+                                        </p-autoComplete>
+                                    </div>
+                                    <div [ngClass]="{'p-col-3': showSearchCard, 'p-col-5': !showSearchCard}">
+                                        <label>Nro. de Documento</label>
+                                        <input type="text" pInputText name="nroDocumento" formControlName="nroDocumento"
+                                            (input)="onInputChangeNumeroDocumento()" [attr.minlength]="nroCaracter"
+                                            [attr.maxlength]="nroCaracter" autocomplete="off">
+                                    </div>
+                                    <div class="p-md-4" *ngIf="showSearchCard">
+                                        <label>Nro. Tarjeta</label>
+                                        <input type="text" pInputText name="nroTarjeta" formControlName="nroTarjeta"
+                                            (input)="onInputChangeNumeroTarjeta()" [attr.minlength]="16"
+                                            [attr.maxlength]="16" autocomplete="off"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
+                                    </div>
+                                    <div class="p-md-1" style="padding-top: 30px;">
+                                        <p-button (click)="searchCuenta()" label=""
+                                            icon="pi pi-search" styleClass="p-button-sm" matTooltipPosition="above"
+                                            matTooltip="Buscar Cuentas" [disabled]="formBusqueda.invalid">
+                                        </p-button>
+                                    </div>
+                                    <div class="p-md-1" style="padding-top: 30px;">
+                                        <p-button (click)="clearFilterCuenta()" label="" icon="pi pi-trash"
+                                            styleClass="p-button-sm" matTooltipPosition="above"
+                                            matTooltip="Limpiar filtros">
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </form>
+                        </mat-expansion-panel>
+                    </mat-accordion> -->
+                </div>
+
+                <div class="content margenTablasNormal" fusePerfectScrollbar>
+                    <div class="h1 pr-16" style="margin-bottom: 25px;">Cuentas</div>
+
+                </div>
+
+                <div class="p-grid p-fluid p-align-center">
+                    <div class="p-col-12">
+                        <div class="card">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / CENTER -->
+</div>

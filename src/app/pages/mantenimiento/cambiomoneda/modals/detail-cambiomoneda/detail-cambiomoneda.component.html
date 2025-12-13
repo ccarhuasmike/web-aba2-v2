@@ -1,0 +1,148 @@
+<p-toast></p-toast>
+<br>
+
+<form [formGroup]="formDetalle" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-1">
+            <label for="codigoCampana" class="block mb-1 text-sm">Código Campaña: &nbsp;</label>
+            <input id="codigoCampana" class="w-full" type="text" type="text" autocomplete="off" pInputText name="codigoCampana"
+                formControlName="codigoCampana">
+        </div>
+        <div class="md:col-span-1">
+            <label for="descripcion" class="block mb-1 text-sm">Descripción: &nbsp;</label>
+            <input id="descripcion" class="w-full" type="text" type="text" autocomplete="off" pInputText name="descripcion"
+                formControlName="descripcion">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaInicioFormat" class="block mb-1 text-sm">Fecha Inicio: &nbsp;</label>
+            <input id="fechaInicioFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText
+                name="fechaInicioFormat" formControlName="fechaInicioFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaFinFormat" class="block mb-1 text-sm">Fecha Fin: &nbsp;</label>
+            <input id="fechaFinFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText
+                name="fechaFinFormat" formControlName="fechaFinFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="tipoCampanaDesc" class="block mb-1 text-sm">Tipo Campaña: &nbsp;</label>
+            <input id="tipoCampanaDesc" class="w-full" type="text" type="text" autocomplete="off" pInputText name="tipoCampanaDesc"
+                formControlName="tipoCampanaDesc">
+        </div>
+        <div *ngIf="dataCampania.tipoCampana === '01'" class="md:col-span-1">
+            <label for="tipoCambioCompraOhFormat" class="block mb-1 text-sm">Tipo Cambio Compra Oh: &nbsp;</label>
+            <input id="tipoCambioCompraOhFormat"     class="w-full" type="text" type="text" autocomplete="off" pInputText name="tipoCambioCompraOhFormat"
+                formControlName="tipoCambioCompraOhFormat">
+        </div>
+        <div *ngIf="dataCampania.tipoCampana === '01'" class="md:col-span-1">
+            <label for="tipoCambioVentaOhFormat" class="block mb-1 text-sm">Tipo Cambio Venta Oh: &nbsp;</label>
+            <input id="tipoCambioVentaOhFormat"  class="w-full" type="text" type="text" autocomplete="off" pInputText name="tipoCambioVentaOhFormat"
+                formControlName="tipoCambioVentaOhFormat">
+        </div>
+        <div *ngIf="dataCampania.tipoCampana === '02'" class="md:col-span-1">
+            <label for="tasaCompraOhFormat" class="block mb-1 text-sm">Tasa Compra Oh: &nbsp;</label>
+            <input id="tasaCompraOhFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="tasaCompraOhFormat"
+                formControlName="tasaCompraOhFormat">
+        </div>
+        <div *ngIf="dataCampania.tipoCampana === '02'" class="md:col-span-1">
+            <label for="tasaVentaOhFormat" class="block mb-1 text-sm">Tasa Venta Oh: &nbsp;</label>
+            <input id="tasaVentaOhFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="tasaVentaOhFormat"
+                formControlName="tasaVentaOhFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="tipoValidacionDesc" class="block mb-1 text-sm">Tipo Validación: &nbsp;</label>
+            <input id="tipoValidacionDesc"   class="w-full" type="text" type="text" autocomplete="off" pInputText name="tipoValidacionDesc"
+                formControlName="tipoValidacionDesc">
+        </div>
+        <div class="md:col-span-1">
+            <label for="montoValidacionFormat" class="block mb-1 text-sm">Monto Validación: &nbsp;</label>
+            <input id="montoValidacionFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="montoValidacionFormat"
+                formControlName="montoValidacionFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="descripcionLarga" class="block mb-1 text-sm">Estado: &nbsp;</label>
+            <input id="descripcionLarga"     class="w-full" type="text" type="text" autocomplete="off" pInputText name="descripcionLarga"
+                formControlName="descripcionLarga">
+        </div>
+        <div class="md:col-span-1">
+            <label for="usuarioRegistro" class="block mb-1 text-sm">Usuario Registro: &nbsp;</label>
+            <input id="usuarioRegistro" class="w-full" type="text" type="text" autocomplete="off" pInputText name="usuarioRegistro"
+                formControlName="usuarioRegistro">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaRegistroFormat" class="block mb-1 text-sm">Fecha Registro: &nbsp;</label>
+            <input id="fechaRegistroFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="fechaRegistroFormat"
+                formControlName="fechaRegistroFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="usuarioAprobacion" class="block mb-1 text-sm">Usuario Aprobación: &nbsp;</label>
+            <input id="usuarioAprobacion" class="w-full" type="text" type="text" autocomplete="off" pInputText name="usuarioAprobacion"
+                formControlName="usuarioAprobacion">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaHoraAprobacionFormat" class="block mb-1 text-sm">Fecha Aprobación: &nbsp;</label>
+            <input id="fechaHoraAprobacionFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="fechaHoraAprobacionFormat"
+                formControlName="fechaHoraAprobacionFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="usuarioCancelacion" class="block mb-1 text-sm">Usuario Cancelación: &nbsp;</label>
+            <input id="usuarioCancelacion" class="w-full" type="text" type="text" autocomplete="off" pInputText name="usuarioCancelacion"
+                formControlName="usuarioCancelacion">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaCancelacionFormat" class="block mb-1 text-sm">Fecha Cancelación: &nbsp;</label>
+            <input id="fechaCancelacionFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="fechaCancelacionFormat"
+                formControlName="fechaCancelacionFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="usuarioVencimiento" class="block mb-1 text-sm">Usuario Vencimiento: &nbsp;</label>
+            <input id="usuarioVencimiento" class="w-full" type="text" type="text" autocomplete="off" pInputText name="usuarioVencimiento"
+                formControlName="usuarioVencimiento">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaHoraVencimientoFormat" class="block mb-1 text-sm">Fecha Vencimiento: &nbsp;</label>
+            <input id="fechaHoraVencimientoFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText
+                name="fechaHoraVencimientoFormat" formControlName="fechaHoraVencimientoFormat">
+        </div>
+        <div class="md:col-span-1">
+            <label for="usuarioActualizacion" class="block mb-1 text-sm">Usuario Actualización: &nbsp;</label>
+            <input id="usuarioActualizacion" class="w-full" type="text" type="text" autocomplete="off" pInputText name="usuarioActualizacion"
+                formControlName="usuarioActualizacion">
+        </div>
+        <div class="md:col-span-1">
+            <label for="fechaActualizacionFormat" class="block mb-1 text-sm">Fecha Actualización: &nbsp;</label>
+            <input id="fechaActualizacionFormat" class="w-full" type="text" type="text" autocomplete="off" pInputText name="fechaActualizacionFormat"
+                formControlName="fechaActualizacionFormat">
+        </div>
+        <div class="md:col-span-2">
+            <p-table [value]="detalleCampania" resizableColumns="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th scope="col" style="width: 10%;"></th>
+                        <th style="width: 25%;" scope="col">Día</th>
+                        <th style="width: 20%;" scope="col">Hora inicio</th>
+                        <th style="width: 20%;" scope="col">Hora Fin</th>
+                        <th style="width: 25%;" scope="col">Estado</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr style="cursor: pointer;">
+                        <td style="text-align: center; width: 10%;">
+                            <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)"
+                                (keydown.enter)="onButtonClick($event, rowData, menusss)" icon="pi pi-ellipsis-v" />
+                            <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
+
+                          
+                        </td>
+                        <td style="width: 30%;">{{rowData.dia}}</td>
+                        <td style="width: 30%;">{{rowData.horaInicio }}</td>
+                        <td style="width: 30%;">{{rowData.horaFin }}</td>
+                        <td style="width: 30%;">{{rowData.estado }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="md:col-span-2 flex items-end justify-end  footer-modal">
+            <p-button label="Cerrar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" />
+        </div>
+    </div>
+</form>

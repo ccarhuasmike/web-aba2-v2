@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './demo/demo.scss';
+
+:root {
+  /* Base Primary */
+  --p-primary-color: #3f51b5 !important;
+
+  /* Escalas Material Indigo */
+  --p-primary-50: #e8eaf6 !important;
+  --p-primary-100: #c5cae9 !important;
+  --p-primary-200: #9fa8da !important;
+  --p-primary-300: #7986cb !important;
+  --p-primary-400: #5c6bc0 !important;
+  --p-primary-500: #3f51b5 !important;
+  --p-primary-600: #3949ab !important;
+  --p-primary-700: #303f9f !important;
+  --p-primary-800: #283593 !important;
+  --p-primary-900: #1a237e !important;
+
+  /* Texto en Primary */
+  --p-primary-contrast-color: #ffffff;
+}
+
+.mi-tabla-personalizada thead>tr>th {
+  background-color: #3f51b5 !important;
+  color: white !important;
+}
+
+.footer-modal {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 1rem 0px;  
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  border-top: 1px solid #ddd;
+}
+
+/* Cambiar fondo del header */
+.header-modal .p-dialog-header {
+  background: #3f51b5;
+  color: #fff;            /* texto en blanco */
+  font-weight: bold;
+  border-top-left-radius: 10px;  /* mismos bordes que el modal */
+  border-top-right-radius: 10px;
+  padding: 1rem;
+}

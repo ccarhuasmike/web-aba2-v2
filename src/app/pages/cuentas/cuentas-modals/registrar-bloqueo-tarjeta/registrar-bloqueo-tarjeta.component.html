@@ -1,0 +1,79 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="md:col-span-1">
+        Tipo de tarjeta: <strong>{{tarjeta?.tipoTarjeta}}</strong>
+    </div>
+    <div class="md:col-span-1">
+        Número de tarjeta: <strong>{{tarjeta?.enmascarado}}</strong>
+    </div>
+    <div class="md:col-span-1">
+        Bloqueo actual: <strong>{{tarjeta?.descripcionMotivoEstado}}</strong>
+    </div>
+    <div class="md:col-span-2">
+        <form [formGroup]="formBloqueo" novalidate>
+            <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+                <div class="md:col-span-1">
+                    <label for="tipoBloqueo" class="block mb-1 text-sm">Tipo bloqueo</label>
+                    <p-autoComplete id="tipoBloqueo" class="w-full" name="tipoBloqueo" formControlName="tipoBloqueo"
+                        [suggestions]="filteredElement" (completeMethod)="filterElement($event, motivosBloqueoTarjeta)"
+                        optionLabel="descripcion" emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                        <ng-template let-element>
+                            <div>{{element.descripcion}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="descripcion" class="block mb-1 text-sm">Descripción</label>
+                    <div class="p-fluid">
+                        <input id="descripcion" class="w-full" #valorDescripcion pInputText type="text" [attr.maxlength]="255"
+                            autocomplete="off" formControlName="descripcion"
+                            [ngClass]="{'ng-invalid': formBloqueo.get('descripcion')?.invalid && formBloqueo.get('descripcion')?.dirty}" />
+                        <div class="flex justify-end text-sm text-gray-500 mt-1">
+                            {{ valorDescripcion.value.length || 0 }} / 255
+                        </div>
+                        <p-message
+                            *ngIf="formBloqueo.get('descripcion')?.invalid && formBloqueo.get('descripcion')?.dirty"
+                            severity="error" variant="simple" size="small">
+                            Máximo 255 caracteres
+                        </p-message>
+                    </div>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="nombreArchivo" class="block mb-1 text-sm">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+                    <div class="p-fluid">
+                        <input id="nombreArchivo" class="w-full" #valorDescripcion pInputText type="text" readonly
+                            formControlName="nombreArchivo" autocomplete="off"
+                            [ngClass]="{'ng-invalid': formBloqueo.get('nombreArchivo')?.invalid && formBloqueo.get('nombreArchivo')?.dirty}" />
+                        <p-message
+                            *ngIf="formBloqueo.get('nombreArchivo')?.invalid && formBloqueo.get('nombreArchivo')?.dirty"
+                            severity="error" variant="simple" size="small">
+                            Es requerido
+                        </p-message>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="md:col-span-2">
+        <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
+            maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+            invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
+            (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
+            chooseLabel="Seleccionar archivo sustento">
+        </p-fileUpload>
+    </div>
+    <div class="md:col-span-2">
+        <div *ngFor="let estado of estadoTarjeta; let i = index">
+            <p style="margin-top: 10px; float: left; width: 100%;">
+                <strong>{{i + 1}}. {{estado.descripcion | uppercase}}</strong>
+            </p>
+            <ul class="row-list" *ngFor="let motivo of estado.motivosBloqueoTarjeta">
+                <li class="column-description">{{motivo.descripcion}} ({{motivo.codigoExterno}})</li>
+            </ul>
+        </div>
+    </div>
+    <div class="md:col-span-2 flex items-end justify-end gap-2 footer-modal">        
+          <p-button label="Aceptar" [disabled]="formBloqueo.invalid || loadingFile || disableButton" (click)="registrarBloqueo()" (keydown.enter)="registrarBloqueo()" (keydown)="registrarBloqueo()"/>
+    </div>
+</div>

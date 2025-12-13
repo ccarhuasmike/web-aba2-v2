@@ -1,0 +1,8 @@
+<iframe [src]="base64File" *ngIf="displayFile" title="Preview file"></iframe>
+<p *ngIf="!displayFile">No hay vista previa del archivo</p>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button id="buttonConfirm" mat-raised-button color="warn" (click)="download()">
+        <em class="pi pi-download" style="color: #fff;"></em>
+        <span>Descargar archivo</span>
+    </button>
+</div>

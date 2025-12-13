@@ -1,0 +1,47 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="md:col-span-1">
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0" *appDisableContentByRole="[roles.PLAFT, roles.CONSULTA]">Estado actual</p-tab>
+                <p-tab value="1">Historial de cambios</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <p class="m-0">
+                        <p-table [value]="rowsEstadoActual"  [resizableColumns]="true" 
+                            [tableStyle]="{ 'min-width': '100% !important','max-width': '100% !important' }">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="text-align: left;" scope="col">Tarjeta: {{tarjeta?.enmascarado}}</th>
+                                    <th style="text-align: center;" scope="col">CLIENTE</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData>
+                                <tr>
+                                    <td>
+                                        <span class="pi " [ngClass]="rowData.icon"></span>&nbsp;&nbsp;{{rowData.field}}
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <p-toggleswitch [(ngModel)]="rowData.cliente" [disabled]="true">
+                                            <ng-template #handle let-checked="checked">
+                                                <i
+                                                    [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                                            </ng-template>
+                                        </p-toggleswitch>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p>
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <p class="m-0">
+                       
+                    </p>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

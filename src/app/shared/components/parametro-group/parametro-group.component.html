@@ -1,0 +1,44 @@
+<p-toast></p-toast>
+
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+
+    <form [formGroup]="form" novalidate>
+
+        <div class="md:col-span-1">
+            <label for="nomTabla" class="block mb-1 text-sm">Nombre del grupo</label>
+
+            <input id="nomTabla" class="w-full"
+                   type="text"
+                   pInputText
+                   formControlName="nomTabla"
+                   autocomplete="off">
+
+            <p-message *ngIf="form.get('nomTabla')?.dirty && form.get('nomTabla')?.errors?.['required']"
+                       severity="error"
+                       text="Es requerido">
+            </p-message>
+
+            <p-message *ngIf="form.get('nomTabla')?.dirty && form.get('nomTabla')?.errors?.['maxlength']"
+                       severity="error"
+                       text="Máximo 50 caracteres">
+            </p-message>
+        </div>
+
+        <div class="md:col-span-1 flex items-end justify-end footer-modal mt-3">
+            <p-button label="Cancelar"
+                      [text]="true"
+                      severity="secondary"
+                      (click)="closeGrupo()"
+                      (keydown.enter)="closeGrupo()">
+            </p-button>
+
+            <p-button class="ml-2"
+                      label="Aceptar"
+                      [disabled]="form.invalid"
+                      (click)="addGrupo()"
+                      (keydown.enter)="addGrupo()">
+            </p-button>
+        </div>
+
+    </form>
+</div>

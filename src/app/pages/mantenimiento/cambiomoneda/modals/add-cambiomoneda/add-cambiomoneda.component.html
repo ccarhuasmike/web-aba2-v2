@@ -1,0 +1,230 @@
+<p-toast></p-toast>
+<p-confirmdialog [style]="{ width: '450px' }" />
+<br>
+
+
+<form [formGroup]="formAddCabecera" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-1">
+            <label for="codigoCampana" class="block mb-1 text-sm">Codigo Campaña: &nbsp;</label>
+            <input id="codigoCampana" class="w-full" type="text" autocomplete="off" pInputText name="codigoCampania"
+                formControlName="codigoCampana" readonly="readonly">
+            <p-message
+                *ngIf="formAddCabecera.get('codigoCampana')?.dirty && formAddCabecera.get('codigoCampana')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>            
+        </div>
+        <div class="md:col-span-1">
+            <label for="nombreCampana" class="block mb-1 text-sm">Nombre Campaña: &nbsp;</label>
+            <input id="nombreCampana" class="w-full" type="text" autocomplete="off" pInputText name="nombreCampania"
+                formControlName="nombreCampania">
+            <p-message
+                *ngIf="formAddCabecera.get('nombreCampania')?.dirty && formAddCabecera.get('nombreCampania')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>            
+        </div>
+        <div class="md:col-span-1">
+            <label for="tipoCampania" class="block mb-1 text-sm">Tipo de Campaña</label>
+            <p-autoComplete id="tipoCampania" class="w-full" name="tipoCampania" formControlName="tipoCampania"
+                (ngModelChange)="changeTipoCampania($event)" [suggestions]="filteredElementTipoCampania"
+                (completeMethod)="filterElementTipoCampania($event)" optionLabel="nombre" emptyMessage='Sin resultados'
+                [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.nombre}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message *ngIf="formAddCabecera.get('tipoCampania')?.dirty && !formAddCabecera.get('tipoCampania')?.valid"
+                severity="error" text="No es una opción">
+            </p-message>           
+        </div>
+        <div class="md:col-span-1">
+            <label for="estadoCampania" class="block mb-1 text-sm">Estado Campaña</label>
+            <p-autoComplete id="estadoCampania" class="w-full" name="estadoCampania" formControlName="estadoCampania" optionLabel="nombre"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.nombre}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message
+                *ngIf="formAddCabecera.get('estadoCampania')?.dirty && !formAddCabecera.get('estadoCampania')?.valid"
+                severity="error" text="No es una opción">
+            </p-message>
+        </div>
+        <div class="md:col-span-1" *ngIf="formAddCabecera?.value.tipoCampania?.id == '01'">
+            <label for="tcCompra" class="block mb-1 text-sm">TC Compra OH: &nbsp;</label>
+            <input id="tcCompra" class="w-full" type="text" autocomplete="off" pInputText name="tcCompra" formControlName="tcCompra"
+                pInputText autocomplete="off" pKeyFilter="num">
+            <p-message
+                *ngIf="formAddCabecera.get('tcCompra')?.dirty && formAddCabecera.get('tcCompra')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>
+            <p-message
+                *ngIf="formAddCabecera.get('tcCompra')?.dirty && formAddCabecera.get('tcCompra')?.hasError('pattern')"
+                severity="error" text="El valor debe tener hasta 1 entero y 4 decimales">
+            </p-message>           
+        </div>
+        <div class="md:col-span-1" *ngIf="formAddCabecera?.value.tipoCampania?.id == '01'">
+            <label for="tcVenta" class="block mb-1 text-sm">TC Venta OH: &nbsp;</label>
+            <input id="tcVenta"  class="w-full" type="text" autocomplete="off" pInputText name="tcVenta" formControlName="tcVenta"
+                pInputText autocomplete="off" pKeyFilter="num">
+
+            <p-message
+                *ngIf="formAddCabecera.get('tcVenta')?.dirty && formAddCabecera.get('tcVenta')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>
+
+            <p-message
+                *ngIf="formAddCabecera.get('tcVenta')?.dirty && formAddCabecera.get('tcVenta')?.hasError('pattern')"
+                severity="error" text="El valor debe tener hasta 1 entero y 4 decimales">
+            </p-message>            
+        </div>
+        <div class="md:col-span-1" *ngIf="formAddCabecera?.value.tipoCampania?.id == '02'">
+            <label for="tasaCompra" class="block mb-1 text-sm">Tasa Compra: &nbsp;</label>
+            <input id="tasaCompra" class="w-full" type="text" autocomplete="off" pInputText name="tasaCompra"
+                formControlName="tasaCompra" pInputText autocomplete="off" pKeyFilter="num">
+            <p-message
+                *ngIf="formAddCabecera.get('tasaCompra')?.dirty && formAddCabecera.get('tasaCompra')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>
+
+            <p-message
+                *ngIf="formAddCabecera.get('tasaCompra')?.dirty && formAddCabecera.get('tasaCompra')?.hasError('pattern')"
+                severity="error" text="El valor debe tener hasta 1 entero y 4 decimales">
+            </p-message>            
+        </div>
+        <div class="md:col-span-1" *ngIf="formAddCabecera?.value.tipoCampania?.id == '02'">
+            <label for="tasaVenta" class="block mb-1 text-sm">Tasa Venta: &nbsp;</label>
+            <input id="tasaVenta" class="w-full" type="text" autocomplete="off" pInputText name="tasaVenta" formControlName="tasaVenta"
+                pInputText autocomplete="off" pKeyFilter="num">
+            <p-message
+                *ngIf="formAddCabecera.get('tasaVenta')?.dirty && formAddCabecera.get('tasaVenta')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>
+
+            <p-message
+                *ngIf="formAddCabecera.get('tasaVenta')?.dirty && formAddCabecera.get('tasaVenta')?.hasError('pattern')"
+                severity="error" text="El valor debe tener hasta 1 entero y 4 decimales">
+            </p-message>           
+        </div>
+        <div class="md:col-span-1">
+            <label for="tipoValidacion"  class="block mb-1 text-sm">Tipo de Validación</label>
+            <p-autoComplete id="tipoValidacion" class="w-full" name="tipoValidacion" formControlName="tipoValidacion"
+                [suggestions]="filteredElementTipoValidacion" (completeMethod)="filterElementTipoValidacion($event)"
+                optionLabel="nombre" (ngModelChange)="changeModelTipoValidacion($event)" emptyMessage='Sin resultados'
+                [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.nombre}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message
+                *ngIf="formAddCabecera.get('tipoValidacion')?.dirty && !formAddCabecera.get('tipoValidacion')?.valid"
+                severity="error" text="No es una opción">
+            </p-message>           
+        </div>
+        <div class="md:col-span-1">
+            <label for="montoValidacion"  class="block mb-1 text-sm">Monto Validación: &nbsp;</label>
+            <input id="montoValidacion" class="w-full" type="text" autocomplete="off" pInputText name="montoValidacion" autocomplete="off"
+                pKeyFilter="num" [disabled]="formAddCabecera!.value.tipoValidacion?.id != '04'"
+                formControlName="montoValidacion">
+            <p-message
+                *ngIf="formAddCabecera.get('montoValidacion')?.dirty && formAddCabecera.get('montoValidacion')?.hasError('required')"
+                severity="error" text="Es requerido">
+            </p-message>
+
+            <p-message
+                *ngIf="formAddCabecera.get('montoValidacion')?.dirty && formAddCabecera.get('montoValidacion')?.hasError('pattern')"
+                severity="error" text="Formato inválido">
+            </p-message>           
+        </div>
+        <div class="md:col-span-2">
+            <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1">
+                    <label for="fechaInicio" class="block mb-1 text-sm">Fecha Inicio</label>
+                    <p-datepicker   id="fechaInicio" class="w-full" formControlName="fechaInicio" dateFormat="dd/mm/yy"
+                        (ngModelChange)="changeModelFecha()" yearRange="2020:2050" inputId="monthpicker">
+                    </p-datepicker>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="fechaFin" class="block mb-1 text-sm">Fecha Fin</label>
+                    <p-datepicker id="fechaFin" class="w-full" formControlName="fechaFin" dateFormat="dd/mm/yy"
+                        (ngModelChange)="changeModelFecha()" appendTo="body" yearRange="2020:2050"
+                        inputId="monthpicker">
+                    </p-datepicker>
+                </div>
+                <div class="md:col-span-1 mt-6 flex items-end justify-end">
+                    <button [disabled]="!formAddCabecera.valid" pButton label="Guardar" icon="pi pi-plus"
+                        (click)="grabarCabecera()"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+<form [formGroup]="formAddDetalle" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1">
+            <label for="diasSemana" class="block mb-1 text-sm">Dia</label>
+            <p-autoComplete id="diasSemana" class="w-full" name="diasSemana" formControlName="diasSemana"
+                [suggestions]="filteredElementDias" (completeMethod)="filterElementDias($event)" optionLabel="nombre"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.nombre}}</div>
+                </ng-template>
+            </p-autoComplete>
+
+            <p-message *ngIf="formAddCabecera.get('diasSemana')?.dirty && !formAddCabecera.get('diasSemana')?.valid"
+                severity="error" text="No es una opción">
+            </p-message>
+
+        </div>
+        <div class="md:col-span-1">
+            <br>
+            <ngx-timepicker-field formControlName="horaInicio" [format]="24"
+                [defaultTime]="'23:11'"></ngx-timepicker-field>
+        </div>
+        <div class="md:col-span-1">
+            <br>
+            <ngx-timepicker-field formControlName="horaFin" [format]="24"
+                [defaultTime]="'23:11'"></ngx-timepicker-field>
+        </div>
+        <div class="md:col-span-3 flex items-end justify-end">
+            <button [disabled]="!(formAddDetalle!.valid) || idCambioMonedaCampana == 0" (click)="agregarDetalle()"
+                label="Agregar" icon="pi pi-plus"></button>
+        </div>
+        
+    </div>
+</form>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+        <p-table [value]="detallesCampania" resizableColumns="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 8%;" scope="col"></th>
+                    <th style="width: 36%;" scope="col">Dias</th>
+                    <th style="width: 28%;" scope="col">Hora inicio</th>
+                    <th style="width: 28%;" scope="col">Hora Fin</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr style="cursor: pointer;">
+                    <td style="width: 8%;">
+                        <div>
+
+                            <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"
+                                icon="pi pi-ellipsis-v" />
+                            <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
+
+
+                        </div>
+                    </td>
+                    <td style="width: 36%;">{{rowData.nombreDias}}</td>
+                    <td style="width: 28%;">{{rowData.horaInicio }}</td>
+                    <td style="width: 28%;">{{rowData.horaFin }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="md:col-span-2 flex items-end justify-end  footer-modal">
+        <p-button label="Cerrar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" />
+    </div>
+</div>

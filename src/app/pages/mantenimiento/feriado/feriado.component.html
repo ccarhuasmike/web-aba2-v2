@@ -1,0 +1,86 @@
+<p-confirmdialog [style]="{ width: '450px' }" />
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="md:col-span-1">
+        <p-breadcrumb [home]="home" [model]="items" />
+    </div>
+</div>
+<br>
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-start gap-2">
+        <form [formGroup]="formBusqueda" novalidate>
+            <button pButton label="Filtrar" icon="pi pi-filter" (click)="mostrarFiltro = !mostrarFiltro">
+            </button>
+            <div *ngIf="mostrarFiltro" class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                <div class="md:col-span-1">
+                    <label for="fechaRangoFeriados" class="block mb-1 text-sm">Rango de Fechas</label>
+                    <p-datepicker id="fechaRangoFeriados" class="w-full" formControlName="fechaRangoFeriados"
+                        (ngModelChange)="changeModelFechaRangoFeriado($event)" dateFormat="dd/mm/yy"
+                        yearRange="1940:2030" selectionMode="range" />
+                </div>
+                <div class="md:col-span-1">
+                    <label for="isRepeat" class="block mb-1 text-sm">Feriado Recurrente</label>
+                    <p-autoComplete id="isRepeat" name="isRepeat" formControlName="isRepeat"
+                        [suggestions]="filteredElementFeriadoRecurrente" optionLabel="descripcion"
+                        emptyMessage='Sin resultados' [dropdown]="true"
+                        (completeMethod)="filterElementFeriadoRecurrente($event, isRepeat)" appendTo="body">
+                        <ng-template let-element>
+                            <div>{{element.descripcion}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="col-span-1 flex items-end justify-end gap-2">
+                    <button pButton label="Buscar" icon="pi pi-search" (click)="getFeriados()">
+                    </button>
+                    <button pButton label="Agregar" icon="pi pi-plus" (click)="openDialogAddFeriado()"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="md:col-span-1">
+        <p-table #dt1 resizableColumns="true" rowExpandMode="single" class="mi-tabla-personalizada"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idCalendario" [columns]="cols" [rows]="rows"
+            [value]="datosFeriados" [totalRecords]="datosFeriados.length" [loading]="loadingFeriados">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th scope="col" style="text-align: center; width: 10px;">
+                        <p-button icon="pi pi-refresh" severity="secondary" pTooltip="Refrescar" showDelay="1000"
+                            hideDelay="300" (click)="getFeriados()" (keydown.enter)="getFeriados()" rounded raised />
+                    </th>
+                    <th scope="col" *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithIcon" [pContextMenuRow]="rowData">
+                    <td style="text-align: center; width: 10px;">
+                        <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"  
+                            icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
+                    </td>
+                    <td>{{rowData.descripcion}}</td>
+                    <td>{{rowData.descripcionTipoFecha}}</td>
+                    <td>{{rowData.fecha | date:'dd/MM/yyyy'}}</td>
+                    <td style="text-align: center;">
+                        <div *ngIf="rowData.indRepetir==1; else noRepeat" class="p-tag p-tag-success">
+                            <span class="pi pi-check"></span>
+                        </div>
+                        <ng-template #noRepeat>
+                            <div class="p-tag p-tag-danger">
+                                <span class="pi pi-filter-slash"></span>
+                            </div>
+                        </ng-template>
+                    </td>
+                    <td></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

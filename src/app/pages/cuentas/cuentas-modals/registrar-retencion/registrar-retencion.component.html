@@ -1,0 +1,56 @@
+<p-toast></p-toast>
+<br>
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <form [formGroup]="formRetencion" novalidate>
+        <div class="md:col-span-1">
+            <label for="tipoRetencion" class="block mb-1 text-sm">Tipo de retención</label>
+            <p-autoComplete id="tipoRetencion" class="w-full" name="tipoRetencion" formControlName="tipoRetencion" [suggestions]="filteredElement"
+                (completeMethod)="filterElementTipoRetencion($event, tipoRetencion)" optionLabel="valCadLargo"
+                emptyMessage='Sin resultados' [dropdown]="true" appendTo="body">
+                <ng-template let-element>
+                    <div>{{element.valCadLargo}}</div>
+                </ng-template>
+            </p-autoComplete>
+            <p-message *ngIf="formRetencion.get('tipoRetencion')?.invalid && formRetencion.get('tipoRetencion')?.dirty"
+                severity="error" variant="simple" size="small">
+                No es una opción
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="importe" class="block mb-1 text-sm">Importe</label>
+            <p-inputNumber id="importe" class="w-full" name="importe" formControlName="importe" locale="en-US" minFractionDigits="2"
+                maxFractionDigits="2" (onInput)="changeModelImporte($event)" [inputStyle]="{'text-align': 'right'}"
+                autocomplete="off" appendTo="body"></p-inputNumber>
+
+            <p-message *ngIf="formRetencion.get('importe')?.invalid && formRetencion.get('importe')?.dirty"
+                severity="error" variant="simple" size="small">
+                Es requerido
+            </p-message>
+        </div>
+        <div class="md:col-span-1">
+            <label for="nombreArchivo" class="block mb-1 text-sm">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+            <div class="p-fluid">
+                <input class="w-full" id="nombreArchivo" #valorDescripcion pInputText type="text" readonly formControlName="nombreArchivo"
+                    autocomplete="off"
+                    [ngClass]="{'ng-invalid': formRetencion.get('nombreArchivo')?.invalid && formRetencion.get('nombreArchivo')?.dirty}" />
+                <p-message
+                    *ngIf="formRetencion.get('nombreArchivo')?.invalid && formRetencion.get('nombreArchivo')?.dirty"
+                    severity="error" variant="simple" size="small">
+                    Es requerido
+                </p-message>
+            </div>
+        </div>
+    </form>
+    <div class="md:col-span-2">
+        <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
+            maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+            invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
+            (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
+            chooseLabel="Seleccionar archivo sustento">
+        </p-fileUpload>
+    </div>
+    <div class="md:col-span-2 flex items-end justify-end gap-2 footer-modal">
+        <p-button label="Aceptar" [disabled]="formRetencion.invalid || loadingFile || disableButton"
+            (click)="registrarRetencion()" (keydown.enter)="registrarRetencion()"/>
+    </div>
+</div>

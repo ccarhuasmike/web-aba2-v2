@@ -1,0 +1,42 @@
+<p-toast></p-toast>
+<br>
+
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="md:col-span-1">
+        <p-table #dt1  styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" dataKey="idCambioMonedaCamDiaLog" [rows]="rows" [value]="datosLogs"
+            [totalRecords]="datosLogs.length" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loadingLogs">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Código Día</th>
+                    <th scope="col">Secuencial</th>
+                    <th scope="col">Hora Inicio</th>
+                    <th scope="col">Hora Fín</th>
+                    <th scope="col">Fecha Registro</th>
+                    <th scope="col">Usuario Registro</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                <tr id="tableWithIcon">
+                    <td>{{rowData.tipoLogDesc}}</td>
+                    <td>{{rowData.dia}}</td>
+                    <td>{{rowData.secuencial}}</td>
+                    <td>{{rowData.horaInicio}}</td>
+                    <td>{{rowData.horaFin}}</td>
+                    <td>{{rowData.fechaRegistroFormat}}</td>
+                    <td>{{rowData.usuarioRegistro}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="md:col-span-1 flex items-end justify-end  footer-modal">        
+        <p-button label="Cerrar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" />
+    </div>
+</div>

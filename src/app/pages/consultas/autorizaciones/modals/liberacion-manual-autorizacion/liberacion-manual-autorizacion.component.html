@@ -1,0 +1,156 @@
+<p-toast></p-toast>
+<br>
+
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
+    <form [formGroup]="formLiberacion">
+        <div class="md:col-span-1">
+            <label for="numeroCuenta" class="block mb-1 text-sm">Cuenta:</label>
+            <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
+
+        </div>
+        <div class="md:col-span-1">
+            <label for="tarjeta" class="block mb-1 text-sm">Tarjeta:</label> <span
+                class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
+        </div>
+        <div class="md:col-span-1 flex items-end justify-end  footer-modal">
+            <!-- <p-button label="Guardar" [text]="true" severity="secondary" *ngIf="isUpdate"
+                [disabled]="!formAddBanco.valid || disableButtonAdd" (click)="addBanco()" (keydown.enter)="addBanco()"
+                (keydown)="addBanco()" />
+            <p-button label="Actualizar" [text]="true" severity="secondary" *ngIf="!isUpdate"
+                [disabled]="disableButtonUpdate" (click)="updateBanco()" (keydown.enter)="updateBanco()"
+                (keydown)="updateBanco()" />
+            <p-button label="Cerrar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" /> -->
+        </div>
+    </form>
+</div>
+
+
+
+<!-- 
+
+<div mat-dialog-content class="dialog-content-wrapper"
+    style="max-height: 85vh;display: flex;flex-direction: column;padding: 0 !important;margin-top: -24px !important;margin-bottom: -24px !important;">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" style="min-height: initial;">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="center center" style="display: unset;">
+            <div style="text-align: center;">
+                <span class="title dialog-title">Liberación Manual de Autorización</span>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 pb-24 m-0" fusePerfectScrollbar>
+        <form [formGroup]="formLiberacion" novalidate>
+            <div class="p-grid p-fluid p-align-center">
+                <div class="p-col-3">
+                    <label>Cuenta:</label> <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
+                </div>
+                <div class="p-col-3">
+                    <label>Tarjeta:</label> <span
+                        class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
+                </div>
+            </div>
+
+            <hr />
+            <div class="datosPrincipales">
+                <div class="p-grid p-fluid">
+                    <div class="p-col-12">
+                        <h3><u>TRANSACCIÓN</u></h3>
+                        <div class="p-grid p-fluid">
+                            <div class="p-col-12">
+                                <label>Id Transacción: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.idTransaccion}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Fecha Transacción: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.fechaTransaccion}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Num. Tarjeta: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Token: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.tarjeta.token}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Cód Descrpcion: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.transaccionResponse.ftcCode}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Descripcion: &nbsp;</label>
+                                <span>{{datosAutorizacion.transaccionResponse.ftcDescription}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Referencia: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.referencia}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Código Autorización:</label>
+                                <span class="secondary-text">{{datosAutorizacion.codigoAutorizacion}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Importe: &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.transaccionProcesada.monto |
+                                    currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                            </div>
+                            <div class="p-col-4">
+                                <label>Red (descripción): &nbsp;</label>
+                                <span class="secondary-text">{{datosAutorizacion.descOrigenInt}}</span>
+                            </div>
+                            <div class="p-col-12">
+                                <label>Estado Confirmación: &nbsp;</label>
+                                <div *ngIf="datosAutorizacion.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
+                                    <span></span>
+                                </div>
+                                <ng-template #estadoConfirmacion>
+                                    <span [ngSwitch]="datosAutorizacion?.estadoConfirmacion">
+                                        <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success"
+                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                                        <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning"
+                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                                        <span *ngSwitchDefault class="p-tag p-tag-danger"
+                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                                    </span>
+                                </ng-template>
+                            </div>
+                            <div class="p-col-3">
+                                <label>Estado Autorizacion: &nbsp;</label>
+                                <span class="secondary-text">
+                                    <div *ngIf="datosAutorizacion.reversado; else other_content">
+                                        <span class="p-tag p-tag-danger" style="font-size: 12px;">REVERSED</span>
+                                    </div>
+                                    <ng-template #other_content>
+                                        <span class="p-tag p-tag-success" style="font-size: 12px;">AUTHORIZED</span>
+                                    </ng-template>
+                                </span>
+                            </div>
+                            <div class="p-col-12">
+                                <label>Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+                                <input type="text" autocomplete="off" pInputText name="nombreArchivo"
+                                    formControlName="nombreArchivo" readonly>
+                                <mat-error
+                                    [ngStyle]="{'display': formLiberacion.get('nombreArchivo').dirty && !formLiberacion.get('nombreArchivo').valid ? 'block' : 'none' }">
+                                    Es requerido
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
+            maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+            invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
+            (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
+            chooseLabel="Seleccionar archivo"></p-fileUpload>
+    </div>
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-raised-button color="primary" [disabled]="disableButton"
+            (click)="postLiberarManualmenteAutorizacion()">
+            Liberar Manualmente Autorizacion
+        </button>
+        <button mat-raised-button color="warn" mat-dialog-close>
+            Cerrar
+        </button>
+    </div>
+</div> -->

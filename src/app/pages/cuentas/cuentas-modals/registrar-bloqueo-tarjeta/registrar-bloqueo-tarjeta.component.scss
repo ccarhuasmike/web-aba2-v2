@@ -1,0 +1,21 @@
+.row-list {
+    float: left;
+    width: 50%;
+    display: flex;
+    margin: 5px 0px;
+
+    .column-description {
+        width: 100%;
+    }
+}
+
+@media (max-width: 757px) {
+    .row-list {
+        float: none;
+        width: 100%;
+    }
+
+    .row-list-title:nth-child(2n+1) {
+        display: none;
+    }
+}

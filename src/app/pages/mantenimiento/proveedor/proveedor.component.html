@@ -1,0 +1,75 @@
+<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="md:col-span-1">
+        <p-breadcrumb [home]="home" [model]="items" />
+    </div>
+</div>
+<br>
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-start gap-2">
+        <form [formGroup]="formBusqueda" novalidate>
+            <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                <div class="md:col-span-1 flex flex-wrap gap-2">
+                    <button pButton label="Filtrar" icon="pi pi-filter" (click)="mostrarFiltro = !mostrarFiltro">
+                    </button>
+                    <button pButton label="Agregar" class="p-ripple p-button p-button-danger p-component"
+                        icon="pi pi-plus" (click)="openDialogCrearProveedor()"></button>
+                </div>
+            </div>
+            <div *ngIf="mostrarFiltro" class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                <div class="md:col-span-1">
+                    <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de documento</label>
+                    <p-select id="tipoDocumento" class="w-full" formControlName="tipoDocumento"
+                        (onChange)="changeModelTipoDocumento($event)" [options]="documentos" optionLabel="descripcion"
+                        optionValue="id" placeholder="Seleccione Tipo de Documento">
+                    </p-select>
+                </div>
+                <div class="md:col-span-1">
+                    <label for="nroCaracter" class="block mb-1 text-sm">Nro de documento</label>
+                    <p-inputgroup>
+                        <input class="w-full" id="nroCaracter" formControlName="nroDocumento" #valorDocumento pInputText type="text"
+                            placeholder="Ingrese N° Documento" [attr.minlength]="nroCaracter"
+                            [attr.maxlength]="nroCaracter" [style]="{'text-transform': 'uppercase'}" autocomplete="off"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />                       
+                    </p-inputgroup>                    
+                </div>
+                <div class="col-span-1 flex items-end justify-end gap-2">
+                    <button pButton label="Buscar" icon="pi pi-search" [disabled]="formBusqueda.invalid"
+                        (click)="searchProveedor()">
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="md:col-span-1">
+        <p-table #dt class="mi-tabla-personalizada" [paginator]="false" [value]="proveedores"
+            [totalRecords]="proveedores.length">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th scope="col"></th>
+                    <th pResizableColumn scope="col">Tipo de proveedor</th>
+                    <th pResizableColumn scope="col">Documento de identidad</th>
+                    <th pResizableColumn scope="col">Razón social</th>
+                    <th pResizableColumn scope="col">Nombres</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td style="text-align: center; width: 10px;">
+                        <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)"
+                            (keydown.enter)="onButtonClick($event, rowData, menusss)" icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
+                    </td>
+                    <td>{{rowData.tipoPartnerDesc}}</td>
+                    <td>{{rowData.numeroDocIdentidad}}</td>
+                    <td>{{rowData.razonSocial}}</td>
+                    <td>{{rowData.primerNombre}} {{rowData.apellidoPaterno}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="5" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

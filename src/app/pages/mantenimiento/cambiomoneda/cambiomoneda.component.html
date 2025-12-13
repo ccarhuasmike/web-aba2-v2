@@ -1,0 +1,200 @@
+<p-toast></p-toast>
+<p-confirmdialog [style]="{ width: '450px' }" />
+
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-start gap-2">
+        <button pButton label="Agregar" icon="pi pi-plus" (click)="openDialogAgregar()"></button>
+    </div>
+    <div class="md:col-span-1">
+        <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            dataKey="idCambioMonedaCampana" [paginator]="true" [showCurrentPageReport]="true" [filterDelay]="0"
+            [rows]="rows" [value]="data" [totalRecords]="data.length" [rowsPerPageOptions]="rowsPerPageOptions"
+            [loading]="loading">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Código Campaña</th>
+                    <th scope="col">Nombre Campaña</th>
+                    <th scope="col">Fec. Inicio Campaña</th>
+                    <th scope="col">Fec. Fin Campaña</th>
+                    <th scope="col">Tipo Campaña</th>
+                    <th scope="col">TC Compra OH</th>
+                    <th scope="col">TC Venta OH</th>
+                    <th scope="col">Tasa Compra</th>
+                    <th scope="col">Tasa Venta</th>
+                    <th scope="col">Tipo Validación</th>
+                    <th scope="col">Monto Validación</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Usuario Registro</th>
+                    <th scope="col">Fecha Registro</th>
+                    <th scope="col">Usuario Aprobación</th>
+                    <th scope="col">Fecha Aprobación</th>
+                    <th scope="col">Usuario Cancelación</th>
+                    <th scope="col">Fecha Cancelación</th>
+                    <th scope="col">Usuario Vencimiento</th>
+                    <th scope="col">Fecha Vencimiento</th>
+                    <th scope="col">Usuario Modificación</th>
+                    <th scope="col">Fecha Modificación</th>
+                </tr>
+                <tr id="tableWithIcon">
+                    <th scope="col" style="text-align: center; min-width: 39px;">
+                        <p-button icon="pi pi-refresh" severity="secondary" pTooltip="Refrescar" showDelay="1000"
+                            hideDelay="300" (click)="getCampanias()" (keydown.enter)="getCampanias()" rounded raised />
+
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'codigoCampana', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'descripcion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaInicioFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaFinFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tipoCampana', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tipoCambioCompraOh', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tipoCambioVentaOh', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tasaCompraOh', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tasaVentaOh', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'tipoValidacion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'montoValidacion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'descripcionLarga', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'usuarioRegistro', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaRegistroFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'usuarioAprobacion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaHoraAprobacionFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'usuarioCancelacion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaCancelacionFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'usuarioVencimiento', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaHoraVencimientoFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'usuarioActualizacion', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                    <th scope="col">
+                        <input pInputText type="text"
+                            (input)="dt1.filter($event.target.value, 'fechaActualizacionFormat', 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                <tr id="tableWithDetails">
+                    <td style="text-align: center; width: 39px;">
+
+                        <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"
+                            icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
+
+                    
+                    </td>
+                    <td>{{rowData.codigoCampana}}</td>
+                    <td>{{rowData.descripcion}}</td>
+                    <td>{{rowData.fechaInicioFormat}}</td>
+                    <td>{{rowData.fechaFinFormat}}</td>
+                    <td>{{rowData.tipoCampanaDesc}}</td>
+                    <td>{{rowData.tipoCambioCompraOhFormat}}</td>
+                    <td>{{rowData.tipoCambioVentaOhFormat}}</td>
+                    <td>{{rowData.tasaCompraOhFormat}}</td>
+                    <td>{{rowData.tasaVentaOhFormat}}</td>
+                    <td>{{rowData.tipoValidacionDesc}}</td>
+                    <td>{{rowData.montoValidacionFormat}}</td>
+                    <td>{{rowData.descripcionLarga}}</td>
+                    <td>{{rowData.usuarioRegistro}}</td>
+                    <td>{{rowData.fechaRegistroFormat}}</td>
+                    <td>{{rowData.usuarioAprobacion}}</td>
+                    <td>{{rowData.fechaHoraAprobacionFormat}}</td>
+                    <td>{{rowData.usuarioCancelacion}}</td>
+                    <td>{{rowData.fechaCancelacionFormat}}</td>
+                    <td>{{rowData.usuarioVencimiento}}</td>
+                    <td>{{rowData.fechaHoraVencimientoFormat}}</td>
+                    <td>{{rowData.usuarioActualizacion}}</td>
+                    <td>{{rowData.fechaActualizacionFormat}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="22" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
