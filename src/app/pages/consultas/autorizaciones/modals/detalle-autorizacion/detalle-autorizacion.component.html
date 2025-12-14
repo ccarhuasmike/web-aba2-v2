@@ -8,10 +8,14 @@
         </div>
         <div class="md:col-span-2 flex items-center gap-2">
             <span class="font-bold">Tarjeta:&nbsp;</span>
-            <span class="secondary-text" *ngIf="!datosAutorizaciones.tarjeta.numTarjetaVisible">{{datosAutorizaciones.tarjeta.enmascarado}}</span>
-            <span class="secondary-text" *ngIf="datosAutorizaciones.tarjeta.numTarjetaVisible">{{datosAutorizaciones.tarjeta.desenmascarado}}</span>
-            <span *appDisableContentByRole="[roles.ATENCION_CLIENTE, roles.ATENCION_CLIENTE_TD, roles.CONSULTA, roles.OPERACION_CONTABLE, roles.PLAFT, roles.TI]">
-                <p-button *ngIf="datosAutorizaciones.tarjeta.token" styleClass="p-button-text p-button-rounded p-button-sm"
+            <span class="secondary-text"
+                *ngIf="!datosAutorizaciones.tarjeta.numTarjetaVisible">{{datosAutorizaciones.tarjeta.enmascarado}}</span>
+            <span class="secondary-text"
+                *ngIf="datosAutorizaciones.tarjeta.numTarjetaVisible">{{datosAutorizaciones.tarjeta.desenmascarado}}</span>
+            <span
+                *appDisableContentByRole="[roles.ATENCION_CLIENTE, roles.ATENCION_CLIENTE_TD, roles.CONSULTA, roles.OPERACION_CONTABLE, roles.PLAFT, roles.TI]">
+                <p-button *ngIf="datosAutorizaciones.tarjeta.token"
+                    styleClass="p-button-text p-button-rounded p-button-sm"
                     [icon]="datosAutorizaciones.tarjeta.numTarjetaVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"
                     (click)="visibilidadTarjeta()" pTooltip="Mostrar/Ocultar tarjeta" tooltipPosition="top">
                 </p-button>
@@ -25,7 +29,8 @@
                     <p-tab value="0">Datos Principales</p-tab>
                     <p-tab value="1">Datos Adicionales</p-tab>
                     <p-tab value="2">Transaccion Original</p-tab>
-                    <p-tab value="3" *appDisableContentByRole="[roles.ATENCION_CLIENTE_N1]" [disabled]="disableTabAjuste">Datos Ajuste</p-tab>
+                    <p-tab value="3" *appDisableContentByRole="[roles.ATENCION_CLIENTE_N1]"
+                        [disabled]="disableTabAjuste">Datos Ajuste</p-tab>
                 </p-tablist>
                 <p-tabpanels>
                     <p-tabpanel value="0">
@@ -36,7 +41,8 @@
                             <div class="md:col-span-3">
                                 <span class="font-bold">Descripcion:&nbsp;</span>
                                 <span class="secondary-text">
-                                    <span *ngIf="datosAutorizaciones.transaccionResponse.ftcCode">({{datosAutorizaciones.transaccionResponse.ftcCode}})</span>
+                                    <span
+                                        *ngIf="datosAutorizaciones.transaccionResponse.ftcCode">({{datosAutorizaciones.transaccionResponse.ftcCode}})</span>
                                     {{datosAutorizaciones.transaccionResponse.ftcDescription}}
                                 </span>
                             </div>
@@ -74,120 +80,33 @@
                             </div>
                             <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
                                 <span class="font-bold">Modo Entrada:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.posEntryMode}}</span>
+                                <span
+                                    class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.posEntryMode}}</span>
                             </div>
                             <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
                                 <span class="font-bold">ECI:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.posConditionCode}}</span>
+                                <span
+                                    class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.posConditionCode}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Estado Autorizacion:&nbsp;</span>
                                 <span [ngSwitch]="datosAutorizaciones.estadoAutorizacion">
-                                    <span *ngSwitchCase="'AUTHORIZED'" class="p-tag p-tag-success" style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
-                                    <span *ngSwitchCase="'REJECTED'" class="p-tag p-tag-danger" style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
-                                    <span *ngSwitchCase="'REVERSED'" class="p-tag p-tag-danger" style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
-                                    <span *ngSwitchDefault class="p-tag p-tag-danger" style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
+                                    <span *ngSwitchCase="'AUTHORIZED'" class="p-tag p-tag-success"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
+                                    <span *ngSwitchCase="'REJECTED'" class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
+                                    <span *ngSwitchCase="'REVERSED'" class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
+                                    <span *ngSwitchDefault class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoAutorizacion}}</span>
                                 </span>
                             </div>
-                            <div class="md:col-span-3" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <h4><u>Datos Comercio</u></h4>
-                            </div>
-                            <div class="md:col-span-2" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Nombre:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceName}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Actividad:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.merchantType}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Pais:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.countryCode}} {{datosAutorizaciones.transaccionRequest.dataElements?.country}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Terminal:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceTerminalId}}</span>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Indicadores</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Reversado:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.estadoReversado}}</span>
-                            </div>
-                            <div class="md:col-span-2">
-                                <span class="font-bold">Estado Confirmacion:&nbsp;</span>
-                                <div *ngIf="datosAutorizaciones.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
-                                    <span></span>
-                                </div>
-                                <ng-template #estadoConfirmacion>
-                                    <span [ngSwitch]="datosAutorizaciones.estadoConfirmacion">
-                                        <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success" style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
-                                        <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning" style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
-                                        <span *ngSwitchDefault class="p-tag p-tag-danger" style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
-                                    </span>
-                                </ng-template>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Operacion Original</u></h4>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Divisa:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionCurrencyCode}}
-                                    {{datosAutorizaciones.transaccionRequest.dataElements?.currency}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Importe Original:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionAmountFormatted | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Cambio:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.conversionRate | currency:"&nbsp;":"symbol":'1.4-4'}}</span>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Datos Conciliacion</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Moneda:&nbsp;</span>
-                                <span class="secondary-text">{{tipoCuenta?.codigoMoneda}} {{tipoCuenta?.moneda}}</span>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Importe:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Codigo On-line</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Mensaje:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.codigoTipoMensaje}}</span>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Datos Cuenta</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Moneda:&nbsp;</span>
-                                <span class="secondary-text">{{tipoCuenta?.codigoMoneda}} {{tipoCuenta?.moneda}}</span>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Importe Transaccion:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Total Autorizado:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-3">
-                                <h4><u>Datos Compra</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Cod. Comercio:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceCode}}</span>
-                            </div>
+
                         </div>
                     </p-tabpanel>
                     <p-tabpanel value="1">
-                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4" *ngIf="datosRequest && datosRequest.originAccountData">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4"
+                            *ngIf="datosRequest && datosRequest.originAccountData">
                             <h4><u>Cuenta origen</u></h4>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Nombres:&nbsp;</span>
@@ -215,11 +134,13 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4" *ngIf="datosRequest && datosRequest.destinationAccountData">
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4"
+                            *ngIf="datosRequest && datosRequest.destinationAccountData">
                             <h4><u>Cuenta destino</u></h4>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Nombres:&nbsp;</span>
-                                <span class="secondary-text">{{datosRequest.destinationAccountData.principalName}}</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.principalName}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Tipo documento:&nbsp;</span>
@@ -227,15 +148,18 @@
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Nro. documento:&nbsp;</span>
-                                <span class="secondary-text">{{datosRequest.destinationAccountData.identDocNumber}}</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.identDocNumber}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Nro. cuenta:&nbsp;</span>
-                                <span class="secondary-text">{{datosRequest.destinationAccountData.accountNumber}}</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.accountNumber}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Celular:&nbsp;</span>
-                                <span class="secondary-text">{{datosRequest.destinationAccountData.cellPhoneNumber}}</span>
+                                <span
+                                    class="secondary-text">{{datosRequest.destinationAccountData.cellPhoneNumber}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Banco:&nbsp;</span>
@@ -243,32 +167,121 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="md:col-span-3">
-                                <h4><u>Datos adicionales</u></h4>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Importe:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-1">
-                                <span class="font-bold">Moneda:&nbsp;</span>
-                                <span class="secondary-text">{{tipoCuenta?.codigoMoneda}} {{tipoCuenta?.moneda}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Moneda divisa:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionCurrencyCode}}
-                                    {{datosAutorizaciones.transaccionRequest.dataElements?.currency}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Importe divisa:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionAmountFormatted | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
-                                <span class="font-bold">Cambio aplicado:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.conversionRate | currency:"&nbsp;":"symbol":'1.4-4'}}</span>
-                            </div>
+                        <div class="md:col-span-3" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <h4><u>Datos Comercio</u></h4>
                         </div>
+                        <div class="md:col-span-2" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Nombre:&nbsp;</span>
+                            <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceName}}</span>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Actividad:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.merchantType}}</span>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Pais:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.countryCode}}
+                                {{datosAutorizaciones.transaccionRequest.dataElements?.country}}</span>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Terminal:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceTerminalId}}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Indicadores</u></h4>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Reversado:&nbsp;</span>
+                            <span class="secondary-text">{{datosAutorizaciones.estadoReversado}}</span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <span class="font-bold">Estado Confirmacion:&nbsp;</span>
+                            <div *ngIf="datosAutorizaciones.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
+                                <span></span>
+                            </div>
+                            <ng-template #estadoConfirmacion>
+                                <span [ngSwitch]="datosAutorizaciones.estadoConfirmacion">
+                                    <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
+                                    <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
+                                    <span *ngSwitchDefault class="p-tag p-tag-danger"
+                                        style="font-size: 12px;">{{datosAutorizaciones.estadoConfirmacion}}</span>
+                                </span>
+                            </ng-template>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Operacion Original</u></h4>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Divisa:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionCurrencyCode}}
+                                {{datosAutorizaciones.transaccionRequest.dataElements?.currency}}</span>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Importe Original:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.transactionAmountFormatted
+                                | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                        </div>
+                        <div class="md:col-span-1" *ngIf="datosAutorizaciones.transaccionRequest">
+                            <span class="font-bold">Cambio:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionRequest.dataElements?.conversionRate
+                                | currency:"&nbsp;":"symbol":'1.4-4'}}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Datos Conciliacion</u></h4>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Moneda:&nbsp;</span>
+                            <span class="secondary-text">{{tipoCuenta?.codigoMoneda}} {{tipoCuenta?.moneda}}</span>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Importe:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount
+                                | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Codigo On-line</u></h4>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Mensaje:&nbsp;</span>
+                            <span class="secondary-text">{{datosAutorizaciones.codigoTipoMensaje}}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Datos Cuenta</u></h4>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Moneda:&nbsp;</span>
+                            <span class="secondary-text">{{tipoCuenta?.codigoMoneda}} {{tipoCuenta?.moneda}}</span>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Importe Transaccion:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount
+                                | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Total Autorizado:&nbsp;</span>
+                            <span
+                                class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.amount
+                                | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4><u>Datos Compra</u></h4>
+                        </div>
+                        <div class="md:col-span-1">
+                            <span class="font-bold">Cod. Comercio:&nbsp;</span>
+                            <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.commerceCode}}</span>
+                        </div>
+
+
                     </p-tabpanel>
                     <p-tabpanel value="2">
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
@@ -277,7 +290,8 @@
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Transaccion Original:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.parentTransactionId}}</span>
+                                <span
+                                    class="secondary-text">{{datosAutorizaciones.transaccionResponse.financialTransaction.parentTransactionId}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Referencia:&nbsp;</span>
@@ -285,7 +299,8 @@
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Autorizacion:&nbsp;</span>
-                                <span class="secondary-text">{{datosAutorizaciones.transaccionRequest.refundParentAuthorizationCode}}</span>
+                                <span
+                                    class="secondary-text">{{datosAutorizaciones.transaccionRequest.refundParentAuthorizationCode}}</span>
                             </div>
                         </div>
                     </p-tabpanel>
@@ -309,7 +324,8 @@
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Fecha:&nbsp;</span>
-                                <span class="secondary-text">{{datosAjuste?.fechaAjuste | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+                                <span class="secondary-text">{{datosAjuste?.fechaAjuste | date:'dd/MM/yyyy
+                                    HH:mm:ss'}}</span>
                             </div>
                             <div class="md:col-span-1">
                                 <span class="font-bold">Referencia:&nbsp;</span>
