@@ -15,6 +15,7 @@ import { InputGroupAddonModule } from "primeng/inputgroupaddon";
 import { InputTextModule } from "primeng/inputtext";
 import { MessageModule } from "primeng/message";
 import { ToastModule } from "primeng/toast";
+import { DividerModule } from "primeng/divider";
 
 
 @Component({
@@ -23,7 +24,7 @@ import { ToastModule } from "primeng/toast";
     styleUrls: ['./liberacion-manual-autorizacion.component.scss'],
 
     encapsulation: ViewEncapsulation.None,
-    imports: [InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
+    imports: [DividerModule, InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService],
 })
 export class LiberacionManualAutorizacionComponent implements OnInit {

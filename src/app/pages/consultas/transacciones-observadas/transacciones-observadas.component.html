@@ -1,0 +1,185 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-list text-2xl"></i>
+            <span class="text-xl font-semibold">Transacciones Observadas</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-1">
+        <p-accordion [(value)]="panelOpenState">
+            <p-accordion-panel value="filters">
+                <p-accordion-header>Filtro de Búsqueda</p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="pi pi-search"></i>
+                        <span class="font-medium">Búsqueda de transacciones observadas</span>
+                    </div>
+                    <form [formGroup]="formObservedTransaction" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">Token Tarjeta</label>
+                                <input class="w-full" type="text" pInputText formControlName="tarjeta" autocomplete="off">
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">Origen</label>
+                                <p-autoComplete formControlName="origen" [suggestions]="filteredElementOrigen"
+                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
+                                    styleClass="w-full" appendTo="body"
+                                    (completeMethod)="filterElementOrigen($event, origenes)">
+                                    <ng-template let-element>
+                                        <div>{{element.descripcion}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">Tipo Solución</label>
+                                <p-autoComplete formControlName="tipoSolucion" [suggestions]="filteredElementTipoSolucion"
+                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
+                                    styleClass="w-full" appendTo="body"
+                                    (completeMethod)="filterElementTipoSolucion($event, tipoSoluciones)">
+                                    <ng-template let-element>
+                                        <div>{{element.descripcion}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">Estado *</label>
+                                <p-autoComplete formControlName="estado" [suggestions]="filteredElementEstado"
+                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
+                                    styleClass="w-full" appendTo="body"
+                                    (completeMethod)="filterElementEstado($event, estados)">
+                                    <ng-template let-element>
+                                        <div>{{element.descripcion}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">ID Transacción Observada</label>
+                                <input class="w-full" type="text" pInputText formControlName="id" autocomplete="off">
+                            </div>
+                            <div class="md:col-span-3">
+                                <label class="block mb-1 text-sm">Fecha rango *</label>
+                                <p-datepicker formControlName="fechaRango" dateFormat="dd/mm/yy"
+                                      yearRange="1940:2030"
+                                    selectionMode="range" [readonlyInput]="true" appendTo="body"
+                                    styleClass="w-full"></p-datepicker>
+                            </div>
+                            <div class="md:col-span-12 flex items-end justify-end gap-2">
+                                <button type="button" pButton label="Buscar" icon="pi pi-search" (click)="search()"
+                                    [disabled]="formObservedTransaction.invalid" pTooltip="Buscar"
+                                    tooltipPosition="top"></button>
+                                <button type="button" pButton label="Limpiar" icon="pi pi-times"
+                                    class="p-button-outlined" (click)="clear()" pTooltip="Limpiar filtros"
+                                    tooltipPosition="top"></button>
+                            </div>
+                        </div>
+                    </form>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span class="text-lg font-semibold">Consultas</span>
+            <p-button label="Excel" icon="pi pi-file-excel" styleClass="p-button-outlined p-button-success"
+                [disabled]="data.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
+                tooltipPosition="bottom"></p-button>
+        </div>
+
+        <p-paginator [rows]="rows" [totalRecords]="totalRecords" 
+            (onPageChange)="onPageChange($event)">
+            <ng-template pTemplate="paginatorleft">
+                <label>{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                    totalRecords + ' registros' }}</label>
+            </ng-template>
+        </p-paginator>
+
+        <p-table #dt resizableColumns="true" columnResizeMode="expand"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" dataKey="id"
+            [value]="data" [columns]="cols" [rows]="rows" >
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+                <tr id="tableWithIcon">
+                    <th *ngFor="let col of columns">
+                        <input *ngIf="col.field" class="w-full" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithIcon">
+                    <td style="text-align: center; width: 48px;">
+                        <p-menu #actionMenu [popup]="true" [model]="getRowMenuItems(rowData)" appendTo="body">
+                            <ng-template pTemplate="item" let-item>
+                                <ng-container *ngIf="item.restrictedRoles?.length; else defaultItem">
+                                    <span *appDisableContentByRole="item.restrictedRoles">
+                                        <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
+                                            <span class="p-menuitem-icon" [ngClass]="item.icon" *ngIf="item.icon"></span>
+                                            <span class="p-menuitem-text">{{item.label}}</span>
+                                        </a>
+                                    </span>
+                                </ng-container>
+                                <ng-template #defaultItem>
+                                    <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
+                                        <span class="p-menuitem-icon" [ngClass]="item.icon" *ngIf="item.icon"></span>
+                                        <span class="p-menuitem-text">{{item.label}}</span>
+                                    </a>
+                                </ng-template>
+                            </ng-template>
+                        </p-menu>
+                        <button type="button" pButton icon="pi pi-ellipsis-v"
+                            class="p-button-text p-button-rounded p-button-sm"
+                            (click)="actionMenu.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
+                    </td>
+                    <td>{{rowData.id}}</td>
+                    <td>{{rowData.fechaCreacionConvert}}</td>
+                    <td>{{rowData.fechaActualizacionConvert}}</td>
+                    <td>{{rowData.fechaProcesoDiarioConvert}}</td>
+                    <td>{{rowData.motivoEstado}}</td>
+                    <td>
+                        <span style="font-size: 12px;"
+                            [ngClass]="rowData.estado == '01' ? 'p-tag p-tag-danger' : 'p-tag p-tag-success'">
+                            {{rowData.descripcionEstado}}
+                        </span>
+                    </td>
+                    <td>{{rowData.data.procesador?.transaccion?.descripcionOrigen}}</td>
+                    <td>{{rowData.data.entrada.MCD4TARE}}</td>
+                    <td>{{rowData.data.entrada.MCTIAREN}}</td>
+                    <td>{{rowData.data.entrada.MCTIAUTO}}</td>
+                    <td>{{rowData.data.entrada.MCTIFTRAConvert}}</td>
+                    <td>{{rowData.data.entrada.MCTIIMPOConvert}}</td>
+                    <td>{{rowData.data.entrada.MCTIMONEDesc}}</td>
+                    <td>{{rowData.data.entrada.MCTIIMADConvert}}</td>
+                    <td>{{rowData.data.entrada.MCTIMOADDesc}}</td>
+                    <td>{{rowData.data.entrada.MCTICEST}}</td>
+                    <td>{{rowData.data.entrada.MCTINEST}}</td>
+                    <td>{{rowData.data.entrada.MCTIMCC}}</td>
+                    <td>{{rowData.data.entrada.MCTIPAIS}}</td>
+                    <td>{{rowData.data.entrada.MCTICIUD}}</td>
+                    <td>{{rowData.data.entrada.MCTITITEDesc}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="23" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p-paginator [rows]="rows" [totalRecords]="totalRecords"
+            (onPageChange)="onPageChange($event)">
+            <ng-template pTemplate="paginatorleft">
+                <label>{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                    totalRecords + ' registros' }}</label>
+            </ng-template>
+        </p-paginator>
+    </div>
+</div>

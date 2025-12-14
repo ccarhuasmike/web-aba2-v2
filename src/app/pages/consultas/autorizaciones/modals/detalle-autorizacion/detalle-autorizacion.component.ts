@@ -14,6 +14,10 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { TabsModule } from 'primeng/tabs';
+import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
+import { DisableContentByRoleDirective } from '@/layout/Utils/directives/disable-content-by-role.directive';
 
 @Component({
     selector: 'app-detalle-autorizacion',
@@ -21,7 +25,7 @@ import { ToastModule } from 'primeng/toast';
     styleUrls: ['./detalle-autorizacion.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
+    imports: [DisableContentByRoleDirective,TooltipModule, DividerModule, TabsModule, InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService],
 })
 export class DetalleAutorizacionComponent implements OnInit {

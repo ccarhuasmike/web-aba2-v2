@@ -8,11 +8,8 @@ import { environment } from 'src/environments/environment';
 export class AutorizacionesService {
 
     APITrxAho = environment.APITrxAho;
-
-    constructor(private http: HttpClient) {
-        //This is a constructor
+    constructor(private http: HttpClient) {       
     }
-
     getCuentaAutorizaciones(uIdCliente:any, uIdCuenta:any, fini:any, ffin:any, pagina:any, tamanio:any) {
         const url = `${this.APITrxAho}/v1/transaccion/debito/cliente/${uIdCliente}/cuenta/${uIdCuenta}?fechaDesde=${fini}&fechaHasta=${ffin}&pagina=${pagina}&tamanioPagina=${tamanio}`;
         return this.http.get(url);

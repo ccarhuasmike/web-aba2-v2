@@ -1,0 +1,109 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="md:col-span-3 flex items-center gap-2">
+        <i class="pi pi-info-circle text-2xl"></i>
+        <span class="text-xl font-semibold">Detalle de Solución {{tipoSolucion?.desElemento}}</span>
+    </div>
+
+    <div class="md:col-span-3">
+        <p>Estimado usuario tenga en cuenta la siguiente información:</p>
+    </div>
+
+    <div class="md:col-span-3 grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-3 font-semibold">
+            <u>Datos de la transacción observada</u>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Id Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.procesador?.transaccion?.idTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIFTRAConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Monto:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIIMPOConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Nombre Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTINEST}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Código Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTICEST}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Token Tarjeta:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCD4TARE}}</span>
+        </div>
+    </div>
+
+    <p-divider class="md:col-span-3" *ngIf="dataAutorizacion" />
+
+    <div class="md:col-span-3 grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4" *ngIf="dataAutorizacion">
+        <div class="md:col-span-3 font-semibold">
+            <u>Datos de la autorización</u>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Id Transacción:</span>
+            <span class="secondary-text">{{dataAutorizacion.idTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Transacción:</span>
+            <span class="secondary-text">{{dataAutorizacion.fechaTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Cod. Descripción:</span>
+            <span class="secondary-text">{{dataAutorizacion.transaccionResponse.ftcCode}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Descripción:</span>
+            <span class="secondary-text">{{dataAutorizacion.transaccionResponse.ftcDescription}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Referencia:</span>
+            <span class="secondary-text">{{dataAutorizacion.referencia}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Código Autorización:</span>
+            <span class="secondary-text">{{dataAutorizacion.codigoAutorizacion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Importe:</span>
+            <span class="secondary-text">{{dataAutorizacion.transaccionProcesada.monto}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Red:</span>
+            <span class="secondary-text">{{dataAutorizacion.descOrigenInt}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Num. Tarjeta:</span>
+            <span class="secondary-text">{{dataAutorizacion.tarjeta.enmascarado}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Token Tarjeta:</span>
+            <span class="secondary-text">{{dataAutorizacion.tarjeta.token}}</span>
+        </div>
+    </div>
+
+    <p-divider class="md:col-span-3" />
+
+    <div class="md:col-span-3">
+        <ol class="list-decimal ml-4">
+            <li *ngFor="let paso of pasos">{{ paso }}</li>
+        </ol>
+    </div>
+
+    <p-divider class="md:col-span-3" />
+
+    <div class="md:col-span-3 text-center font-semibold text-base">
+        ¿Desea realizar esta transacción?
+    </div>
+
+    <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+        <button type="button" pButton label="Aceptar" icon="pi pi-check" (click)="guardarSolucionTransaccionObservada()">
+        </button>
+        <button type="button" pButton label="Cancelar" icon="pi pi-times" class="p-button-outlined"
+            (click)="dialogRef.close()"></button>
+    </div>
+</div>

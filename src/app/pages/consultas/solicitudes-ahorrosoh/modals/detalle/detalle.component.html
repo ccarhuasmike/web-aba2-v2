@@ -1,0 +1,202 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="md:col-span-3 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-info-circle text-2xl"></i>
+            <span class="text-xl font-semibold">Detalle Informacion Solicitud</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-3">
+        <span class="font-bold">Numero solicitud:&nbsp;</span>
+        <span class="secondary-text">{{config.data.nroSolicitud}}</span>
+    </div>
+
+    <p-divider class="md:col-span-3"></p-divider>
+
+    <div class="md:col-span-2">
+        <span class="font-bold">Nombre completo:&nbsp;</span>
+        <span class="secondary-text">{{config.data.primerNombre}} {{config.data.segundoNombre}}
+            {{config.data.apellidoPaterno}} {{config.data.apellidoMaterno}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Tipo y numero documento:&nbsp;</span>
+        <span class="secondary-text">{{config.data.tipoDoc}} / {{config.data.numeroDoc}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Fecha ingreso solicitud:&nbsp;</span>
+        <span class="secondary-text">{{config.data.fechaHoraRegistro | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Correo:&nbsp;</span>
+        <span class="secondary-text">{{config.data.email}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Celular:&nbsp;</span>
+        <span class="secondary-text">{{config.data.celular}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Sexo:&nbsp;</span>
+        <span class="secondary-text">{{config.data.sexo}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Fecha nacimiento:&nbsp;</span>
+        <span class="secondary-text">{{config.data.fechaNacimientoConvert}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Estado civil:&nbsp;</span>
+        <span class="secondary-text">{{config.data.estadoCivil}}</span>
+    </div>
+
+    <p-divider class="md:col-span-3"></p-divider>
+
+    <div class="md:col-span-1">
+        <span class="font-bold">Departamento:&nbsp;</span>
+        <span class="secondary-text">{{config.data?.descDepartamento}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Provincia:&nbsp;</span>
+        <span class="secondary-text">{{config.data?.descProvincia}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Distrito:&nbsp;</span>
+        <span class="secondary-text">{{config.data?.descDistrito}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Direccion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.direccion}}</span>
+    </div>
+    <div class="md:col-span-2">
+        <span class="font-bold">Referencia:&nbsp;</span>
+        <span class="secondary-text">{{config.data.referenciaDireccion}}</span>
+    </div>
+
+    <p-divider class="md:col-span-3"></p-divider>
+
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Acepto tratamiento datos obligatorios?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgAceptTratamDatosObligatorio | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Acepto tratamiento datos opcionales?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgAceptTratamDatosOpcional | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Acepto contrato?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgAceptacionContrato | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Misma direccion del DNI?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgMismaDireccionDni | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Negocio propio?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgNegocioPropio | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Nombre negocio:&nbsp;</span>
+        <span class="secondary-text">{{config.data.nombreNegocio}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Es persona PEP?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgPep | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">¿Tiene RUC?:&nbsp;</span>
+        <span class="secondary-text">{{config.data.flgRuc | uppercase}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">RUC:&nbsp;</span>
+        <span class="secondary-text">{{config.data.ruc}}</span>
+    </div>
+
+    <p-divider class="md:col-span-3"></p-divider>
+
+    <div class="md:col-span-1">
+        <span class="font-bold">Cod. actividad ocupacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.codActividadOcupacion}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Actividad ocupacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.actividadOcupacion}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Cod. cargo actual:&nbsp;</span>
+        <span class="secondary-text">{{config.data.codCargoActual}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Cargo actual:&nbsp;</span>
+        <span class="secondary-text">{{config.data.cargoActual}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Cod. tipo ocupacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.codTipoOcupacion}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Tipo ocupacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.tipoOcupacion}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Fecha ingreso laboral:&nbsp;</span>
+        <span class="secondary-text">{{config.data.fechaIngresoLaboralConvert}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Ingreso mensual:&nbsp;</span>
+        <span class="secondary-text">{{config.data.ingresoMensual}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Nombre empresa:&nbsp;</span>
+        <span class="secondary-text">{{config.data.nombreEmpresa}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Tipo vivienda:&nbsp;</span>
+        <span class="secondary-text">{{config.data.tipoVivienda}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Paso actual:&nbsp;</span>
+        <span class="secondary-text">{{config.data.paso}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Log de pasos:&nbsp;</span>
+        <span class="secondary-text">{{config.data.logPasos}}</span>
+    </div>
+
+    <div class="md:col-span-1">
+        <span class="font-bold">Canal:&nbsp;</span>
+        <span class="secondary-text">{{config.data.descCanal}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Moneda:&nbsp;</span>
+        <span class="secondary-text">{{config.data.descMoneda}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Estado solicitud:&nbsp;</span>
+        <span [class]="config.data.color" style="font-size: 12px;">{{config.data.descEstadoSolicitud}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Tipo producto:&nbsp;</span>
+        <span class="secondary-text">{{config.data.descTipoProducto}}</span>
+    </div>
+
+    <p-divider class="md:col-span-3"></p-divider>
+
+    <div class="md:col-span-1">
+        <span class="font-bold">Fecha creacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.fechaCreacionConvert}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Usuario creacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.usuarioCreacion}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Fecha modificacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.fechaModificacionConvert}}</span>
+    </div>
+    <div class="md:col-span-1">
+        <span class="font-bold">Usuario modificacion:&nbsp;</span>
+        <span class="secondary-text">{{config.data.usuarioModificacion}}</span>
+    </div>
+
+    <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+        <p-button label="Cancelar" severity="secondary" (click)="cerrarModal()"></p-button>
+    </div>
+</div>

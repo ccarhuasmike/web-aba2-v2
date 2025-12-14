@@ -21,7 +21,7 @@ import { AppMenuitem } from './app.menuitem';
         </ng-container>
     </ul> `
 })
-export class AppMenu implements OnInit{
+export class AppMenu implements OnInit {
     model: MenuItem[] = [];
     modelT: MenuItem[] = [];
 
@@ -61,7 +61,7 @@ export class AppMenu implements OnInit{
                 label: 'Consultas',
                 items: [
                     { label: 'Transacciones Observadas', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Autorizaciones', icon: 'pi pi-fw pi-id-card', routerLink: ['/consulta/autorizaciones'] },
+                    { label: 'Autorizaciones', icon: 'pi pi-fw pi-id-card', routerLink: ['consultas/autorizaciones'] },
                     {
                         label: 'Tipo de Cambio', icon: 'pi pi-fw pi-id-card',
                         items: [
@@ -91,8 +91,9 @@ export class AppMenu implements OnInit{
                             }
                         ]
                     },
-                    { label: 'Tokenización', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Solicitudes Ahorros Oh!', icon: 'pi pi-fw pi-id-card', routerLink: ['/mantenimiento/solicitudes-ahorros-oh'] },
+                    { label: 'Tokenización', icon: 'pi pi-fw pi-id-card', routerLink: ['consultas/tokenizacion'] },
+                    { label: 'Solicitudes Ahorros Oh!', icon: 'pi pi-fw pi-id-card', routerLink: ['consultas/solicitudes-ahorros-oh'] },
+                    { label: 'Transacciones Observadas', icon: 'pi pi-fw pi-id-card', routerLink: ['consultas/transacciones-observadas'] },
                 ]
             },
 

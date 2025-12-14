@@ -1,129 +1,97 @@
-<div mat-dialog-content class="dialog-content-wrapper"
-    style="max-height: 85vh;display: flex;flex-direction: column;padding: 0 !important;margin-top: -24px !important;margin-bottom: -24px !important;">
-    <mat-toolbar matDialogTitle class="mat-accent m-0" style="min-height: initial;">
-        <mat-toolbar-row fxLayout="row" fxLayoutAlign="center center" style="display: unset;">
-            <div style="text-align: center;">
-                <span class="title dialog-title">Liberación Manual de Autorización</span>
-            </div>
-        </mat-toolbar-row>
-    </mat-toolbar>
+<p-toast></p-toast>
+<br>
+<form [formGroup]="formLiberacion" novalidate>
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1">
+            <span class="font-bold">Cuenta:&nbsp;</span>
+            <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
+        </div>
+        <div class="md:col-span-2">
+            <span class="font-bold">Tarjeta:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
+        </div>
+        <p-divider class="md:col-span-3"></p-divider>
 
-    <div mat-dialog-content class="p-24 pb-24 m-0" fusePerfectScrollbar>
-        <form [formGroup]="formLiberacion" novalidate>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-3">
-                    <label>Cuenta:</label> <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
-                </div>
-                <div class="p-col-3">
-                    <label>Tarjeta:</label> <span
-                        class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
-                </div>
+        <div class="md:col-span-3">
+            <h4><u>Transaccion</u></h4>
+        </div>
+        <div class="md:col-span-3">
+            <span class="font-bold">Id Transaccion:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.idTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Transaccion:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.fechaTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Num. Tarjeta:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Token:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.tarjeta.token}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Cod. Descripcion:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.transaccionResponse.ftcCode}}</span>
+        </div>
+        <div class="md:col-span-2">
+            <span class="font-bold">Descripcion:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.transaccionResponse.ftcDescription}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Referencia:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.referencia}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Cod. Autorizacion:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.codigoAutorizacion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Importe:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.transaccionProcesada.monto | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Red:&nbsp;</span>
+            <span class="secondary-text">{{datosAutorizacion.descOrigenInt}}</span>
+        </div>
+        <div class="md:col-span-2">
+            <span class="font-bold">Estado Confirmacion:&nbsp;</span>
+            <div *ngIf="datosAutorizacion.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
+                <span></span>
             </div>
+            <ng-template #estadoConfirmacion>
+                <span [ngSwitch]="datosAutorizacion?.estadoConfirmacion">
+                    <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success" style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                    <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning" style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                    <span *ngSwitchDefault class="p-tag p-tag-danger" style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
+                </span>
+            </ng-template>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Estado Autorizacion:&nbsp;</span>
+            <span class="secondary-text">
+                <div *ngIf="datosAutorizacion.reversado; else other_content">
+                    <span class="p-tag p-tag-danger" style="font-size: 12px;">REVERSED</span>
+                </div>
+                <ng-template #other_content>
+                    <span class="p-tag p-tag-success" style="font-size: 12px;">AUTHORIZED</span>
+                </ng-template>
+            </span>
+        </div>
+        <div class="md:col-span-3">
+            <label class="font-bold block mb-1">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+            <input type="text" autocomplete="off" pInputText name="nombreArchivo" formControlName="nombreArchivo" readonly>
+            <small class="p-error" *ngIf="formLiberacion.get('nombreArchivo')?.dirty && !formLiberacion.get('nombreArchivo')?.value">Es requerido</small>
+        </div>
+        <div class="md:col-span-3 flex items-end justify-end gap-2">
+            <p-button label="Liberar Manualmente Autorizacion" (click)="postLiberarManualmenteAutorizacion()" [disabled]="disableButton"></p-button>
+            <p-button label="Cerrar" severity="secondary" (click)="dialogRef.close()"></p-button>
+        </div>
+    </div>
+</form>
 
-            <hr />
-            <div class="datosPrincipales">
-                <div class="p-grid p-fluid">
-                    <div class="p-col-12">
-                        <h3><u>TRANSACCIÓN</u></h3>
-                        <div class="p-grid p-fluid">
-                            <div class="p-col-12">
-                                <label>Id Transacción: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.idTransaccion}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Fecha Transacción: &nbsp;</label>
-                                <span
-                                    class="secondary-text">{{datosAutorizacion.fechaTransaccion}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Num. Tarjeta: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Token: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.tarjeta.token}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Cód Descrpcion: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.transaccionResponse.ftcCode}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Descripcion: &nbsp;</label>
-                                <span>{{datosAutorizacion.transaccionResponse.ftcDescription}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Referencia: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.referencia}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Código Autorización:</label>
-                                <span class="secondary-text">{{datosAutorizacion.codigoAutorizacion}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Importe: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.transaccionProcesada.monto |
-                                    currency:"&nbsp;":"symbol":'1.2-2'}}</span>
-                            </div>
-                            <div class="p-col-4">
-                                <label>Red (descripción): &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.descOrigenInt}}</span>
-                            </div>
-                            <div class="p-col-12">
-                                <label>Estado Confirmación: &nbsp;</label>
-                                <div
-                                    *ngIf="datosAutorizacion.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
-                                    <span></span>
-                                </div>
-                                <ng-template #estadoConfirmacion>
-                                    <span
-                                        [ngSwitch]="datosAutorizacion?.estadoConfirmacion">
-                                        <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success"
-                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
-                                        <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning"
-                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
-                                        <span *ngSwitchDefault class="p-tag p-tag-danger"
-                                            style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
-                                    </span>
-                                </ng-template>
-                            </div>
-                            <div class="p-col-3">
-                                <label>Estado Autorizacion: &nbsp;</label>
-                                <span class="secondary-text">
-                                    <div *ngIf="datosAutorizacion.reversado; else other_content">
-                                        <span class="p-tag p-tag-danger" style="font-size: 12px;">REVERSED</span>
-                                    </div>
-                                    <ng-template #other_content>
-                                        <span class="p-tag p-tag-success" style="font-size: 12px;">AUTHORIZED</span>
-                                    </ng-template>
-                                </span>
-                            </div>
-                            <div class="p-col-12">
-                                <label>Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
-                                <input type="text" autocomplete="off" pInputText name="nombreArchivo"
-                                    formControlName="nombreArchivo" readonly>
-                                <mat-error
-                                    [ngStyle]="{'display': formLiberacion.get('nombreArchivo').dirty && !formLiberacion.get('nombreArchivo').valid ? 'block' : 'none' }">
-                                    Es requerido
-                                </mat-error>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
-        maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
-            invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
-            (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
-            chooseLabel="Seleccionar archivo"></p-fileUpload>
-    </div>
-    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center">
-        <button mat-raised-button color="primary" [disabled]="disableButton"
-            (click)="postLiberarManualmenteAutorizacion()">
-            Liberar Manualmente Autorizacion
-        </button>
-        <button mat-raised-button color="warn" mat-dialog-close>
-            Cerrar
-        </button>
-    </div>
-</div>
+<p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx" maxFileSize="3700000"
+    invalidFileTypeMessageSummary="{0}: archivo invalido, " invalidFileTypeMessageDetail="extensiones permitidas: {0}."
+    (uploadHandler)="uploader($event)" (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar"
+    cancelLabel="Cancelar" chooseLabel="Seleccionar archivo"></p-fileUpload>

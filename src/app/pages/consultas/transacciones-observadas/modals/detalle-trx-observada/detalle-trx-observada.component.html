@@ -1,0 +1,147 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="md:col-span-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-info-circle text-2xl"></i>
+            <span class="text-xl font-semibold">Detalle Transacción</span>
+        </div>
+        <p-tag [styleClass]="dataTrxObservada.estado === '01' ? 'p-tag-danger' : 'p-tag-success'"
+            [value]="dataTrxObservada.descripcionEstado"></p-tag>
+    </div>
+
+    <div class="md:col-span-3 grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1">
+            <span class="font-bold">Nombre completo:</span>
+            <span class="secondary-text">{{datosCliente?.nombresApellidos}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Tipo y Nº documento:</span>
+            <span class="secondary-text">{{datosCliente?.tipoDocu}} / {{datosCliente?.numDocu}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Correo:</span>
+            <span class="secondary-text">{{datosCliente?.correoElectronico}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Teléfono:</span>
+            <span class="secondary-text">{{datosCliente?.telefono}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Domicilio:</span>
+            <span class="secondary-text">{{datosCliente?.direccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Nº Cuenta:</span>
+            <span class="secondary-text">{{datosCuenta?.numeroCuenta}}</span>
+        </div>
+    </div>
+
+    <p-divider class="md:col-span-3" />
+
+    <div class="md:col-span-3 grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-1">
+            <span class="font-bold">ID Trans. Observada:</span>
+            <span class="secondary-text">{{dataTrxObservada.id}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">ID Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.procesador?.transaccion?.idTransaccion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Apertura:</span>
+            <span class="secondary-text">{{dataTrxObservada.fechaCreacionConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Proceso:</span>
+            <span class="secondary-text">{{dataTrxObservada.fechaProcesoDiarioConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Motivo:</span>
+            <span class="secondary-text">{{dataTrxObservada.motivoEstado}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Origen:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.procesador?.transaccion?.descripcionOrigen}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Token Tarjeta:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCD4TARE}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Nº Referencia:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIAREN}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Código Autorización:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIAUTO}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIFTRAConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Monto Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIIMPOConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Moneda Transacción:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIMONEDesc}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Monto Divisa:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIIMADConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Moneda Divisa:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIMOADDesc}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Código Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTICEST}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Nombre Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTINEST}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Actividad Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIMCC}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">País Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTIPAIS}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Ciudad Comercio:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTICIUD}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Tipo Terminal:</span>
+            <span class="secondary-text">{{dataTrxObservada.data.entrada.MCTITITEDesc}}</span>
+        </div>
+    </div>
+
+    <p-divider class="md:col-span-3" />
+
+    <div class="md:col-span-3 grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-3 font-semibold">
+            <u>Detalle Incidencia</u>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Tipo Solución:</span>
+            <span class="secondary-text">{{dataTrxObservada.descTipoSolucion}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Fecha Cierre:</span>
+            <span class="secondary-text">{{dataTrxObservada.fechaActualizacionConvert}}</span>
+        </div>
+        <div class="md:col-span-1">
+            <span class="font-bold">Usuario Solución:</span>
+            <span class="secondary-text">{{dataTrxObservada.usuarioSolucion}}</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
+        <button type="button" pButton label="Cerrar" icon="pi pi-times" class="p-button-outlined"
+            (click)="dialogRef.close()"></button>
+    </div>
+</div>

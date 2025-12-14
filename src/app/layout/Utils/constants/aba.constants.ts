@@ -29,6 +29,10 @@ export const ROLES = {
     ADMINISTRADOR: 'AdministradorRol',
     ATENCION_CLIENTE: 'AtencionClienteRol',
     ATENCION_CLIENTE_TD: 'AtencionClienteTdRol',
+    ATENCION_CLIENTE_N4 : 'AtencionClienteN4Rol',
+    ATENCION_CLIENTE_N3 : 'AtencionClienteN3Rol',
+    ATENCION_CLIENTE_N2 : 'AtencionClienteN2Rol',
+    ATENCION_CLIENTE_N1 : 'AtencionClienteN1Rol',
     CONSULTA: 'ConsultaRol',
     FRAUDE: 'FraudeRol',
     OPERACION_CONTABLE: 'OperacionContableRol',
@@ -37,7 +41,9 @@ export const ROLES = {
     TI: 'TiRol',
     TESORERIA: 'TesoreriaRol',
     VENTAS: 'VentaRol',
-    JEFE_VENTAS: 'JefeVentaRol'
+    JEFE_VENTAS: 'JefeVentaRol',    
+    AUDITORIA: 'AuditoriaRol',
+    RECLAMOS: 'ReclamosRol'
 }
 
 //Documentos
