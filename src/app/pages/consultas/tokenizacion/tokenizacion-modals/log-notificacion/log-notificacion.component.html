@@ -39,11 +39,12 @@
                 <td>{{rowData.fechaActualizacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
             </tr>
         </ng-template>
-        <ng-template pTemplate="rowexpansion" let-rowData>
+        <ng-template #expandedrow let-rowData>
             <tr>
                 <td colspan="10" style="padding-left: 40px !important;">
                     <!-- <p-tabView>
                         <p-tabPanel header="OTPs"> -->
+                            <h5>OTPs</h5>
                             <p-table  [paginator]="false" [value]="datosOtps"
                                 [totalRecords]="datosOtps.length" [loading]="loadingOtps">
                                 <ng-template pTemplate="header">

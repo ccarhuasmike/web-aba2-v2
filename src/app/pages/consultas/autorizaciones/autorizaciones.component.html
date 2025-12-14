@@ -88,8 +88,8 @@
                             style="font-size: 12px;">{{rowData.motivoBloqueo}}
                         </span>
                     </td>
-                    <td>{{rowData.fechaApertura | date:'DD/MM/YYYY'}}</td>
-                    <td>{{rowData.fechaBaja | date:'DD/MM/YYYY'}}</td>
+                    <td>{{rowData.fechaApertura | date:'dd/MM/yyyy'}}</td>
+                    <td>{{rowData.fechaBaja | date:'dd/MM/yyyy'}}</td>
                     <td>{{rowData.desCodTipoDoc}}</td>
                     <td>{{rowData.numDocIdentidad}}</td>
                 </tr>
@@ -121,7 +121,7 @@
                     <p-datepicker formControlName="fechaRangoAutorizaciones"
                         (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" 
                         dateFormat="dd/mm/yy" yearRange="1940:2030"
-                        selectionMode="range" [readonlyInput]="true" appendTo="body" styleClass="w-full"></p-datepicker>
+                        selectionMode="range" [readonlyInput]="true" appendTo="body" class="w-full"></p-datepicker>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block mb-1 text-sm">Cod. de operacion</label>

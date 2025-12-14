@@ -2,18 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-//import { MatDialog } from '@angular/material/dialog';
-//import { fuseAnimations } from '@fuse/animations';
-//import { ToastrService } from 'ngx-toastr';
 import moment from 'moment';
-
-// import { Cliente } from 'app/main/models/cliente';
-// import { DatetzPipe } from 'app/main/pipes/datetz.pipe';
-// import { CommonService } from 'app/main/services/shared/common.service';
-// import { ExcelService } from 'app/main/services/shared/excel.service';
-// import { SecurityEncryptedService } from 'app/main/services/shared/security-encrypted.service';
-// import { AutorizacionesService } from 'app/main/apps/consultas/autorizaciones/autorizaciones.service';
-// import { DOCUMENT, ROLES, CALENDAR_DETAIL, ACCOUNT_TYPES } from 'app/main/utils/constants/aba.constants';
 import { DetalleAutorizacionComponent } from './modals/detalle-autorizacion/detalle-autorizacion.component';
 import { LiberacionManualAutorizacionComponent } from './modals/liberacion-manual-autorizacion/liberacion-manual-autorizacion.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -35,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { Cliente } from '@/layout/models/cliente';
 import { ACCOUNT_TYPES, CALENDAR_DETAIL, DOCUMENT, ROLES } from '@/layout/Utils/constants/aba.constants';
 import { DatetzPipe } from '@/layout/Utils/pipes/datetz.pipe';
+
 import { ExcelService } from '@/pages/service/excel.service';
 import { CommonService } from '@/pages/service/commonService';
 import { SecurityEncryptedService } from '@/layout/service/SecurityEncryptedService';
@@ -48,7 +38,7 @@ import { AccordionModule } from 'primeng/accordion';
     styleUrls: ['./autorizaciones.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [AccordionModule,DisableContentByRoleDirective, FormsModule, ConfirmDialogModule, TooltipModule, TabsModule, MenuModule, DividerModule, InputNumberModule, DatePickerModule, TableModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
+    imports: [AccordionModule, DisableContentByRoleDirective, FormsModule, ConfirmDialogModule, TooltipModule, TabsModule, MenuModule, DividerModule, InputNumberModule, DatePickerModule, TableModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService, DatetzPipe, DatePipe],
 })
 export class AutorizacionesComponent implements OnInit {
@@ -614,7 +604,15 @@ export class AutorizacionesComponent implements OnInit {
 
     openDialogDetalleAutorizacion(data: any) {
         this.dialog.open(DetalleAutorizacionComponent, {
-            width: '900px',
+            header: 'Detalle Autorización',
+            width: '50vw',
+            modal: true,
+            styleClass: 'header-modal',
+            dismissableMask: true,  // permite cerrar al hacer click fuera
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
             data: {
                 datosAutorizaciones: data,
                 datosCliente: this.datosCliente,
