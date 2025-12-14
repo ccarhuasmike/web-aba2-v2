@@ -1,33 +1,3 @@
-<p-toast></p-toast>
-<br>
-
-<div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-2 gap-4">
-    <form [formGroup]="formLiberacion">
-        <div class="md:col-span-1">
-            <label for="numeroCuenta" class="block mb-1 text-sm">Cuenta:</label>
-            <span class="secondary-text">{{datosCuenta.numeroCuenta}}</span>
-
-        </div>
-        <div class="md:col-span-1">
-            <label for="tarjeta" class="block mb-1 text-sm">Tarjeta:</label> <span
-                class="secondary-text">{{datosAutorizacion.tarjeta.enmascarado}}</span>
-        </div>
-        <div class="md:col-span-1 flex items-end justify-end  footer-modal">
-            <!-- <p-button label="Guardar" [text]="true" severity="secondary" *ngIf="isUpdate"
-                [disabled]="!formAddBanco.valid || disableButtonAdd" (click)="addBanco()" (keydown.enter)="addBanco()"
-                (keydown)="addBanco()" />
-            <p-button label="Actualizar" [text]="true" severity="secondary" *ngIf="!isUpdate"
-                [disabled]="disableButtonUpdate" (click)="updateBanco()" (keydown.enter)="updateBanco()"
-                (keydown)="updateBanco()" />
-            <p-button label="Cerrar" (click)="close()" (keydown.enter)="close()" (keydown)="close()" /> -->
-        </div>
-    </form>
-</div>
-
-
-
-<!-- 
-
 <div mat-dialog-content class="dialog-content-wrapper"
     style="max-height: 85vh;display: flex;flex-direction: column;padding: 0 !important;margin-top: -24px !important;margin-bottom: -24px !important;">
     <mat-toolbar matDialogTitle class="mat-accent m-0" style="min-height: initial;">
@@ -62,7 +32,8 @@
                             </div>
                             <div class="p-col-4">
                                 <label>Fecha Transacción: &nbsp;</label>
-                                <span class="secondary-text">{{datosAutorizacion.fechaTransaccion}}</span>
+                                <span
+                                    class="secondary-text">{{datosAutorizacion.fechaTransaccion}}</span>
                             </div>
                             <div class="p-col-4">
                                 <label>Num. Tarjeta: &nbsp;</label>
@@ -99,11 +70,13 @@
                             </div>
                             <div class="p-col-12">
                                 <label>Estado Confirmación: &nbsp;</label>
-                                <div *ngIf="datosAutorizacion.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
+                                <div
+                                    *ngIf="datosAutorizacion.estadoAutorizacion=='REJECTED'; else estadoConfirmacion">
                                     <span></span>
                                 </div>
                                 <ng-template #estadoConfirmacion>
-                                    <span [ngSwitch]="datosAutorizacion?.estadoConfirmacion">
+                                    <span
+                                        [ngSwitch]="datosAutorizacion?.estadoConfirmacion">
                                         <span *ngSwitchCase="'CONFIRMED'" class="p-tag p-tag-success"
                                             style="font-size: 12px;">{{datosAutorizacion?.estadoConfirmacion}}</span>
                                         <span *ngSwitchCase="'PENDING'" class="p-tag p-tag-warning"
@@ -139,7 +112,7 @@
             </div>
         </form>
         <p-fileUpload name="files" [auto]="true" customUpload="true" accept=".pdf,.jpeg,.png,.xlsx"
-            maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
+        maxFileSize="3700000" invalidFileTypeMessageSummary="{0}: archivo inválido, "
             invalidFileTypeMessageDetail="extensiones permitidas: {0}." (uploadHandler)="uploader($event)"
             (onClear)="removeAll()" (onRemove)="removeElement($event)" uploadLabel="Cargar" cancelLabel="Cancelar"
             chooseLabel="Seleccionar archivo"></p-fileUpload>
@@ -153,4 +126,4 @@
             Cerrar
         </button>
     </div>
-</div> -->
+</div>

@@ -48,13 +48,12 @@ import { AccordionModule } from 'primeng/accordion';
     styleUrls: ['./autorizaciones.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [AccordionModule, DisableContentByRoleDirective, FormsModule, ConfirmDialogModule, TooltipModule, TabsModule, MenuModule, DividerModule, InputNumberModule, DatePickerModule, TableModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
+    imports: [AccordionModule,DisableContentByRoleDirective, FormsModule, ConfirmDialogModule, TooltipModule, TabsModule, MenuModule, DividerModule, InputNumberModule, DatePickerModule, TableModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService, DatetzPipe, DatePipe],
 })
 export class AutorizacionesComponent implements OnInit {
     mostrarFiltro = false;
-    panelOpenState = 0; // o false, según tu implementación
-    //panelOpenState: boolean = true;
+    panelOpenState: number | null = 0;
 
     datosCuenta: any;
     datosCliente: Cliente = new Cliente();
@@ -72,7 +71,6 @@ export class AutorizacionesComponent implements OnInit {
     tipoDocIdent: string = '';
     numeroDocIdent: string = '';
     numeroCuenta: string = '';
-    //panelOpenState = false;
     showSearchCard = false;
 
     tipoRedes: any[] = [];
@@ -155,9 +153,7 @@ export class AutorizacionesComponent implements OnInit {
 
     ngOnInit() {
         this.getCombos();
-
         const role = this.securityEncryptedService.getRolesDecrypted();
-
         if (
             role == this.roles.ADMINISTRADOR ||
             role == this.roles.FRAUDE ||
