@@ -14,6 +14,7 @@ import { CommonService } from '@/pages/service/commonService';
 import { ExcelService } from '@/pages/service/excel.service';
 import { LogTransaccionesService } from './log-transaccoiones.service';
 import { DatePickerModule } from 'primeng/datepicker';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-log-transacciones',
@@ -30,7 +31,8 @@ import { DatePickerModule } from 'primeng/datepicker';
         ReactiveFormsModule,
         TableModule,
         ToastModule,
-        TooltipModule
+        TooltipModule,
+        InputTextModule
     ],
     providers: [MessageService, DatePipe]
 })
