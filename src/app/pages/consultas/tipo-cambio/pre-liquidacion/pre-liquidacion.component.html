@@ -1,0 +1,156 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <p-toast></p-toast>
+    <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-list text-2xl"></i>
+            <span class="text-xl font-semibold">Pre Liquidaciones</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-1">
+        <p-accordion [(value)]="panelOpenState">
+            <p-accordion-panel value="0">
+                <p-accordion-header>Filtro de Búsqueda</p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="pi pi-search"></i>
+                        <span class="font-medium">Búsqueda de Pre Liquidaciones</span>
+                    </div>
+                    <form [formGroup]="formBusqueda" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-6">
+                                <label class="block mb-1 text-sm">Partner</label>
+                                <p-autoComplete formControlName="proveedor" [suggestions]="filteredElementProveedor"
+                                    field="nombreGenerico" emptyMessage="Sin resultados" [dropdown]="true"
+                                    (completeMethod)="filterElementProveedor($event, proveedores)"
+                                    (ngModelChange)="changeModelProveedor($event)" appendTo="body" styleClass="w-full">
+                                    <ng-template let-element>
+                                        <div>{{element.nombreGenerico}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                            <div class="md:col-span-6 flex items-end justify-end gap-2">
+                                <button pButton label="Buscar" icon="pi pi-search" (click)="getLiquidaciones()"
+                                    [disabled]="formBusqueda.invalid" pTooltip="Buscar pre liquidaciones"
+                                    tooltipPosition="top"></button>
+                                <button pButton label="Limpiar" icon="pi pi-times" class="p-button-outlined"
+                                    (click)="clearBusquedaFiltros()" pTooltip="Limpiar filtros"
+                                    tooltipPosition="top"></button>
+                            </div>
+                        </div>
+                    </form>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span class="text-lg font-semibold">Resumen</span>
+            <button pButton label="Excel" icon="pi pi-file-excel"
+                class="p-button-outlined p-button-success" [disabled]="datosLiquidaciones.length === 0"
+                (click)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+        </div>
+        <p-table #dt resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
+            styleClass="p-datatable-striped p-datatable-gridlines"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" [filterDelay]="0" [columns]="cols" [rows]="rows" dataKey="idCambioMonedaPreLiqDiariaRes"
+            [value]="datosLiquidaciones" [totalRecords]="datosLiquidaciones.length"
+            [loading]="loadingDatosLiquidaciones">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithIcon" (click)="getLiquidacionDetalle(rowData)" style="cursor: pointer;">
+                    <td class="text-right">{{rowData.totalDolaresTcCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalDolaresTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalSolesTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalSolesTcCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalDolaresTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalDolaresTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalSolesTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalSolesTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalSpreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalSpreadVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td>{{rowData.descripcionMonedaRecibirPartner}}</td>
+                    <td>{{rowData.netoRecibirPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td>{{rowData.descripcionMonedaEnvioPartner}}</td>
+                    <td>{{rowData.netoEnviarPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="14" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="md:col-span-1" *ngIf="datosLiquidacionDetalle.length > 0">
+        <div class="card">
+            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                <span class="text-lg font-semibold">Detalle</span>
+                <button pButton label="Excel" icon="pi pi-file-excel"
+                    class="p-button-outlined p-button-success" [disabled]="datosLiquidacionDetalle.length === 0"
+                    (click)="exportExcelDetalle()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+            </div>
+            <p-table #dt2 resizableColumns="true" columnResizeMode="expand" 
+                styleClass="p-datatable-striped p-datatable-gridlines"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+                [showCurrentPageReport]="true" [value]="datosLiquidacionDetalle"
+                [totalRecords]="datosLiquidacionDetalle.length" [columns]="colsDetalle" [rows]="rows"
+                [loading]="loadingDatosLiquidacionDetalle">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr id="tableWithoutIcon">
+                        <td>{{rowData.nroCambioMonedaOperacion}}</td>
+                        <td>{{rowData.idOperacionPartner}}</td>
+                        <td>{{rowData.cuentaOrigen}}</td>
+                        <td>{{rowData.descripcionMonedaOrigen}}</td>
+                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeOrigenOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td>{{rowData.nroOperacionCuentaOrigen}}</td>
+                        <td>{{rowData.cuentaDestino}}</td>
+                        <td>{{rowData.descripcionMonedaDestino}}</td>
+                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeDestinoOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td>{{rowData.nroOperacionCuentaDestino}}</td>
+                        <td class="text-right">{{rowData.spreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.spreadVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td>{{rowData.descEstadoTipoCambio}}</td>
+                        <td>{{rowData.tipoDocIdentidadDescripcion}}</td>
+                        <td>{{rowData.numeroDocIdentidad}}</td>
+                        <td>{{rowData.tipoOperacionOh}}</td>
+                        <td>{{rowData.fechaHoraConfirmacionUsuario | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>{{rowData.fechaHoraEjecucionOperacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>{{rowData.fechaHoraPreLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td class="text-right">{{rowData.tipoCambioOh | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
+                        <td class="text-right">{{rowData.tipoCambioPartner | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
+                        <td class="text-right">{{rowData.tipoCambioTransaccion | currency:"&nbsp;":"symbol":'1.4-4'}}
+                        </td>
+                        <td>{{rowData.idConsultaPartner}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="25" style="text-align:left">Sin registros encontrados</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

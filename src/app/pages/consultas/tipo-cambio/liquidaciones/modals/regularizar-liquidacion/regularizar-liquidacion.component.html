@@ -1,0 +1,45 @@
+<div class="p-fluid space-y-4">
+    <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Nº Lote</label>
+            <span class="secondary-text">{{datoLiquidacion.nroLoteLiquidado}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Fecha Liquidación</label>
+            <span class="secondary-text">{{datoLiquidacion.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Nº operación cambio</label>
+            <span class="secondary-text">{{datoLiquidacion.nroCambioMonedaOperacion}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Nº operación proveedor</label>
+            <span class="secondary-text">{{datoLiquidacion.idOperacionPartner}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Cuenta destino</label>
+            <span class="secondary-text">{{datoLiquidacion.nroOperacionCuentaDestino}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label class="font-medium block mb-1">Cuenta origen</label>
+            <span class="secondary-text">{{datoLiquidacion.nroOperacionCuentaOrigen}}</span>
+        </div>
+    </div>
+
+    <form [formGroup]="formRegularizarLiquidacion" class="space-y-3">
+        <h3 class="text-lg font-semibold">Modificar Liquidación</h3>
+        <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
+            <div class="md:col-span-4">
+                <label class="block mb-1 text-sm">Tipo cambio observado proveedor</label>
+                <p-inputNumber formControlName="importeOrigen" locale="en-US" minFractionDigits="2"
+                    maxFractionDigits="4" [inputStyle]="{'text-align': 'right'}" appendTo="body"></p-inputNumber>
+            </div>
+        </div>
+    </form>
+
+    <div class="flex items-center justify-end gap-2">
+        <button pButton label="Guardar" icon="pi pi-save" (click)="regularizarLiquidacion()"
+            [disabled]="disableButton"></button>
+        <button pButton label="Cerrar" icon="pi pi-times" class="p-button-outlined" (click)="closeDialog()"></button>
+    </div>
+</div>

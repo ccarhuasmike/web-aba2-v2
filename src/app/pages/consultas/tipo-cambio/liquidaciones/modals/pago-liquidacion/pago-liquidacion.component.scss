@@ -1,0 +1,39 @@
+.button_option {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    width: 60%;
+}
+
+.icon_customize {
+    font-size: 25px;
+}
+.row-list {
+    float: left;
+    width: 50%;
+    display: flex;
+    padding: 5px 10px;
+
+    .column-description {
+        width: 90%;
+    }
+
+    .column-weight {
+        width: 10%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 757px) {
+    .row-list {
+        float: none;
+        width: 100%;
+    }
+
+    .row-list-title:nth-child(2n+1) {
+        display: none;
+    }
+}

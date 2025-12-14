@@ -4,6 +4,12 @@ import { ROLES } from '@/layout/Utils/constants/aba.constants';
 import { SolicitudesAhorrosohComponent } from './solicitudes-ahorrosoh/solicitudes-ahorrosoh.component';
 import { TokenizacionComponent } from './tokenizacion/tokenizacion.component';
 import { TransaccionesObservadasComponent } from './transacciones-observadas/transacciones-observadas.component';
+import { ConsultasComponent } from './tipo-cambio/consultas/consultas.component';
+import { LiquidacionesComponent } from './tipo-cambio/liquidaciones/liquidaciones.component';
+import { LogTransaccionesComponent } from './tipo-cambio/log-transacciones/log-transaccoiones.component';
+import { OpeCampaniasComponent } from './tipo-cambio/ope-campanias/ope-campanias.component';
+import { PreLiquidacionComponent } from './tipo-cambio/pre-liquidacion/pre-liquidacion.component';
+import { TransaccionesComponent } from './tipo-cambio/transacciones/transacciones.component';
 export default [
 
     {
@@ -32,6 +38,43 @@ export default [
         component: TransaccionesObservadasComponent
     }
 
+    ,
+    {
+        path: 'tipo-cambio/transacciones',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.RECLAMOS,ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA, ROLES.TESORERIA, ROLES.PLAFT] },
+        component: TransaccionesComponent
+    },
+    {
+        path: 'tipo-cambio/log-transacciones',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
+        component: LogTransaccionesComponent
+    },
+    {
+        path: 'tipo-cambio/pre-liquidacion',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
+        component: PreLiquidacionComponent
+    },
+    {
+        path: 'tipo-cambio/consultas',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.RECLAMOS,ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
+        component: ConsultasComponent
+    },
+    {
+        path: 'tipo-cambio/liquidaciones',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
+        component: LiquidacionesComponent
+    },
+    {
+        path: 'tipo-cambio/ope-campanias',
+        //canActivate: [RoleGuard],
+        data: { roles: [ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
+        component: OpeCampaniasComponent
+    },
     // { path: 'parametro/debito', data: { breadcrumb: 'Button' }, component: ParametroDebitoComponent },
     // { path: 'parametro/tipo-cambio', data: { breadcrumb: 'Button' }, component: ParametroTipoCambioComponent },
     // { path: 'banco', data: { breadcrumb: 'Button' }, component: BancoComponent },

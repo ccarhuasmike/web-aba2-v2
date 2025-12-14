@@ -4,7 +4,7 @@
         <span class="text-xl font-semibold">Logs Notificaciones</span>
     </div>
 
-    <p-table #dt1 rowExpandMode="single" [autoLayout]="true" styleClass="p-datatable-striped p-datatable-gridlines"
+    <p-table #dt1 rowExpandMode="single"  styleClass="p-datatable-striped p-datatable-gridlines"
         (onRowExpand)="getOtps($event)" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
         [paginator]="true" [showCurrentPageReport]="true" dataKey="operationId" [rows]="rows"
         [value]="datosNotificaciones" [totalRecords]="datosNotificaciones.length"
@@ -42,8 +42,8 @@
         <ng-template pTemplate="rowexpansion" let-rowData>
             <tr>
                 <td colspan="10" style="padding-left: 40px !important;">
-                    <p-tabView>
-                        <p-tabPanel header="OTPs">
+                    <!-- <p-tabView>
+                        <p-tabPanel header="OTPs"> -->
                             <p-table  [paginator]="false" [value]="datosOtps"
                                 [totalRecords]="datosOtps.length" [loading]="loadingOtps">
                                 <ng-template pTemplate="header">
@@ -82,8 +82,8 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
-                        </p-tabPanel>
-                    </p-tabView>
+                        <!-- </p-tabPanel>
+                    </p-tabView> -->
                 </td>
             </tr>
         </ng-template>

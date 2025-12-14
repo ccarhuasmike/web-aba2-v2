@@ -1,0 +1,93 @@
+<div class="p-fluid space-y-4">
+    <p-table  styleClass="p-datatable-striped p-datatable-gridlines"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+        [showCurrentPageReport]="true" dataKey="idCmInterfazGl" [rows]="rows" [value]="datosAsientosContables"
+        [totalRecords]="datosAsientosContables.length" [rowsPerPageOptions]="rowsPerPageOptions"
+        [loading]="loadingAsientosContables">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID INTERFAZ GL</th>
+                <th>STATUS</th>
+                <th>LEDGER ID</th>
+                <th>ACCOUNTING DATE</th>
+                <th>CURRENCY CODE</th>
+                <th>DATE CREATED</th>
+                <th>CREATED BY</th>
+                <th>ACTUAL FLAG</th>
+                <th>USER CATEGORY NAME</th>
+                <th>USER SOURCE NAME</th>
+                <th>CURRENCY CONVERSION DATE</th>
+                <th>USER CONVERSION TYPE</th>
+                <th>CURRENCY CONVERSION RATE</th>
+                <th>SEGMENT 1</th>
+                <th>SEGMENT 2</th>
+                <th>SEGMENT 3</th>
+                <th>SEGMENT 4</th>
+                <th>SEGMENT 5</th>
+                <th>SEGMENT 6</th>
+                <th>SEGMENT 7</th>
+                <th>ENTERED DR</th>
+                <th>ENTERED CR</th>
+                <th>ACCOUNTED DR</th>
+                <th>ACCOUNTED CR</th>
+                <th>REFERENCE 5</th>
+                <th>REFERENCE 10</th>
+                <th>PERIOD NAME</th>
+                <th>CHART OF ACCOUNTS ID</th>
+                <th>GROUP ID</th>
+                <th>SET OF BOOKS ID</th>
+                <th>USUARIO REGISTRO</th>
+                <th>FECHA REGISTRO</th>
+                <th>USUARIO ACTUALIZACIÓN</th>
+                <th>FECHA ACTUALIZACIÓN</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+            <tr id="tableWithIcon">
+                <td>{{ rowData.idCmInterfazGl }}</td>
+                <td>{{ rowData.glStatus }}</td>
+                <td>{{ rowData.glLedgerId }}</td>
+                <td>{{ rowData.glAccountingDate }}</td>
+                <td>{{ rowData.glCurrencyCode }}</td>
+                <td>{{ rowData.glDateCreated }}</td>
+                <td>{{ rowData.glCreatedBy }}</td>
+                <td>{{ rowData.glActualFlag }}</td>
+                <td>{{ rowData.glUserJeCategoryName }}</td>
+                <td>{{ rowData.glUserJeSourceName }}</td>
+                <td>{{ rowData.glCurrencyConversionDate }}</td>
+                <td>{{ rowData.glUserCurrencyConversType }}</td>
+                <td>{{ rowData.glCurrencyConversionRate }}</td>
+                <td>{{ rowData.glSegment1 }}</td>
+                <td>{{ rowData.glSegment2 }}</td>
+                <td>{{ rowData.glSegment3 }}</td>
+                <td>{{ rowData.glSegment4 }}</td>
+                <td>{{ rowData.glSegment5 }}</td>
+                <td>{{ rowData.glSegment6 }}</td>
+                <td>{{ rowData.glSegment7 }}</td>
+                <td>{{ rowData.glEnteredDr }}</td>
+                <td>{{ rowData.glEnteredCr }}</td>
+                <td>{{ rowData.glAccountedDr }}</td>
+                <td>{{ rowData.glAccountedCr }}</td>
+                <td>{{ rowData.glReference5 }}</td>
+                <td>{{ rowData.glReference10 }}</td>
+                <td>{{ rowData.glPeriodName }}</td>
+                <td>{{ rowData.glChartOfAccountsId }}</td>
+                <td>{{ rowData.glGroupId }}</td>
+                <td>{{ rowData.glSetOfBooksId }}</td>
+                <td>{{ rowData.usuarioRegistro }}</td>
+                <td>{{ rowData.fechaRegistro }}</td>
+                <td>{{ rowData.usuarioActualizacion }}</td>
+                <td>{{ rowData.fechaActualizacion }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="34" style="text-align:left">Sin registros encontrados</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <div class="flex items-center justify-end">
+        <button pButton label="Cerrar" icon="pi pi-times" class="p-button-outlined" (click)="closeDialog()"></button>
+    </div>
+</div>

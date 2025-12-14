@@ -1,0 +1,74 @@
+<div class="p-fluid space-y-4">
+    <p-toast></p-toast>
+    <div>
+        <h3 class="text-lg font-semibold mb-3">Detalle Transacción</h3>
+        <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Nº operación cambio</label>
+                <span class="secondary-text">{{datosTrx.nroCambioMonedaOperacion}}</span>
+            </div>
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Nº operación proveedor</label>
+                <span class="secondary-text">{{datosTrx.idOperacionPartner}}</span>
+            </div>
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Estado transacción</label>
+                <span class="secondary-text">{{datosTrx.descEstadoTipoCambio}}</span>
+            </div>
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Tipo de documento</label>
+                <span class="secondary-text">{{datosTrx.descTipoDocumentoIdentidad}}</span>
+            </div>
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Nº documento</label>
+                <span class="secondary-text">{{datosTrx.numeroDocIdentidad}}</span>
+            </div>
+            <div class="md:col-span-4">
+                <label class="font-medium block mb-1">Tipo operación</label>
+                <span class="secondary-text">{{datosTrx.tipoOperacionOh}}</span>
+            </div>
+            <div class="md:col-span-6">
+                <label class="font-medium block mb-1">Nº operación cuenta origen</label>
+                <span class="secondary-text">{{datosTrx.nroOperacionCuentaOrigen}}</span>
+            </div>
+            <div class="md:col-span-6">
+                <label class="font-medium block mb-1">Nº operación cuenta destino</label>
+                <span class="secondary-text">{{datosTrx.nroOperacionCuentaDestino}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3 class="text-lg font-semibold mb-3">Modificar transacción</h3>
+        <form [formGroup]="formRegularizarTrx">
+            <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
+                <div class="md:col-span-6">
+                    <label class="block mb-1 text-sm">Estado transacción</label>
+                    <p-autoComplete formControlName="monedaEstado" [suggestions]="filteredElementEstadoTipoCambio"
+                        field="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
+                        (completeMethod)="filterElementEstadoTipoCambio($event, estadosTipoCambio)" appendTo="body"
+                        styleClass="w-full">
+                        <ng-template let-element>
+                            <div>{{element.descripcionCorta}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="md:col-span-6">
+                    <label class="block mb-1 text-sm">Nº operación cuenta origen</label>
+                    <input type="text" pInputText class="w-full" formControlName="nroOperacionCuentaOrigen"
+                        autocomplete="off">
+                </div>
+                <div class="md:col-span-6">
+                    <label class="block mb-1 text-sm">Nº operación cuenta destino</label>
+                    <input type="text" pInputText class="w-full" formControlName="nroOperacionCuentaDestino"
+                        autocomplete="off">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="flex items-center justify-end gap-2">
+        <button pButton label="Guardar" icon="pi pi-save" (click)="regularizarTrx()" [disabled]="disableButton"></button>
+        <button pButton label="Cerrar" icon="pi pi-times" class="p-button-outlined" (click)="closeDialog()"></button>
+    </div>
+</div>

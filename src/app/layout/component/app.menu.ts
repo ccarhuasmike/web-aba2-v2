@@ -60,34 +60,39 @@ export class AppMenu implements OnInit {
             {
                 label: 'Consultas',
                 items: [
-                    { label: 'Transacciones Observadas', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Autorizaciones', icon: 'pi pi-fw pi-id-card', routerLink: ['consultas/autorizaciones'] },
                     {
                         label: 'Tipo de Cambio', icon: 'pi pi-fw pi-id-card',
                         items: [
                             {
                                 label: 'Transacciones',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/transacciones']
                             },
                             {
                                 label: 'Log de Transacciones',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/log-transacciones']
                             },
                             {
                                 label: 'Pre-Liquidacion',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/pre-liquidacion']
                             },
                             {
                                 label: 'Liquidaciones',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/liquidaciones']
                             },
                             {
                                 label: 'Consultas',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/consultas']
                             },
                             {
                                 label: 'Operaciones por campaña',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['consultas/tipo-cambio/ope-campanias']
                             }
                         ]
                     },
