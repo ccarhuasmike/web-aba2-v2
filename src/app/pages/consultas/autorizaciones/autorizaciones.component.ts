@@ -154,6 +154,7 @@ export class AutorizacionesComponent implements OnInit {
         }
     }
 
+
     getCombos() {
         this.commonService.getMultipleCombosPromiseCliente(['documentos/tipos']).then(resp => {
             this.tipoDocumento = resp[0].data.content.filter((item: any) => item['nombre'] !== DOCUMENT.RUC)
@@ -722,4 +723,10 @@ export class AutorizacionesComponent implements OnInit {
 
         this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, fechaReporte, filterLavel);
     }
+    onKeyToggle(event: KeyboardEvent, rowData: any): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.visibilidadTarjeta(rowData);
+    }
+}
 }

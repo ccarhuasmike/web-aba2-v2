@@ -338,11 +338,13 @@
                     <td>
                         <span
                             *appDisableContentByRole="[roles.ATENCION_CLIENTE, roles.ATENCION_CLIENTE_TD, roles.CONSULTA, roles.PLAFT, roles.TI]">
-                            <p-button *ngIf="rowData.tarjeta.token"
+                            <p-button 
+                                *ngIf="rowData.tarjeta.token"
                                 styleClass="p-button-text p-button-plain p-button-sm"
                                 [icon]="rowData.tarjeta.numTarjetaVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"
-                                pTooltip="Mostrar/Ocultar tarjeta" tooltipPosition="top"
-                                (click)="visibilidadTarjeta(rowData)"></p-button>
+                                pTooltip="Mostrar/Ocultar tarjeta" 
+                                tooltipPosition="top"
+                                (click)="visibilidadTarjeta(rowData)" (onKeyDown)="onKeyToggle($event, rowData)"></p-button>
                         </span>
                         <span *ngIf="!rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.enmascarado}}</span>
                         <span *ngIf="rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.desenmascarado}}</span>
