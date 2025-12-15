@@ -76,7 +76,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon" [pContextMenuRow]="rowData" (click)="selectCuenta(rowData)"
+                <tr  [pContextMenuRow]="rowData" (click)="selectCuenta(rowData)"
                     style="cursor: pointer;">
                     <td>{{rowData.producto}}</td>
                     <td>{{rowData.nombresApellidos}}</td>
@@ -113,11 +113,6 @@
                 </div>
                 <div class="md:col-span-3">
                     <label class="block mb-1 text-sm">Fecha rango</label>
-
-                       <!-- <p-datepicker id="fechaRangoFeriados" class="w-full" formControlName="fechaRangoFeriados"
-                        (ngModelChange)="changeModelFechaRangoFeriado($event)" dateFormat="dd/mm/yy"
-                        yearRange="1940:2030" selectionMode="range" />
- -->
                     <p-datepicker formControlName="fechaRangoAutorizaciones"
                         (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" 
                         dateFormat="dd/mm/yy" yearRange="1940:2030"
@@ -181,7 +176,7 @@
                     <th scope="col">Id Transaccion Original</th>
                     <th scope="col">Razon Estado</th>
                 </tr>
-                <tr id="tableWithIcon">
+                <tr>
                     <th scope="col" style="text-align: center; width: 39px;">
                         <p-button icon="pi pi-refresh" pTooltip="Refrescar" showDelay="1000" hideDelay="300"
                             (click)="searchCuentaAutorizaciones()" (keydown.enter)="searchCuentaAutorizaciones()"
