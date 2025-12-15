@@ -9,7 +9,7 @@ export class SolicitudesAhorrosohService {
 
   APICtaAhoMig = environment.APICtaAhoMig;
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   getReporteSolicitudes(request:any) {
     let url = `${this.APICtaAhoMig}/v1/aba/solicitudes-ahorros/filtro-fecha`;

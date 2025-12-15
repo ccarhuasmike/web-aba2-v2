@@ -13,6 +13,7 @@ import { CALENDAR_DETAIL } from '@/layout/Utils/constants/aba.constants';
 import { ExcelService } from '@/pages/service/excel.service';
 import { OpeCampaniasService } from './ope-campanias.service';
 import { DatePickerModule } from 'primeng/datepicker';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-ope-campanias',
@@ -275,18 +276,19 @@ export class OpeCampaniasComponent implements OnInit {
         });
 
         this.datosOperaciones.forEach(x => {
-            const list: any[] = [];
-            list.push(x.idCambioMonedaCamOpeRes);
-            list.push(x.idCambioMonedaCampana);
-            list.push(x.fechaOperacion);
-            list.push(x.importeTotalCampana);
-            list.push(x.totalSpreadCompraOh);
-            list.push(x.totalSpreadVentaOh);
-            list.push(x.totalSpreadOh);
-            list.push(x.gananciaSpreadOh);
-            list.push(x.perdidaSpreadOh);
-            list.push(x.usuarioRegistro);
-            list.push(x.fechaRegistro);
+            const list: any[] = [
+                x.idCambioMonedaCamOpeRes,
+                x.idCambioMonedaCampana,
+                x.fechaOperacion,
+                x.importeTotalCampana,
+                x.totalSpreadCompraOh,
+                x.totalSpreadVentaOh,
+                x.totalSpreadOh,
+                x.gananciaSpreadOh,
+                x.perdidaSpreadOh,
+                x.usuarioRegistro,
+                x.fechaRegistro
+            ];
             datos.push(list);
         });
 
@@ -309,15 +311,16 @@ export class OpeCampaniasComponent implements OnInit {
         });
 
         this.datosOperacionesDetalle.forEach(x => {
-            const list: any[] = [];
-            list.push(x.idCambioMonedaCamOpeDet);
-            list.push(x.idCambioMonedaOperacion);
-            list.push(x.fechaOperacion);
-            list.push(x.importeCampana);
-            list.push(x.spreadCompraOh);
-            list.push(x.spreadVentaOh);
-            list.push(x.usuarioRegistro);
-            list.push(x.fechaRegistro);
+            const list: any[] = [
+                x.idCambioMonedaCamOpeDet,
+                x.idCambioMonedaOperacion,
+                x.fechaOperacion,
+                x.importeCampana,
+                x.spreadCompraOh,
+                x.spreadVentaOh,
+                x.usuarioRegistro,
+                x.fechaRegistro
+            ];
             datos.push(list);
         });
 
@@ -325,14 +328,13 @@ export class OpeCampaniasComponent implements OnInit {
     }
 
     filterElementCampania(event: any, data: any): void {
+
+
         this.filteredElementCampanias = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementCampanias.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementCampanias = UtilService.filterByField(data, query, 'descripcion');
+
+
     }
 
     private showMessage(severity: 'success' | 'info' | 'warn' | 'error', summary: string, detail: string): void {

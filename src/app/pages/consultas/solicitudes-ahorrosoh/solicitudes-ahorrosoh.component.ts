@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-
 import moment from 'moment';
-
-
-
 import { EditarInfoSolicitudComponent } from './modals/editar-info/editar-info.component';
 import { DetalleInfoSolicitudComponent } from './modals/detalle/detalle.component';
 import { AccordionModule } from 'primeng/accordion';
@@ -23,6 +19,7 @@ import { CommonService } from '@/pages/service/commonService';
 import { ExcelService } from '@/pages/service/excel.service';
 import { SolicitudesAhorrosohService } from './solicitudes-ahorrosoh.service';
 import { DialogService } from 'primeng/dynamicdialog';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
   selector: 'app-solicitudes-ahorrosoh',
@@ -135,11 +132,11 @@ export class SolicitudesAhorrosohComponent implements OnInit {
 
   constructor(
     private readonly dialog: DialogService,
-    private datePipe: DatePipe,
+    private readonly datePipe: DatePipe,
     private readonly toastr: MessageService,
-    private excelService: ExcelService,
-    private commonService: CommonService,
-    private solicitudesAhorrosohService: SolicitudesAhorrosohService
+    private readonly excelService: ExcelService,
+    private readonly commonService: CommonService,
+    private readonly solicitudesAhorrosohService: SolicitudesAhorrosohService
   ) {
     this.createForm();
   }
@@ -218,13 +215,8 @@ export class SolicitudesAhorrosohComponent implements OnInit {
 
   filterElementTipoDocumento(event: any, data: any) {
     this.filteredElementTipoDocumento = [];
-    const query = event.query;
-    for (let i = 0; i < data.length; i++) {
-      const element = data[i];
-      if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-        this.filteredElementTipoDocumento.push(element);
-      }
-    }
+    const query = event?.query ?? '';
+    this.filteredElementTipoDocumento = UtilService.filterByField(data, query, 'descripcion');
   }
 
   getSolicitudes() {
@@ -274,7 +266,7 @@ export class SolicitudesAhorrosohComponent implements OnInit {
     }
 
     this.solicitudesAhorrosohService.getReporteSolicitudes(request).subscribe((resp: any) => {
-      if (resp && resp['codigo'] == 0) {
+      if (resp?.['codigo'] == 0) {
         this.dataSolicitudes = resp.data.map((item: any) => {
           const tipoMoneda = this.tipoMonedas.find(e => e.id === +item.moneda);
           const descMoneda = tipoMoneda?.descripcion || '';
@@ -367,54 +359,54 @@ export class SolicitudesAhorrosohComponent implements OnInit {
     });
 
     this.dataSolicitudes.forEach(x => {
-      const list = [];
-
-      list.push(x.nroSolicitud);
-      list.push(x.fechaHoraRegistroConvert);
-      list.push(x.tipoDoc);
-      list.push(x.numeroDoc);
-      list.push(x.flgAceptTratamDatosObligatorio);
-      list.push(x.flgAceptTratamDatosOpcional);
-      list.push(x.primerNombre);
-      list.push(x.segundoNombre);
-      list.push(x.apellidoPaterno);
-      list.push(x.apellidoMaterno);
-      list.push(x.sexo);
-      list.push(x.fechaNacimientoConvert);
-      list.push(x.estadoCivil);
-      list.push(x.celular);
-      list.push(x.email);
-      list.push(x.flgMismaDireccionDni);
-      list.push(x.tipoVivienda);
-      list.push(x.departamento);
-      list.push(x.provincia);
-      list.push(x.distrito);
-      list.push(x.direccion);
-      list.push(x.referenciaDireccion);
-      list.push(x.flgPep);
-      list.push(x.tipoOcupacion);
-      list.push(x.nombreEmpresa);
-      list.push(x.nombreNegocio);
-      list.push(x.fechaIngresoLaboralConvert);
-      list.push(x.cargoActual);
-      list.push(x.ingresoMensual);
-      list.push(x.flgNegocioPropio);
-      list.push(x.actividadOcupacion);
-      list.push(x.giroNegocio);
-      list.push(x.flgRuc);
-      list.push(x.ruc);
-      list.push(x.flgAceptacionContrato);
-      list.push(x.descMoneda);
-      list.push(x.descEstadoSolicitud);
-      list.push(x.paso);
-      list.push(x.usuarioCreacion);
-      list.push(x.fechaCreacionConvert);
-      list.push(x.usuarioModificacion);
-      list.push(x.fechaModificacionConvert);
-      list.push(x.descCanal);
-      list.push(x.codigoAgencia);
-      list.push(x.descTipoProducto);
-      list.push(x.codCallCenter);
+      const list = [
+        x.nroSolicitud,
+        x.fechaHoraRegistroConvert,
+        x.tipoDoc,
+        x.numeroDoc,
+        x.flgAceptTratamDatosObligatorio,
+        x.flgAceptTratamDatosOpcional,
+        x.primerNombre,
+        x.segundoNombre,
+        x.apellidoPaterno,
+        x.apellidoMaterno,
+        x.sexo,
+        x.fechaNacimientoConvert,
+        x.estadoCivil,
+        x.celular,
+        x.email,
+        x.flgMismaDireccionDni,
+        x.tipoVivienda,
+        x.departamento,
+        x.provincia,
+        x.distrito,
+        x.direccion,
+        x.referenciaDireccion,
+        x.flgPep,
+        x.tipoOcupacion,
+        x.nombreEmpresa,
+        x.nombreNegocio,
+        x.fechaIngresoLaboralConvert,
+        x.cargoActual,
+        x.ingresoMensual,
+        x.flgNegocioPropio,
+        x.actividadOcupacion,
+        x.giroNegocio,
+        x.flgRuc,
+        x.ruc,
+        x.flgAceptacionContrato,
+        x.descMoneda,
+        x.descEstadoSolicitud,
+        x.paso,
+        x.usuarioCreacion,
+        x.fechaCreacionConvert,
+        x.usuarioModificacion,
+        x.fechaModificacionConvert,
+        x.descCanal,
+        x.codigoAgencia,
+        x.descTipoProducto,
+        x.codCallCenter,
+      ];
       datos.push(list);
     });
     this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, date, filterLavel);

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
-environment
+
 @Injectable({
     providedIn: 'root'
 })
@@ -9,7 +9,7 @@ export class LogTransaccionesService {
 
     APICamMon = environment.APICamMon;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     getCambioMonedaLog(
         fechaConfirmacionDesde: any,

@@ -27,7 +27,6 @@ import { DetailCambioMonedaComponent } from './modals/detail-cambiomoneda/detail
 import { LogCampaniaCambiomonedaComponent } from './modals/log-campania-cambiomoneda/log-campania-cambiomoneda.component';
 import { CambioMonedaService } from './cambiomoneda.service';
 import { CommonService } from '@/pages/service/commonService';
-import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-cambiomoneda',

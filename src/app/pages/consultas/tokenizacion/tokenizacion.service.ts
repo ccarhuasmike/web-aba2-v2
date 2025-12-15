@@ -13,8 +13,8 @@ export class TokenizacionService {
   ClientIdTarOh = environment.ClientIdTarOh;
 
   constructor(
-    private http: HttpClient,
-    private commonService: CommonService
+    private readonly http: HttpClient,
+    private readonly commonService: CommonService
   ) { }
 
   getTokenizacionPorDigitalCardId(digitalCardId:any) {

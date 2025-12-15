@@ -20,7 +20,6 @@ import { ToggleSwitchModule } from "primeng/toggleswitch";
 import { TYPE_PARTNER } from "@/layout/Utils/constants/aba.constants";
 import { CommonService } from "@/pages/service/commonService";
 import { TabsModule } from 'primeng/tabs';
-import { environment } from "src/environments/environment";
 import { UtilService } from "@/utils/util.services";
 @Component({
     selector: 'app-edit-proveedor',

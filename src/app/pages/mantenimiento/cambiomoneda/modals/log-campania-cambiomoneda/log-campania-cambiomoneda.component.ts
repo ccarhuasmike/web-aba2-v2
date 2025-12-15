@@ -15,7 +15,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-log-campania-cambiomoneda',

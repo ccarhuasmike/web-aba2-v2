@@ -80,9 +80,9 @@ export class TransaccionesObservadasComponent implements OnInit {
     constructor(
         public datePipe: DatePipe,
         public currencyPipe: CurrencyPipe,
-        private excelService: ExcelService,
-        private commonService: CommonService,
-        private transaccionesObservadasService: TransaccionesObservadasService,
+        private readonly excelService: ExcelService,
+        private readonly commonService: CommonService,
+        private readonly transaccionesObservadasService: TransaccionesObservadasService,
         private readonly messageService: MessageService,
         private readonly dialog: DialogService
     ) {
@@ -159,7 +159,7 @@ export class TransaccionesObservadasComponent implements OnInit {
         let fechaDesde = '';
         let fechaHasta = '';
 
-        if (form.fechaRango && form.fechaRango[0] && form.fechaRango[1]) {
+        if (form.fechaRango?.[0] && form.fechaRango[1]) {
             fechaDesde = moment(form.fechaRango[0]).format('YYYY-MM-DD');
             fechaHasta = moment(form.fechaRango[1]).format('YYYY-MM-DD');
         }
@@ -301,7 +301,7 @@ export class TransaccionesObservadasComponent implements OnInit {
         });
 
         dialogRef?.onClose.subscribe((resp:any) => {
-            if (resp?.data && resp.data['codigo'] === 0) {
+            if (resp?.data?.['codigo'] === 0) {
                 this.search();
             }
         });
@@ -377,9 +377,6 @@ export class TransaccionesObservadasComponent implements OnInit {
                     item.data.entrada['MCTIMOADDesc'] = monedaDiv?.valCadLargo;
                 }
             }
-            // const monedaDiv = this.tipoMonedas.find(e => e.valNumEntero == item.data.entrada.MCTIMOAD);
-            // item.data.entrada['MCTIMOADDesc'] = monedaDiv?.valCadLargo;
-
             const terminal = this.tiposTerminal.find((e: any) => e.codigo == item.data.entrada.MCTITITE);
             item.data.entrada['MCTITITEDesc'] = terminal?.descripcion;
 
@@ -424,7 +421,9 @@ export class TransaccionesObservadasComponent implements OnInit {
         let listaPaginas: number[] = [];
 
         for (let index = 1; index <= pageFinal; index++) {
-            (index != pageActual) ? listaPaginas.push(index) : null;
+            if (index !== pageActual) {
+                listaPaginas.push(index);
+            }
         }
 
         return listaPaginas;
@@ -445,13 +444,15 @@ export class TransaccionesObservadasComponent implements OnInit {
         let fechaDesde = '';
         let fechaHasta = '';
 
-        if (form.fechaRango && form.fechaRango[0] && form.fechaRango[1]) {
+        if (form.fechaRango?.[0] && form.fechaRango[1]) {
             fechaDesde = moment(form.fechaRango[0]).format('YYYY-MM-DD');
             fechaHasta = moment(form.fechaRango[1]).format('YYYY-MM-DD');
         }
 
         this.cols.forEach((element: any) => {
-            (element.header != 'Opciones') ? header.push(element.header) : null;
+            if (element.header !== 'Opciones') {
+                header.push(element.header);
+            }
         });
 
         //Logica para obtener la data y paginacion
@@ -481,29 +482,29 @@ export class TransaccionesObservadasComponent implements OnInit {
 
         listadoData.forEach((dataPagina: any[]) => {
             dataPagina.forEach(row => {
-                const list = [];
-
-                list.push(row.id);
-                list.push(row.fechaCreacionConvert);
-                list.push(row.fechaActualizacionConvert);
-                list.push(row.fechaProcesoDiarioConvert);
-                list.push(row.motivoEstado);
-                list.push(row.descripcionEstado);
-                list.push(row.data.procesador?.transaccion?.descripcionOrigen);
-                list.push(row.data.entrada.MCD4TARE);
-                list.push(row.data.entrada.MCTIAREN);
-                list.push(row.data.entrada.MCTIAUTO);
-                list.push(row.data.entrada.MCTIFTRAConvert);
-                list.push(row.data.entrada.MCTIIMPOConvert);
-                list.push(row.data.entrada.MCTIMONEDesc);
-                list.push(row.data.entrada.MCTIIMADConvert);
-                list.push(row.data.entrada.MCTIMOADDesc);
-                list.push(row.data.entrada.MCTICEST);
-                list.push(row.data.entrada.MCTINEST);
-                list.push(row.data.entrada.MCTIMCC);
-                list.push(row.data.entrada.MCTIPAIS);
-                list.push(row.data.entrada.MCTICIUD);
-                list.push(row.data.entrada.MCTITITEDesc);
+                const list = [
+                    row.id,
+                    row.fechaCreacionConvert,
+                    row.fechaActualizacionConvert,
+                    row.fechaProcesoDiarioConvert,
+                    row.motivoEstado,
+                    row.descripcionEstado,
+                    row.data.procesador?.transaccion?.descripcionOrigen,
+                    row.data.entrada.MCD4TARE,
+                    row.data.entrada.MCTIAREN,
+                    row.data.entrada.MCTIAUTO,
+                    row.data.entrada.MCTIFTRAConvert,
+                    row.data.entrada.MCTIIMPOConvert,
+                    row.data.entrada.MCTIMONEDesc,
+                    row.data.entrada.MCTIIMADConvert,
+                    row.data.entrada.MCTIMOADDesc,
+                    row.data.entrada.MCTICEST,
+                    row.data.entrada.MCTINEST,
+                    row.data.entrada.MCTIMCC,
+                    row.data.entrada.MCTIPAIS,
+                    row.data.entrada.MCTICIUD,
+                    row.data.entrada.MCTITITEDesc
+                ];
 
                 datos.push(list);
             });

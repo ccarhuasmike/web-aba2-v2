@@ -80,13 +80,22 @@
             </span>
         </div>
         <div class="md:col-span-3">
-            <label class="font-bold block mb-1">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
-            <input type="text" autocomplete="off" pInputText name="nombreArchivo" formControlName="nombreArchivo" readonly>
+            <label for="nombreArchivo" class="font-bold block mb-1">Nombre archivo sustento (pdf, jpeg, png, xlsx)</label>
+            <input id="nombreArchivo" type="text" autocomplete="off" pInputText name="nombreArchivo" formControlName="nombreArchivo" readonly>
             <small class="p-error" *ngIf="formLiberacion.get('nombreArchivo')?.dirty && !formLiberacion.get('nombreArchivo')?.value">Es requerido</small>
         </div>
         <div class="md:col-span-3 flex items-end justify-end gap-2">
-            <p-button label="Liberar Manualmente Autorizacion" (click)="postLiberarManualmenteAutorizacion()" [disabled]="disableButton"></p-button>
-            <p-button label="Cerrar" severity="secondary" (click)="dialogRef.close()"></p-button>
+            <p-button label="Liberar Manualmente Autorizacion" 
+            (click)="postLiberarManualmenteAutorizacion()" 
+            (keydown.enter)="postLiberarManualmenteAutorizacion()" 
+            (keydown)="postLiberarManualmenteAutorizacion()"
+            [disabled]="disableButton"></p-button>
+            
+            <p-button label="Cerrar" severity="secondary" 
+            (click)="dialogRef.close()"
+            (keydown.enter)="dialogRef.close()" 
+            (keydown)="dialogRef.close()"
+            ></p-button>
         </div>
     </div>
 </form>

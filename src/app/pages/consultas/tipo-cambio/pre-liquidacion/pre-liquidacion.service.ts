@@ -9,7 +9,7 @@ export class PreLiquidacionService {
 
     APICamMon = environment.APICamMon;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     getResumenLiquidacion(
         idPartner: any

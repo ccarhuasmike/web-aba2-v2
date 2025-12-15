@@ -24,7 +24,6 @@ import { TabsModule } from 'primeng/tabs';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { environment } from 'src/environments/environment';
 import { UtilService } from '@/utils/util.services';
 import { CommonService } from '@/pages/service/commonService';
 @Component({

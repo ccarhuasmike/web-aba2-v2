@@ -19,9 +19,10 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-6">
-                                <label class="block mb-1 text-sm">Partner</label>
-                                <p-autoComplete formControlName="proveedor" [suggestions]="filteredElementProveedor"
-                                    field="nombreGenerico" emptyMessage="Sin resultados" [dropdown]="true"
+                                <label for="proveedor" class="block mb-1 text-sm">Partner</label>
+                                <p-autoComplete id="proveedor" formControlName="proveedor"
+                                    [suggestions]="filteredElementProveedor" field="nombreGenerico"
+                                    emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementProveedor($event, proveedores)"
                                     (ngModelChange)="changeModelProveedor($event)" appendTo="body" styleClass="w-full">
                                     <ng-template let-element>
@@ -47,25 +48,27 @@
     <div class="md:col-span-1">
         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
             <span class="text-lg font-semibold">Resumen</span>
-            <button pButton label="Excel" icon="pi pi-file-excel"
-                class="p-button-outlined p-button-success" [disabled]="datosLiquidaciones.length === 0"
-                (click)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosLiquidaciones.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
+                tooltipPosition="bottom"></button>
         </div>
-        <p-table #dt resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
+        <p-table #dt resizableColumns="true" rowExpandMode="single" [scrollable]="true"
             styleClass="p-datatable-striped p-datatable-gridlines"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
-            [showCurrentPageReport]="true" [filterDelay]="0" [columns]="cols" [rows]="rows" dataKey="idCambioMonedaPreLiqDiariaRes"
-            [value]="datosLiquidaciones" [totalRecords]="datosLiquidaciones.length"
-            [loading]="loadingDatosLiquidaciones">
+            [showCurrentPageReport]="true" [filterDelay]="0" [columns]="cols" [rows]="rows"
+            dataKey="idCambioMonedaPreLiqDiariaRes" [value]="datosLiquidaciones"
+            [totalRecords]="datosLiquidaciones.length" [loading]="loadingDatosLiquidaciones">
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns  " scope="col">
                         {{col.header}}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon" (click)="getLiquidacionDetalle(rowData)" style="cursor: pointer;">
+                <tr id="tableWithIcon2" (click)="getLiquidacionDetalle(rowData)"
+                    (keydown.enter)="getLiquidacionDetalle(rowData)" (keydown)="getLiquidacionDetalle(rowData)"
+                    style="cursor: pointer;">
                     <td class="text-right">{{rowData.totalDolaresTcCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td class="text-right">{{rowData.totalDolaresTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td class="text-right">{{rowData.totalSolesTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
@@ -98,11 +101,11 @@
         <div class="card">
             <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
                 <span class="text-lg font-semibold">Detalle</span>
-                <button pButton label="Excel" icon="pi pi-file-excel"
-                    class="p-button-outlined p-button-success" [disabled]="datosLiquidacionDetalle.length === 0"
-                    (click)="exportExcelDetalle()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+                <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                    [disabled]="datosLiquidacionDetalle.length === 0" (click)="exportExcelDetalle()"
+                    pTooltip="Descargar excel" tooltipPosition="bottom"></button>
             </div>
-            <p-table #dt2 resizableColumns="true" columnResizeMode="expand" 
+            <p-table #dt2 resizableColumns="true" columnResizeMode="expand"
                 styleClass="p-datatable-striped p-datatable-gridlines"
                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
                 [showCurrentPageReport]="true" [value]="datosLiquidacionDetalle"
@@ -110,7 +113,7 @@
                 [loading]="loadingDatosLiquidacionDetalle">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns">
+                        <th *ngFor="let col of columns" scope="col">
                             {{col.header}}
                         </th>
                     </tr>
@@ -121,12 +124,14 @@
                         <td>{{rowData.idOperacionPartner}}</td>
                         <td>{{rowData.cuentaOrigen}}</td>
                         <td>{{rowData.descripcionMonedaOrigen}}</td>
-                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                        </td>
                         <td class="text-right">{{rowData.importeOrigenOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                         <td>{{rowData.nroOperacionCuentaOrigen}}</td>
                         <td>{{rowData.cuentaDestino}}</td>
                         <td>{{rowData.descripcionMonedaDestino}}</td>
-                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                        </td>
                         <td class="text-right">{{rowData.importeDestinoOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                         <td>{{rowData.nroOperacionCuentaDestino}}</td>
                         <td class="text-right">{{rowData.spreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>

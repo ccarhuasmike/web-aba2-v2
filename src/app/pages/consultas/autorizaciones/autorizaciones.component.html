@@ -10,7 +10,7 @@
 
         <p-accordion value="0">
             <p-accordion-panel value="0">
-                 <p-accordion-header>Filtro de Búsqueda</p-accordion-header>
+                <p-accordion-header>Filtro de Búsqueda</p-accordion-header>
                 <p-accordion-content>
                     <ng-template pTemplate="header">
                         <div class="flex items-center gap-2">
@@ -21,8 +21,8 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div [ngClass]="showSearchCard ? 'md:col-span-3' : 'md:col-span-5'">
-                                <label class="block mb-1 text-sm">Tipo de Documento</label>
-                                <p-autoComplete name="tipoDocumento" formControlName="tipoDocumento"
+                                <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de Documento</label>
+                                <p-autoComplete id="tipoDocumento" name="tipoDocumento" formControlName="tipoDocumento"
                                     [suggestions]="filteredElementTipoDocumento" optionLabel="descripcion"
                                     emptyMessage="Sin resultados" [dropdown]="true" styleClass="w-full"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumento)"
@@ -33,14 +33,14 @@
                                 </p-autoComplete>
                             </div>
                             <div [ngClass]="showSearchCard ? 'md:col-span-3' : 'md:col-span-5'">
-                                <label class="block mb-1 text-sm">Nro. de Documento</label>
-                                <input class="w-full" type="text" pInputText name="nroDocumento"
+                                <label for="nroDocumento" class="block mb-1 text-sm">Nro. de Documento</label>
+                                <input id="nroDocumento" class="w-full" type="text" pInputText name="nroDocumento"
                                     formControlName="nroDocumento" (input)="onInputChangeNumeroDocumento()"
                                     [attr.minlength]="nroCaracter" [attr.maxlength]="nroCaracter" autocomplete="off">
                             </div>
                             <div class="md:col-span-4" *ngIf="showSearchCard">
-                                <label class="block mb-1 text-sm">Nro. Tarjeta</label>
-                                <input class="w-full" type="text" pInputText name="nroTarjeta"
+                                <label for="nroTarjeta" class="block mb-1 text-sm">Nro. Tarjeta</label>
+                                <input id="nroTarjeta" class="w-full" type="text" pInputText name="nroTarjeta"
                                     formControlName="nroTarjeta" (input)="onInputChangeNumeroTarjeta()"
                                     [attr.minlength]="16" [attr.maxlength]="16" autocomplete="off"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
@@ -70,14 +70,14 @@
             [value]="datosCuentas" [totalRecords]="datosCuentas.length" [loading]="loadingCuentas">
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
-                        {{col.header}}
+                    <th *ngFor="let col of columns" scope="col">
+                        {{ col.header }}
                     </th>
                 </tr>
-            </ng-template>
+            </ng-template>            
             <ng-template pTemplate="body" let-rowData>
-                <tr  [pContextMenuRow]="rowData" (click)="selectCuenta(rowData)"
-                    style="cursor: pointer;">
+                <tr id="tableWithIconCuenta" [pContextMenuRow]="rowData" (click)="selectCuenta(rowData)"
+                    (keydown.enter)="selectCuenta(rowData)" (keydown)="selectCuenta(rowData)" style="cursor: pointer;">
                     <td>{{rowData.producto}}</td>
                     <td>{{rowData.nombresApellidos}}</td>
                     <td>{{rowData.numeroCuenta}}</td>
@@ -107,31 +107,31 @@
         <form *ngIf="uidCuenta" [formGroup]="formBusquedaAutorizaciones" novalidate class="mb-4">
             <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                 <div class="md:col-span-3">
-                    <label class="block mb-1 text-sm">Cuenta</label>
-                    <input class="w-full" type="text" autocomplete="off" pInputText name="numeroCuenta"
-                        [(ngModel)]="numeroCuenta" [ngModelOptions]="{standalone: true}" readonly>
+                    <label for="numeroCuenta" class="block mb-1 text-sm">Cuenta</label>
+                    <input id="numeroCuenta" class="w-full" type="text" autocomplete="off" pInputText
+                        name="numeroCuenta" [(ngModel)]="numeroCuenta" [ngModelOptions]="{standalone: true}" readonly>
                 </div>
                 <div class="md:col-span-3">
-                    <label class="block mb-1 text-sm">Fecha rango</label>
-                    <p-datepicker formControlName="fechaRangoAutorizaciones"
-                        (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" 
-                        dateFormat="dd/mm/yy" yearRange="1940:2030"
-                        selectionMode="range" [readonlyInput]="true" appendTo="body" class="w-full"></p-datepicker>
+                    <label for="fechaRangoAutorizaciones" class="block mb-1 text-sm">Fecha rango</label>
+                    <p-datepicker id="fechaRangoAutorizaciones" formControlName="fechaRangoAutorizaciones"
+                        (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" dateFormat="dd/mm/yy"
+                        yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
+                        class="w-full"></p-datepicker>
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block mb-1 text-sm">Cod. de operacion</label>
-                    <input class="w-full" type="text" autocomplete="off" pInputText name="codigoOperacion"
-                        formControlName="codigoOperacion">
+                    <label for="codigoOperacion" class="block mb-1 text-sm">Cod. de operacion</label>
+                    <input id="codigoOperacion" class="w-full" type="text" autocomplete="off" pInputText
+                        name="codigoOperacion" formControlName="codigoOperacion">
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block mb-1 text-sm">Cod. de grupo</label>
-                    <input class="w-full" type="text" autocomplete="off" pInputText name="codigoGrupo"
+                    <label for="codigoGrupo" class="block mb-1 text-sm">Cod. de grupo</label>
+                    <input id="codigoGrupo" class="w-full" type="text" autocomplete="off" pInputText name="codigoGrupo"
                         formControlName="codigoGrupo">
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block mb-1 text-sm">Cod. de entrada</label>
-                    <input class="w-full" type="text" autocomplete="off" pInputText name="codigoEntrada"
-                        formControlName="codigoEntrada">
+                    <label for="codigoEntrada" class="block mb-1 text-sm">Cod. de entrada</label>
+                    <input id="codigoEntrada" class="w-full" type="text" autocomplete="off" pInputText
+                        name="codigoEntrada" formControlName="codigoEntrada">
                 </div>
                 <div class="md:col-span-12 flex items-end justify-end gap-2">
                     <button pButton label="Buscar" icon="pi pi-search" (click)="searchCuentaAutorizaciones()"
@@ -176,11 +176,11 @@
                     <th scope="col">Id Transaccion Original</th>
                     <th scope="col">Razon Estado</th>
                 </tr>
-                <tr>
+                <tr id="tableWithIconAutorizaciones">
                     <th scope="col" style="text-align: center; width: 39px;">
                         <p-button icon="pi pi-refresh" pTooltip="Refrescar" showDelay="1000" hideDelay="300"
                             (click)="searchCuentaAutorizaciones()" (keydown.enter)="searchCuentaAutorizaciones()"
-                            [disabled]="!uidCuenta" rounded raised />
+                            (keydown)="searchCuentaAutorizaciones()" [disabled]="!uidCuenta" rounded raised />
                     </th>
                     <th scope="col">
                         <input class="w-full" pInputText type="text"
@@ -265,7 +265,9 @@
                     <td style="text-align: center;">
                         <div class="flex justify-between gap-2">
                             <p-button styleClass="p-button-text p-button-rounded p-button-sm" icon="pi pi-external-link"
-                                (click)="openDialogDetalleAutorizacion(rowData)" pTooltip="Detalle Autorizacion"
+                                (click)="openDialogDetalleAutorizacion(rowData)"
+                                (keydown.enter)="openDialogDetalleAutorizacion(rowData)"
+                                (keydown)="openDialogDetalleAutorizacion(rowData)" pTooltip="Detalle Autorizacion"
                                 tooltipPosition="top"></p-button>
                             <span
                                 *appDisableContentByRole="[roles.PLAFT, roles.ATENCION_CLIENTE, roles.OPERACION_CONTABLE, roles.FRAUDE, roles.CONSULTA]">
@@ -293,6 +295,8 @@
                                             )
                                         )
                                     " (click)="openDialogLiberarManualAutorizacion(rowData)"
+                                    (keydown.enter)="openDialogLiberarManualAutorizacion(rowData)"
+                                    (keydown)="openDialogLiberarManualAutorizacion(rowData)"
                                     pTooltip="Liberar Autorizacion" tooltipPosition="top"></p-button>
                             </span>
                         </div>
@@ -338,13 +342,12 @@
                     <td>
                         <span
                             *appDisableContentByRole="[roles.ATENCION_CLIENTE, roles.ATENCION_CLIENTE_TD, roles.CONSULTA, roles.PLAFT, roles.TI]">
-                            <p-button 
-                                *ngIf="rowData.tarjeta.token"
+                            <p-button *ngIf="rowData.tarjeta.token"
                                 styleClass="p-button-text p-button-plain p-button-sm"
                                 [icon]="rowData.tarjeta.numTarjetaVisible ? 'pi pi-eye-slash' : 'pi pi-eye'"
-                                pTooltip="Mostrar/Ocultar tarjeta" 
-                                tooltipPosition="top"
-                                (click)="visibilidadTarjeta(rowData)" (onKeyDown)="onKeyToggle($event, rowData)"></p-button>
+                                pTooltip="Mostrar/Ocultar tarjeta" tooltipPosition="top"
+                                (click)="visibilidadTarjeta(rowData)" (keydown.enter)="visibilidadTarjeta(rowData)"
+                                (keydown)="visibilidadTarjeta(rowData)"></p-button>
                         </span>
                         <span *ngIf="!rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.enmascarado}}</span>
                         <span *ngIf="rowData.tarjeta.numTarjetaVisible">{{rowData.tarjeta.desenmascarado}}</span>

@@ -9,7 +9,7 @@ export class ConsultasService {
 
     APICamMon = environment.APICamMon;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     getConsultas(
         fechaConsultaDesde: any,

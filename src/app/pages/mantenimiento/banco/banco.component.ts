@@ -19,7 +19,6 @@ import { TableModule } from "primeng/table";
 import { TabsModule } from "primeng/tabs";
 import { ToastModule } from "primeng/toast";
 import { TooltipModule } from "primeng/tooltip";
-import { environment } from "src/environments/environment";
 import { CommonService } from "@/pages/service/commonService";
 
 @Component({

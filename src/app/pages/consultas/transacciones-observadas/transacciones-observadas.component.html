@@ -18,14 +18,15 @@
                     <form [formGroup]="formObservedTransaction" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Token Tarjeta</label>
-                                <input class="w-full" type="text" pInputText formControlName="tarjeta" autocomplete="off">
+                                <label for="tarjeta" class="block mb-1 text-sm">Token Tarjeta</label>
+                                <input id="tarjeta" class="w-full" type="text" pInputText formControlName="tarjeta"
+                                    autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Origen</label>
-                                <p-autoComplete formControlName="origen" [suggestions]="filteredElementOrigen"
-                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
-                                    styleClass="w-full" appendTo="body"
+                                <label for="origen" class="block mb-1 text-sm">Origen</label>
+                                <p-autoComplete id="origen" formControlName="origen"
+                                    [suggestions]="filteredElementOrigen" optionLabel="descripcion" dataKey="id"
+                                    emptyMessage="Sin resultados" [dropdown]="true" styleClass="w-full" appendTo="body"
                                     (completeMethod)="filterElementOrigen($event, origenes)">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
@@ -33,10 +34,10 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Tipo Solución</label>
-                                <p-autoComplete formControlName="tipoSolucion" [suggestions]="filteredElementTipoSolucion"
-                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
-                                    styleClass="w-full" appendTo="body"
+                                <label for="tipoSolucion" class="block mb-1 text-sm">Tipo Solución</label>
+                                <p-autoComplete id="tipoSolucion" formControlName="tipoSolucion"
+                                    [suggestions]="filteredElementTipoSolucion" optionLabel="descripcion" dataKey="id"
+                                    emptyMessage="Sin resultados" [dropdown]="true" styleClass="w-full" appendTo="body"
                                     (completeMethod)="filterElementTipoSolucion($event, tipoSoluciones)">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
@@ -44,10 +45,10 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Estado *</label>
-                                <p-autoComplete formControlName="estado" [suggestions]="filteredElementEstado"
-                                    optionLabel="descripcion" dataKey="id" emptyMessage="Sin resultados" [dropdown]="true"
-                                    styleClass="w-full" appendTo="body"
+                                <label for="estado" class="block mb-1 text-sm">Estado *</label>
+                                <p-autoComplete id="estado" formControlName="estado"
+                                    [suggestions]="filteredElementEstado" optionLabel="descripcion" dataKey="id"
+                                    emptyMessage="Sin resultados" [dropdown]="true" styleClass="w-full" appendTo="body"
                                     (completeMethod)="filterElementEstado($event, estados)">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
@@ -55,14 +56,14 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">ID Transacción Observada</label>
-                                <input class="w-full" type="text" pInputText formControlName="id" autocomplete="off">
+                                <label for="id" class="block mb-1 text-sm">ID Transacción Observada</label>
+                                <input id="id" class="w-full" type="text" pInputText formControlName="id"
+                                    autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Fecha rango *</label>
-                                <p-datepicker formControlName="fechaRango" dateFormat="dd/mm/yy"
-                                      yearRange="1940:2030"
-                                    selectionMode="range" [readonlyInput]="true" appendTo="body"
+                                <label for="fechaRango" class="block mb-1 text-sm">Fecha rango *</label>
+                                <p-datepicker id="fechaRango" formControlName="fechaRango" dateFormat="dd/mm/yy"
+                                    yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
                                     styleClass="w-full"></p-datepicker>
                             </div>
                             <div class="md:col-span-12 flex items-end justify-end gap-2">
@@ -84,14 +85,13 @@
         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
             <span class="text-lg font-semibold">Consultas</span>
             <p-button label="Excel" icon="pi pi-file-excel" styleClass="p-button-outlined p-button-success"
-                [disabled]="data.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
-                tooltipPosition="bottom"></p-button>
+                [disabled]="data.length === 0" (click)="exportExcel()" (keydown.enter)="exportExcel()"
+                (keydown)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="bottom"></p-button>
         </div>
 
-        <p-paginator [rows]="rows" [totalRecords]="totalRecords" 
-            (onPageChange)="onPageChange($event)">
+        <p-paginator [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)">
             <ng-template pTemplate="paginatorleft">
-                <label>{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                <label for="" >{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
                     totalRecords + ' registros' }}</label>
             </ng-template>
         </p-paginator>
@@ -99,14 +99,14 @@
         <p-table #dt resizableColumns="true" columnResizeMode="expand"
             styleClass="p-datatable-striped p-datatable-gridlines"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" dataKey="id"
-            [value]="data" [columns]="cols" [rows]="rows" >
+            [value]="data" [columns]="cols" [rows]="rows">
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th *ngFor="let col of columns">
                         {{col.header}}
                     </th>
                 </tr>
-                <tr id="tableWithIcon">
+                <tr id="tableWithIcon_1">
                     <th *ngFor="let col of columns">
                         <input *ngIf="col.field" class="w-full" pInputText type="text"
                             (input)="dt.filter($event.target.value, col.field, 'startsWith')"
@@ -115,14 +115,15 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon">
+                <tr id="tableWithIcon_2">
                     <td style="text-align: center; width: 48px;">
                         <p-menu #actionMenu [popup]="true" [model]="getRowMenuItems(rowData)" appendTo="body">
                             <ng-template pTemplate="item" let-item>
                                 <ng-container *ngIf="item.restrictedRoles?.length; else defaultItem">
                                     <span *appDisableContentByRole="item.restrictedRoles">
                                         <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
-                                            <span class="p-menuitem-icon" [ngClass]="item.icon" *ngIf="item.icon"></span>
+                                            <span class="p-menuitem-icon" [ngClass]="item.icon"
+                                                *ngIf="item.icon"></span>
                                             <span class="p-menuitem-text">{{item.label}}</span>
                                         </a>
                                     </span>
@@ -136,8 +137,8 @@
                             </ng-template>
                         </p-menu>
                         <button type="button" pButton icon="pi pi-ellipsis-v"
-                            class="p-button-text p-button-rounded p-button-sm"
-                            (click)="actionMenu.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
+                            class="p-button-text p-button-rounded p-button-sm" (click)="actionMenu.toggle($event)"
+                            pTooltip="Acciones" tooltipPosition="top"></button>
                     </td>
                     <td>{{rowData.id}}</td>
                     <td>{{rowData.fechaCreacionConvert}}</td>
@@ -174,10 +175,9 @@
             </ng-template>
         </p-table>
 
-        <p-paginator [rows]="rows" [totalRecords]="totalRecords"
-            (onPageChange)="onPageChange($event)">
+        <p-paginator [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)">
             <ng-template pTemplate="paginatorleft">
-                <label>{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                <label for="paginatorleft" >{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
                     totalRecords + ' registros' }}</label>
             </ng-template>
         </p-paginator>

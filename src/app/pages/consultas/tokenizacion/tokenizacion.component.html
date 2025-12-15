@@ -9,15 +9,17 @@
     <div class="md:col-span-3">
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
             <div class="md:col-span-2">
-                <input class="w-full"  type="text" placeholder="Ingrese digitalCardId" pInputText autocomplete="off"
+                <input class="w-full" type="text" placeholder="Ingrese digitalCardId" pInputText autocomplete="off"
                     [(ngModel)]="digitalCardId" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-1 flex items-end justify-end gap-2">
                 <p-button icon="pi pi-search" styleClass="p-button-sm" [disabled]="loadingAutorizaciones"
-                    (click)="searchTokenizacion()" pTooltip="Buscar por Token Reference" tooltipPosition="top">
+                    (click)="searchTokenizacion()" pTooltip="Buscar por Token Reference" tooltipPosition="top"
+                    (keydown.enter)="searchTokenizacion()" (keydown)="searchTokenizacion()">
                 </p-button>
                 <p-button icon="pi pi-file" styleClass="p-button-sm" (click)="openDialogLogNotificacion()"
-                    pTooltip="Logs Notificacion" tooltipPosition="top">
+                    pTooltip="Logs Notificacion" tooltipPosition="top" (keydown.enter)="openDialogLogNotificacion()"
+                    (keydown)="openDialogLogNotificacion()">
                 </p-button>
             </div>
         </div>
@@ -27,39 +29,41 @@
         <div class="text-lg font-semibold mb-2">Consulta por Token Reference</div>
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-2" pTooltip="Unique identifier of the card." tooltipPosition="top">
-                <label class="block text-sm mb-1">parentCardId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.parentCardId"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="parentCardId" class="block text-sm mb-1">parentCardId</label>
+                <input id="parentCardId" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.parentCardId" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="md:col-span-2" pTooltip="Unique identifier of the token specified by the TSP." tooltipPosition="top">
-                <label class="block text-sm mb-1">digitalCardId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.digitalCardId"
-                    [ngModelOptions]="{standalone: true}">
+            <div class="md:col-span-2" pTooltip="Unique identifier of the token specified by the TSP."
+                tooltipPosition="top">
+                <label for="digitalCardId" class="block text-sm mb-1">digitalCardId</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.digitalCardId" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Last four digits of the token" tooltipPosition="top">
-                <label class="block text-sm mb-1">panSuffix</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.panSuffix"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="panSuffix" class="block text-sm mb-1">panSuffix</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.panSuffix" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-1" pTooltip="The state of the digital card (token)" tooltipPosition="top">
-                <label class="block text-sm mb-1">state</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.state"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="state" class="block text-sm mb-1">state</label>
+                <input id="state" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.state" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-1" pTooltip="The type of the token" tooltipPosition="top">
-                <label class="block text-sm mb-1">type</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.type"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="type" class="block text-sm mb-1">type</label>
+                <input id="type" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.type" [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="md:col-span-2" pTooltip="Scheme card identifier for a given token requestor." tooltipPosition="top">
-                <label class="block text-sm mb-1">schemeCardId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.schemeCardId"
-                    [ngModelOptions]="{standalone: true}">
+            <div class="md:col-span-2" pTooltip="Scheme card identifier for a given token requestor."
+                tooltipPosition="top">
+                <label for="schemeCardId" class="block text-sm mb-1">schemeCardId</label>
+                <input id="schemeCardId" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.schemeCardId" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-3" pTooltip="List of all devices bound to this token." tooltipPosition="top">
-                <label class="block text-sm mb-1">deviceBindingList</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.deviceBindingList"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="deviceBindingList" class="block text-sm mb-1">deviceBindingList</label>
+                <input id="deviceBindingList" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.deviceBindingList" [ngModelOptions]="{standalone: true}">
             </div>
         </div>
     </div>
@@ -70,23 +74,24 @@
         <div class="text-lg font-semibold mb-2">Tiempo de Aprovisionamiento</div>
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-4"
-                pTooltip="Provisioning time of the token. Format ISO 8601 YYYY-MM-DDThh:mm:ssTZD." tooltipPosition="top">
-                <label class="block text-sm mb-1">provisioningTime</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off" [(ngModel)]="tokenizacion.provisioningTime"
-                    [ngModelOptions]="{standalone: true}">
+                pTooltip="Provisioning time of the token. Format ISO 8601 YYYY-MM-DDThh:mm:ssTZD."
+                tooltipPosition="top">
+                <label for="provisioningTime" class="block text-sm mb-1">provisioningTime</label>
+                <input id="provisioningTime" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.provisioningTime" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-4"
                 pTooltip="Last time the token keys have been replenished. Format ISO 8601 YYYY-MM-DDThh:mm:ssTZD."
                 tooltipPosition="top">
-                <label class="block text-sm mb-1">lastReplenishTime</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="lastReplenishTime" class="block text-sm mb-1">lastReplenishTime</label>
+                <input id="lastReplenishTime" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.lastReplenishTime" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-4"
                 pTooltip="Last time the token status has been changed. Format ISO 8601 YYYY-MM-DDThh:mm:ssTZD."
                 tooltipPosition="top">
-                <label class="block text-sm mb-1">lastStateChangeTime</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="lastStateChangeTime" class="block text-sm mb-1">lastStateChangeTime</label>
+                <input id="lastStateChangeTime" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.lastStateChangeTime" [ngModelOptions]="{standalone: true}">
             </div>
         </div>
@@ -98,41 +103,42 @@
         <div class="text-lg font-semibold mb-2">Informacion del Token</div>
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-2" pTooltip="Digital Card requestor identifier." tooltipPosition="top">
-                <label class="block text-sm mb-1">id</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="digitalCardRequestorInformation" class="block text-sm mb-1">id</label>
+                <input id="digitalCardRequestorInformation" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.id"
                     [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="MasterCard only. Wallet Application identifier." tooltipPosition="top">
-                <label class="block text-sm mb-1">walletId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="digitalCardRequestorInformation" class="block text-sm mb-1">walletId</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.walletId"
                     [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Wallet or Merchant readable name." tooltipPosition="top">
-                <label class="block text-sm mb-1">name</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="name" class="block text-sm mb-1">name</label>
+                <input id="name" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.name"
                     [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2"
                 pTooltip="VISA only. Identifiers of the couple Token Requestor - Token Service Provider."
                 tooltipPosition="top">
-                <label class="block text-sm mb-1">tspId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="digitalCardRequestorInformation" class="block text-sm mb-1">tspId</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.tspId"
                     [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="md:col-span-2" pTooltip="Applies to VISA when token for token provisioning." tooltipPosition="top">
-                <label class="block text-sm mb-1">originalDigitalCardRequestorId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+            <div class="md:col-span-2" pTooltip="Applies to VISA when token for token provisioning."
+                tooltipPosition="top">
+                <label for="originalDigitalCardRequestorId" class="block text-sm mb-1">originalDigitalCardRequestorId</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.originalDigitalCardRequestorId"
                     [ngModelOptions]="{standalone: true}">
             </div>
-            <div class="md:col-span-2"
-                pTooltip="Wallet/Digital Card Requestor colour recommended during tokenization." tooltipPosition="top">
-                <label class="block text-sm mb-1">recommendation</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+            <div class="md:col-span-2" pTooltip="Wallet/Digital Card Requestor colour recommended during tokenization."
+                tooltipPosition="top">
+                <label for="recommendation" class="block text-sm mb-1">recommendation</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.digitalCardRequestorInformation!.recommendation"
                     [ngModelOptions]="{standalone: true}">
             </div>
@@ -145,103 +151,100 @@
         <div class="text-lg font-semibold mb-2">Informacion del Dispositivo</div>
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-2" pTooltip="Identifier of the token storage." tooltipPosition="top">
-                <label class="block text-sm mb-1">deviceId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="deviceInformation" class="block text-sm mb-1">deviceId</label>
+                <input class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.deviceId" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Type of the token storage location." tooltipPosition="top">
-                <label class="block text-sm mb-1">digitalCardStorageType</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="digitalCardStorageType" class="block text-sm mb-1">digitalCardStorageType</label>
+                <input id="digitalCardStorageType" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.digitalCardStorageType"
                     [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device manufacturer name." tooltipPosition="top">
-                <label class="block text-sm mb-1">manufacturer</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="manufacturer" class="block text-sm mb-1">manufacturer</label>
+                <input id="manufacturer" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.manufacturer" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device brand." tooltipPosition="top">
-                <label class="block text-sm mb-1">brand</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="brand" class="block text-sm mb-1">brand</label>
+                <input id="brand" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.brand" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device model." tooltipPosition="top">
-                <label class="block text-sm mb-1">model</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="model" class="block text-sm mb-1">model</label>
+                <input id="model" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.model" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device OS version." tooltipPosition="top">
-                <label class="block text-sm mb-1">osVersion</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="osVersion" class="block text-sm mb-1">osVersion</label>
+                <input id="osVersion" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.osVersion" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device firmware version." tooltipPosition="top">
-                <label class="block text-sm mb-1">firmwareVersion</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
-                    [(ngModel)]="tokenizacion.deviceInformation!.firmwareVersion"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="firmwareVersion" class="block text-sm mb-1">firmwareVersion</label>
+                <input id="firmwareVersion" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.deviceInformation!.firmwareVersion" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device phone number." tooltipPosition="top">
-                <label class="block text-sm mb-1">phoneNumber</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="phoneNumber" class="block text-sm mb-1">phoneNumber</label>
+                <input id="phoneNumber" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.phoneNumber" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2">
-                <label class="block text-sm mb-1">fourLastDigitPhoneNumber</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="fourLastDigitPhoneNumber" class="block text-sm mb-1">fourLastDigitPhoneNumber</label>
+                <input id="fourLastDigitPhoneNumber" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.fourLastDigitPhoneNumber"
                     [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device name set by the end user." tooltipPosition="top">
-                <label class="block text-sm mb-1">deviceName</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="deviceName" class="block text-sm mb-1">deviceName</label>
+                <input id="deviceName" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.deviceName" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="ID of parent device. Applies to wearable." tooltipPosition="top">
-                <label class="block text-sm mb-1">deviceParentId</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="deviceParentId" class="block text-sm mb-1">deviceParentId</label>
+                <input id="deviceParentId" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.deviceParentId" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Language set on the device in ISO 639-3." tooltipPosition="top">
-                <label class="block text-sm mb-1">language</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="language" class="block text-sm mb-1">language</label>
+                <input id="language" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.language" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device serial number." tooltipPosition="top">
-                <label class="block text-sm mb-1">serialNumber</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="serialNumber" class="block text-sm mb-1">serialNumber</label>
+                <input id="serialNumber" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.serialNumber" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Device time zone abbreviation." tooltipPosition="top">
-                <label class="block text-sm mb-1">timeZone</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="timeZone" class="block text-sm mb-1">timeZone</label>
+                <input id="timeZone" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.timeZone" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Who has set the timezone." tooltipPosition="top">
-                <label class="block text-sm mb-1">timeZoneSetting</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
-                    [(ngModel)]="tokenizacion.deviceInformation!.timeZoneSetting"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="timeZoneSetting" class="block text-sm mb-1">timeZoneSetting</label>
+                <input id="timeZoneSetting" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.deviceInformation!.timeZoneSetting" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Secure Element serial number." tooltipPosition="top">
-                <label class="block text-sm mb-1">simSerialNumber</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
-                    [(ngModel)]="tokenizacion.deviceInformation!.simSerialNumber"
-                    [ngModelOptions]="{standalone: true}">
+                <label for="simSerialNumber" class="block text-sm mb-1">simSerialNumber</label>
+                <input id="simSerialNumber" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
+                    [(ngModel)]="tokenizacion.deviceInformation!.simSerialNumber" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2">
-                <label class="block text-sm mb-1">IMEI</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="IMEI" class="block text-sm mb-1">IMEI</label>
+                <input id="IMEI" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.IMEI" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Network operator name." tooltipPosition="top">
-                <label class="block text-sm mb-1">networkOperator</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="" class="block text-sm mb-1">networkOperator</label>
+                <input id="networkOperator" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.networkOperator" [ngModelOptions]="{standalone: true}">
             </div>
             <div class="md:col-span-2" pTooltip="Network type (CELLULAR, WIFI)." tooltipPosition="top">
-                <label class="block text-sm mb-1">networkType</label>
-                <input class="w-full"  type="text" [disabled]="true" pInputText autocomplete="off"
+                <label for="networkType" class="block text-sm mb-1">networkType</label>
+                <input id="networkType" class="w-full" type="text" [disabled]="true" pInputText autocomplete="off"
                     [(ngModel)]="tokenizacion.deviceInformation!.networkType" [ngModelOptions]="{standalone: true}">
             </div>
         </div>

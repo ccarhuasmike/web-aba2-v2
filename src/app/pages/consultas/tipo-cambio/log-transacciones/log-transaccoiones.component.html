@@ -19,20 +19,20 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker formControlName="fechaRangoTrx" dateFormat="dd/mm/yy"
+                                <label for="fechaRangoTrx" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker id="fechaRangoTrx" formControlName="fechaRangoTrx" dateFormat="dd/mm/yy"
                                      yearRange="1940:2030"
                                     selectionMode="range" [readonlyInput]="true" appendTo="body" styleClass="w-full">
                                 </p-datepicker>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nº operación</label>
-                                <input type="text" pInputText class="w-full" formControlName="numOperacion"
+                                <label for="numOperacion" class="block mb-1 text-sm">Nº operación</label>
+                                <input id="numOperacion" type="text" pInputText class="w-full" formControlName="numOperacion"
                                     autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Tipo de documento</label>
-                                <p-autoComplete formControlName="tipoDocumento" [suggestions]="filteredElementTipoDocumento"
+                                <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de documento</label>
+                                <p-autoComplete id="tipoDocumento" formControlName="tipoDocumento" [suggestions]="filteredElementTipoDocumento"
                                     field="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
                                     (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body"
@@ -43,8 +43,8 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nro. de documento</label>
-                                <input type="text" pInputText class="w-full" formControlName="numDocumento"
+                                <label for="numDocumento" class="block mb-1 text-sm">Nro. de documento</label>
+                                <input id="numDocumento" type="text" pInputText class="w-full" formControlName="numDocumento"
                                     autocomplete="off">
                                 <div class="text-right text-xs mt-1" *ngIf="nroCaracter !== 0">
                                     {{formBusqueda.get('numDocumento')?.value?.length || 0}} / {{nroCaracter}}
@@ -85,7 +85,7 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>

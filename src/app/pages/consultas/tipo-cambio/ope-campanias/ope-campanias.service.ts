@@ -9,7 +9,7 @@ export class OpeCampaniasService {
 
     APICamMon = environment.APICamMon;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     getCampanias() {
         return this.http.get(`${this.APICamMon}/v1/cambio/moneda/campana/con-estado`);

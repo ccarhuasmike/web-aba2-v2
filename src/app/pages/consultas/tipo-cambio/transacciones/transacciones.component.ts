@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import moment from 'moment';
 import { AccordionModule } from 'primeng/accordion';
@@ -8,7 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Menu, MenuModule } from 'primeng/menu';
+import { MenuModule } from 'primeng/menu';
 import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { TabsModule } from 'primeng/tabs';
@@ -22,6 +22,7 @@ import { ParametroTipoCambioService } from '@/pages/mantenimiento/parametro/para
 import { TransaccionesService } from './transacciones.service';
 import { RegularizarTransaccionComponent } from './modals/regularizar-transaccion.component';
 import { DatePickerModule } from 'primeng/datepicker';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-trasacciones',
@@ -131,7 +132,7 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
     ) {
         this.createForm();
     }
-    
+
     menuAcciones: MenuItem[] = [];
     buildMenu(rowData: any) {
         const actions = [];
@@ -148,13 +149,13 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
     }
 
     onNumDocumentoInput(event: Event) {
-  const input = event.target as HTMLInputElement;
-  const soloNumeros = input.value.replace(/[^0-9]/g, '');
+        const input = event.target as HTMLInputElement;
+        const soloNumeros = input.value.replaceAll(/[^0-9]/g, '');
 
-  this.formBusqueda.get('numDocumento')?.setValue(soloNumeros, {
-    emitEvent: false
-  });
-}
+        this.formBusqueda.get('numDocumento')?.setValue(soloNumeros, {
+            emitEvent: false
+        });
+    }
 
     ngOnInit(): void {
         this.getCombos();
@@ -369,13 +370,9 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
 
     filterElementTipoDocumento(event: any, data: any): void {
         this.filteredElementTipoDocumentos = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementTipoDocumentos.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementTipoDocumentos = UtilService.filterByField(data, query, 'descripcion');
+
     }
 
     openDialogRegularizarTrx(datosTrx: any): void {
@@ -394,10 +391,10 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
 
         if (this.dialogRef) {
             this.dialogRef.onClose.subscribe((resp: any) => {
-                if (resp && resp.data && resp.data['codigo'] === 0) {
+                if (resp?.data?.['codigo'] === 0) {
                     this.showMessage('success', '', 'Regularización registrada');
                     this.getTransactions();
-                } else if (resp && resp.data && resp.data['codigo'] !== 0) {
+                } else if (resp?.data && resp.data['codigo'] !== 0) {
                     this.showMessage('error', 'Error openDialogRegularizarTrx', 'Error en el servicio de regularización de transacción');
                 }
             });
@@ -452,34 +449,36 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
             const tipoCambioObservadoPartner = x.tipoCambioObservadoPartner || 0;
             const tipoCambioObservadoPartnerFormat = this.currencyPipe.transform(tipoCambioObservadoPartner, ' ', 'symbol', '1.4-4');
 
-            list.push(x.nroCambioMonedaOperacion);
-            list.push(x.idOperacionPartner);
-            list.push(x.cuentaOrigen);
-            list.push(x.descMonedaOrigen);
-            list.push(importeOrigenPartnerFormat);
-            list.push(importeOrigenOhFormat);
-            list.push(x.nroOperacionCuentaOrigen);
-            list.push(x.cuentaDestino);
-            list.push(x.descMonedaDestino);
-            list.push(importeDestinoPartnerFormat);
-            list.push(importeDestinoOhFormat);
-            list.push(x.nroOperacionCuentaDestino);
-            list.push(spreadCompraOhFormat);
-            list.push(spreadVentaOhFormat);
-            list.push(x.descEstadoTipoCambio);
-            list.push(x.descTipoDocumentoIdentidad);
-            list.push(x.numeroDocIdentidad);
-            list.push(x.tipoOperacionOh);
-            list.push(this.datepipe.transform(x.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraEjecucionOperacion, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(tipoCambioOhFormat);
-            list.push(tipoCambioPartnerFormat);
-            list.push(tipoCambioTransaccionFormat);
-            list.push(tipoCambioObservadoPartnerFormat);
-            list.push(x.idConsultaPartner);
-            list.push(x.nroLoteLiquidado);
-            list.push(x.descCanal);
+            list.push(
+                x.nroCambioMonedaOperacion,
+                x.idOperacionPartner,
+                x.cuentaOrigen,
+                x.descMonedaOrigen,
+                importeOrigenPartnerFormat,
+                importeOrigenOhFormat,
+                x.nroOperacionCuentaOrigen,
+                x.cuentaDestino,
+                x.descMonedaDestino,
+                importeDestinoPartnerFormat,
+                importeDestinoOhFormat,
+                x.nroOperacionCuentaDestino,
+                spreadCompraOhFormat,
+                spreadVentaOhFormat,
+                x.descEstadoTipoCambio,
+                x.descTipoDocumentoIdentidad,
+                x.numeroDocIdentidad,
+                x.tipoOperacionOh,
+                this.datepipe.transform(x.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraEjecucionOperacion, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'),
+                tipoCambioOhFormat,
+                tipoCambioPartnerFormat,
+                tipoCambioTransaccionFormat,
+                tipoCambioObservadoPartnerFormat,
+                x.idConsultaPartner,
+                x.nroLoteLiquidado,
+                x.descCanal
+            );
 
             datos.push(list);
         });
@@ -488,25 +487,20 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
     }
 
     filterElement(event: any, data: any): void {
+
         this.filteredElement = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElement.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElement = UtilService.filterByField(data, query, 'descripcion');
+
+
+
     }
 
     filterElementEstadoTipoCambio(event: any, data: any): void {
         this.filteredElement = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcionCorta.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElement.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElement = UtilService.filterByField(data, query, 'descripcionCorta');
+
     }
 
     private showMessage(severity: 'success' | 'info' | 'warn' | 'error', summary: string, detail: string): void {

@@ -19,15 +19,15 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker formControlName="fechaRangoLiquidacion"  dateFormat="dd/mm/yy"
-                                    yearRange="1940:2030"
-                                    selectionMode="range" [readonlyInput]="true" appendTo="body" styleClass="w-full">
+                                <label for="fechaRangoLiquidacion" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker id="fechaRangoLiquidacion" formControlName="fechaRangoLiquidacion"
+                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
+                                    [readonlyInput]="true" appendTo="body" styleClass="w-full">
                                 </p-datepicker>
                             </div>
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Nº lote</label>
-                                <input type="text" pInputText class="w-full" formControlName="numLote"
+                                <label for="numLote" class="block mb-1 text-sm">Nº lote</label>
+                                <input id="numLote" type="text" pInputText class="w-full" formControlName="numLote"
                                     autocomplete="off">
                             </div>
                             <div class="md:col-span-4 flex items-end justify-end gap-2">
@@ -47,17 +47,18 @@
     <div class="md:col-span-1">
         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
             <span class="text-lg font-semibold">Resumen</span>
-            <button pButton label="Excel" icon="pi pi-file-excel"
-                class="p-button-outlined p-button-success" [disabled]="datosLiquidaciones.length === 0"
-                (click)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosLiquidaciones.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
+                tooltipPosition="bottom"></button>
         </div>
 
-        <p-table #dtResumen resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
+        <p-table #dtResumen resizableColumns="true" rowExpandMode="single" [scrollable]="true"
             styleClass="p-datatable-striped p-datatable-gridlines"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
-            [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableResumen" dataKey="nroLoteLiquidado"
-            [columns]="cols" [rows]="rows" [value]="datosLiquidaciones" [totalRecords]="datosLiquidaciones.length"
-            [loading]="loadingDatosLiquidaciones" (onPage)="onPaginadoResumen($event)">
+            [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableResumen"
+            dataKey="nroLoteLiquidado" [columns]="cols" [rows]="rows" [value]="datosLiquidaciones"
+            [totalRecords]="datosLiquidaciones.length" [loading]="loadingDatosLiquidaciones"
+            (onPage)="onPaginadoResumen($event)">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
@@ -65,20 +66,19 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon" style="cursor: pointer;" (click)="getLiquidacionDetalle(rowData)">
+                <tr id="tableWithIcon3" style="cursor: pointer;" (click)="getLiquidacionDetalle(rowData)"
+                    (keydown.enter)="getLiquidacionDetalle(rowData)" (keydown)="getLiquidacionDetalle(rowData)">
                     <td class="text-center">
-                        <p-menu #menuResumen [popup]="true"
-                            [model]="getResumenActions(rowData)">
+                        <p-menu #menuResumen [popup]="true" [model]="getResumenActions(rowData)">
                         </p-menu>
-                        <button type="button" pButton icon="pi pi-ellipsis-v"
-                            class="p-button-text p-button-rounded" (click)="menuResumen.toggle($event)"
-                            (click)="$event.stopPropagation()" pTooltip="Acciones"
+                        <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
+                            (click)="menuResumen.toggle($event)" (click)="$event.stopPropagation()" pTooltip="Acciones"
                             tooltipPosition="top"></button>
                     </td>
                     <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
@@ -94,10 +94,14 @@
                     <td class="text-right">{{rowData.totalDolaresTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td class="text-right">{{rowData.totalSolesTcVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td class="text-right">{{rowData.totalSolesTcCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                    <td class="text-right">{{rowData.totalDolaresTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                    <td class="text-right">{{rowData.totalDolaresTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                    <td class="text-right">{{rowData.totalSolesTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                    <td class="text-right">{{rowData.totalSolesTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.totalDolaresTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalDolaresTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalSolesTcVentaPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.totalSolesTcCompraPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
                     <td class="text-right">{{rowData.totalSpreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td class="text-right">{{rowData.totalSpreadVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                     <td>{{rowData.descripcionMonedaRecibirPartner}}</td>
@@ -126,12 +130,12 @@
                     <span class="text-sm font-medium" *ngIf="datoLiquidado">
                         Lote: {{datoLiquidado?.nroLoteLiquidado}}
                     </span>
-                    <button pButton label="Excel" icon="pi pi-file-excel"
-                        class="p-button-outlined p-button-success" [disabled]="datosLiquidacionDetalle.length === 0"
-                        (click)="exportExcelDetalle()" pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
+                    <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                        [disabled]="datosLiquidacionDetalle.length === 0" (click)="exportExcelDetalle()"
+                        pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
                 </div>
             </div>
-            <p-table #dtDetalle resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
+            <p-table #dtDetalle resizableColumns="true" rowExpandMode="single" [scrollable]="true"
                 styleClass="p-datatable-striped p-datatable-gridlines"
                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
                 [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableDetalle"
@@ -145,7 +149,7 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns">
+                        <th *ngFor="let col of columns" scope="col">
                             {{col.header}}
                         </th>
                     </tr>
@@ -153,23 +157,23 @@
                 <ng-template pTemplate="body" let-rowData>
                     <tr id="tableWithoutIcon">
                         <td class="text-center">
-                            <p-menu #menuDetalle [popup]="true"
-                                [model]="getDetalleActions(rowData)">
+                            <p-menu #menuDetalle [popup]="true" [model]="getDetalleActions(rowData)">
                             </p-menu>
-                            <button type="button" pButton icon="pi pi-ellipsis-v"
-                                class="p-button-text p-button-rounded" (click)="menuDetalle.toggle($event)"
-                                pTooltip="Acciones" tooltipPosition="top"></button>
+                            <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
+                                (click)="menuDetalle.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
                         </td>
                         <td>{{rowData.nroCambioMonedaOperacion}}</td>
                         <td>{{rowData.idOperacionPartner}}</td>
                         <td>{{rowData.cuentaOrigen}}</td>
                         <td>{{rowData.descripcionMonedaOrigen}}</td>
-                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                        </td>
                         <td class="text-right">{{rowData.importeOrigenOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                         <td>{{rowData.nroOperacionCuentaOrigen}}</td>
                         <td>{{rowData.cuentaDestino}}</td>
                         <td>{{rowData.descripcionMonedaDestino}}</td>
-                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                        </td>
                         <td class="text-right">{{rowData.importeDestinoOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
                         <td>{{rowData.nroOperacionCuentaDestino}}</td>
                         <td class="text-right">{{rowData.spreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
@@ -183,8 +187,10 @@
                         <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                         <td class="text-right">{{rowData.tipoCambioOh | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
                         <td class="text-right">{{rowData.tipoCambioPartner | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
-                        <td class="text-right">{{rowData.tipoCambioTransaccion | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
-                        <td class="text-right">{{rowData.tipoCambioLiqPartner | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
+                        <td class="text-right">{{rowData.tipoCambioTransaccion | currency:"&nbsp;":"symbol":'1.4-4'}}
+                        </td>
+                        <td class="text-right">{{rowData.tipoCambioLiqPartner | currency:"&nbsp;":"symbol":'1.4-4'}}
+                        </td>
                         <td>{{rowData.idConsultaPartner}}</td>
                         <td>{{rowData.nroLoteLiquidado}}</td>
                     </tr>

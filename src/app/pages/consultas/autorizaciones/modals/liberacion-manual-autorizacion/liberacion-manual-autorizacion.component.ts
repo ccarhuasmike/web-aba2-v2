@@ -1,6 +1,4 @@
-import { Component, Inject, OnInit, ViewEncapsulation } from "@angular/core";
-
-
+import { Component, ViewEncapsulation } from "@angular/core";
 import { AutorizacionesService } from "../../autorizaciones.service";
 import { finalize } from "rxjs/operators";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
@@ -27,7 +25,7 @@ import { DividerModule } from "primeng/divider";
     imports: [DividerModule, InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService],
 })
-export class LiberacionManualAutorizacionComponent implements OnInit {
+export class LiberacionManualAutorizacionComponent  {
     datosRequest: any;
     datosCliente: any;
     datosCuenta: any;
@@ -39,10 +37,10 @@ export class LiberacionManualAutorizacionComponent implements OnInit {
 
     disableButton: boolean = false;
     constructor(
-        private autorizacionesService: AutorizacionesService,
+        private readonly autorizacionesService: AutorizacionesService,
         public dialogRef: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private toastr: MessageService,
+        private readonly toastr: MessageService,
 
     ) {
         this.datosAutorizacion = config.data.datosAutorizacion;
@@ -55,9 +53,7 @@ export class LiberacionManualAutorizacionComponent implements OnInit {
     }
 
 
-    ngOnInit(): void {
-    }
-
+ 
     postLiberarManualmenteAutorizacion() {
         this.disableButton = true;
         const formValue = this.formLiberacion.value;

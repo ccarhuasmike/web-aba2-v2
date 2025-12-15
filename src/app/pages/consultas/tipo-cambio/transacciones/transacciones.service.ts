@@ -8,7 +8,7 @@ export class TransaccionesService {
 
     APICamMon = environment.APICamMon;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     getReporteTransacciones(
         fechaEjecucionDesde: any,

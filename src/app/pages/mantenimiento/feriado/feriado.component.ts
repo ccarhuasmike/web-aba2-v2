@@ -22,7 +22,6 @@ import { TooltipModule } from "primeng/tooltip";
 import { CALENDAR_DETAIL } from "@/layout/Utils/constants/aba.constants";
 import { AddFeriadoComponent } from "./modals/add-feriado/add-feriado.component";
 import { Breadcrumb } from "primeng/breadcrumb";
-import { environment } from "src/environments/environment";
 import { UtilService } from "@/utils/util.services";
 import { CommonService } from "@/pages/service/commonService";
 

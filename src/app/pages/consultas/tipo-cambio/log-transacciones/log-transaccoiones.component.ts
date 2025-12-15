@@ -15,6 +15,7 @@ import { ExcelService } from '@/pages/service/excel.service';
 import { LogTransaccionesService } from './log-transaccoiones.service';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-log-transacciones',
@@ -206,13 +207,8 @@ export class LogTransaccionesComponent implements OnInit {
 
     filterElementTipoDocumento(event: any, data: any): void {
         this.filteredElementTipoDocumento = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementTipoDocumento.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementTipoDocumento = UtilService.filterByField(data, query, 'descripcion');     
     }
 
     exportExcel(): void {
@@ -229,18 +225,18 @@ export class LogTransaccionesComponent implements OnInit {
         });
 
         this.datosLogTransacciones.forEach(x => {
-            const list: any[] = [];
-
-            list.push(x.tipoDocIdentidadDescripcion);
-            list.push(x.numeroDocIdentidad);
-            list.push(x.nroCambioMonedaOperacion);
-            list.push(this.datepipe.transform(x.fechaConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(x.idCambioMonedaOperacion);
-            list.push(x.descripcionLarga);
-            list.push(x.nroOperacionCuentaOrigen);
-            list.push(x.nroOperacionCuentaDestino);
-            list.push(x.usuarioRegistro);
-            list.push(this.datepipe.transform(x.fechaRegistro, 'dd/MM/yyyy HH:mm:ss'));
+            const list: any[] = [
+                x.tipoDocIdentidadDescripcion,
+                x.numeroDocIdentidad,
+                x.nroCambioMonedaOperacion,
+                this.datepipe.transform(x.fechaConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'),
+                x.idCambioMonedaOperacion,
+                x.descripcionLarga,
+                x.nroOperacionCuentaOrigen,
+                x.nroOperacionCuentaDestino,
+                x.usuarioRegistro,
+                this.datepipe.transform(x.fechaRegistro, 'dd/MM/yyyy HH:mm:ss')
+            ];
 
             datos.push(list);
         });

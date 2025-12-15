@@ -20,7 +20,6 @@ import { CommonService } from "@/pages/service/commonService";
 import { StepperModule } from 'primeng/stepper';
 import { ToggleSwitchModule } from "primeng/toggleswitch";
 import { KeyFilterModule } from 'primeng/keyfilter';
-import { environment } from "src/environments/environment";
 import { UtilService } from "@/utils/util.services";
 @Component({
     selector: 'app-add-proveedor',

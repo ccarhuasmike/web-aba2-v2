@@ -8,6 +8,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { TransaccionesService } from '../transacciones.service';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-regularizar-transaccion',
@@ -108,13 +109,8 @@ export class RegularizarTransaccionComponent implements OnInit {
 
     filterElementEstadoTipoCambio(event: any, data: any): void {
         this.filteredElementEstadoTipoCambio = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcionCorta.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementEstadoTipoCambio.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementEstadoTipoCambio = UtilService.filterByField(data, query, 'descripcionCorta');
     }
 
     closeDialog(): void {

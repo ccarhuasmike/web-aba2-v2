@@ -39,13 +39,12 @@ export class LogNotificacionComponent implements OnInit {
     this.digitalCardId = config.data?.digitalCardId;
   }
 
-  async ngOnInit(): Promise<void> {
-    try {
-      await this.postAuthApiGee();
-      await this.getNotificaciones();
-    } catch {
-      // errores ya notificados
-    }
+  ngOnInit(): void {
+    this.postAuthApiGee()
+      .then(() => this.getNotificaciones())
+      .catch(() => {
+        // errores ya notificados
+      });
   }
 
   private postAuthApiGee(): Promise<boolean> {
@@ -67,8 +66,7 @@ export class LogNotificacionComponent implements OnInit {
               severity: 'error',
               summary: 'Error postAuthApiGee',
               detail: 'Error en el servicio de autenticacion ApiGee'
-            });
-            reject();
+            });            
           }
         });
       } else {
@@ -95,8 +93,7 @@ export class LogNotificacionComponent implements OnInit {
               severity: 'error',
               summary: 'Error getNotificaciones',
               detail: resp?.mensaje || 'Error inesperado'
-            });
-            reject();
+            });           
           }
         },
         error: () => {
@@ -105,8 +102,7 @@ export class LogNotificacionComponent implements OnInit {
             severity: 'error',
             summary: 'Error getNotificaciones',
             detail: 'Error en el servicio de obtener notificaciones'
-          });
-          reject();
+          });          
         }
       });
     });

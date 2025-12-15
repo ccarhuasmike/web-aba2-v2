@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators,FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import moment from 'moment';
 import { DetalleAutorizacionComponent } from './modals/detalle-autorizacion/detalle-autorizacion.component';
@@ -24,14 +24,22 @@ import { TooltipModule } from 'primeng/tooltip';
 import { Cliente } from '@/layout/models/cliente';
 import { ACCOUNT_TYPES, CALENDAR_DETAIL, DOCUMENT, ROLES } from '@/layout/Utils/constants/aba.constants';
 import { DatetzPipe } from '@/layout/Utils/pipes/datetz.pipe';
-
 import { ExcelService } from '@/pages/service/excel.service';
 import { CommonService } from '@/pages/service/commonService';
 import { SecurityEncryptedService } from '@/layout/service/SecurityEncryptedService';
 import { AutorizacionesService } from './autorizaciones.service';
-import { FormsModule } from '@angular/forms';
 import { DisableContentByRoleDirective } from '@/layout/Utils/directives/disable-content-by-role.directive';
 import { AccordionModule } from 'primeng/accordion';
+import { UtilService } from '@/utils/util.services';
+import { finalize } from 'rxjs/operators';
+
+interface AutorizacionFilters {
+    codigoOperacion?: string;
+    codigoGrupo?: string;
+    codigoEntrada?: string;
+}
+
+type ToastSeverity = 'success' | 'info' | 'warn' | 'error';
 @Component({
     selector: 'app-autorizaciones',
     templateUrl: './autorizaciones.component.html',
@@ -42,6 +50,10 @@ import { AccordionModule } from 'primeng/accordion';
     providers: [MessageService, DialogService, ConfirmationService, DatetzPipe, DatePipe],
 })
 export class AutorizacionesComponent implements OnInit {
+    private static readonly TARJETA_DEBITO_BIN = '457339';
+    private static readonly TAMANIO_AUTORIZACIONES = 999_999_000;
+    private static readonly RANGO_FECHA_MESES = 2;
+
     mostrarFiltro = false;
     panelOpenState: number | null = 0;
 
@@ -95,14 +107,14 @@ export class AutorizacionesComponent implements OnInit {
     constructor(
         private readonly dialog: DialogService,
         private readonly toastr: MessageService,
-        public datepipe: DatePipe,
-        private dateTzPipe: DatetzPipe,
-        private excelService: ExcelService,
-        private commonService: CommonService,
-        private securityEncryptedService: SecurityEncryptedService,
-        private autorizacionesService: AutorizacionesService,
-        private activatedRoute: ActivatedRoute,
-        private router: Router
+        public readonly datepipe: DatePipe,
+        private readonly dateTzPipe: DatetzPipe,
+        private readonly excelService: ExcelService,
+        private readonly commonService: CommonService,
+        private readonly securityEncryptedService: SecurityEncryptedService,
+        private readonly autorizacionesService: AutorizacionesService,
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly router: Router
     ) {
         const primerDia = new Date();
         primerDia.setMonth(primerDia.getMonth() - 1);
@@ -153,7 +165,6 @@ export class AutorizacionesComponent implements OnInit {
             this.showSearchCard = true;
         }
     }
-
 
     getCombos() {
         this.commonService.getMultipleCombosPromiseCliente(['documentos/tipos']).then(resp => {
@@ -237,14 +248,8 @@ export class AutorizacionesComponent implements OnInit {
         if (nroTarjeta) {
 
             const bin = nroTarjeta.slice(0, 6);
-            if (bin !== '457339') {
-
-
-                this.toastr.add({
-                    severity: 'warn',
-                    summary: '',
-                    detail: 'Solo se puede realizar la búsqueda por tarjetas de débito'
-                });
+            if (bin !== AutorizacionesComponent.TARJETA_DEBITO_BIN) {
+                this.showMessage('warn', '', 'Solo se puede realizar la búsqueda por tarjetas de débito');
                 return;
             }
 
@@ -267,20 +272,10 @@ export class AutorizacionesComponent implements OnInit {
                 this.numeroDocIdent = datosCliente.data.numeroDocIdent;
                 this.numeroCuenta = datosCliente.data.numeroCuenta;
             } else {
-                this.toastr.add({
-                    severity: 'error',
-                    summary: 'Error getCuenta',
-                    detail: 'Error en el servicio de obtener cliente de la tarjeta'
-                });
-                return;
+                this.showMessage('error', 'Error getCuenta', 'Error en el servicio de obtener cliente de la tarjeta');                
             }
         } else {
-            this.toastr.add({
-                severity: 'error',
-                summary: 'Error getCuenta',
-                detail: 'Error en el servicio de obtener token de la tarjeta'
-            });
-            return;
+            this.showMessage('error', 'Error getCuenta', 'Error en el servicio de obtener token de la tarjeta');            
         }
     }
 
@@ -293,34 +288,17 @@ export class AutorizacionesComponent implements OnInit {
             this.commonService.getCliente(this.tipoDocIdent, this.numeroDocIdent)
                 .subscribe(
                     (resp: any) => {
-                        console.log('getCliente()...', resp);
-
                         if (resp['codigo'] == 0) {
                             this.datosCliente = resp['data'];
                             this.uidCliente = resp['data'].uIdCliente;
                         } else if (resp['codigo'] == -1) {
-
-                            this.toastr.add({
-                                severity: 'error',
-                                summary: 'Error getCliente',
-                                detail: resp['mensaje']
-                            });
-
+                            this.showMessage('error', 'Error getCliente', resp['mensaje']);
                         } else if (resp['codigo'] == 1) {
-                            this.toastr.add({
-                                severity: 'error',
-                                summary: 'Error getCliente',
-                                detail: 'El cliente que se intenta buscar no existe'
-                            });
+                            this.showMessage('error', 'Error getCliente', 'El cliente que se intenta buscar no existe');
                         }
                         resolve(true);
                     }, (_error) => {
-                        this.toastr.add({
-                            severity: 'error',
-                            summary: 'Error getCliente',
-                            detail: 'Error en el servicio de obtener datos del cliente'
-                        });
-                        reject();
+                        this.showMessage('error', 'Error getCliente', 'Error en el servicio de obtener datos del cliente');                        
                     }
                 );
         });
@@ -334,8 +312,6 @@ export class AutorizacionesComponent implements OnInit {
                 .subscribe((resp: any) => {
 
                     this.loadingCuentas = false;
-
-                    console.log('getCuenta()...', resp);
 
                     if (resp['codigo'] == 0) {
                         this.datosCuentas = resp['data'].content;
@@ -353,22 +329,12 @@ export class AutorizacionesComponent implements OnInit {
                             this.datosCuentas = this.datosCuentas.filter((row: any) => row.numeroCuenta == this.numeroCuenta);
                         }
                     } else if (resp['codigo'] == -1) {
-                        this.toastr.add({
-                            severity: 'error',
-                            summary: 'Error getCuenta',
-                            detail: resp['mensaje']
-                        });
+                        this.showMessage('error', 'Error getCuenta', resp['mensaje']);
                     }
                     resolve(true);
                 }, (_error) => {
                     this.loadingCuentas = false;
-
-                    this.toastr.add({
-                        severity: 'error',
-                        summary: 'Error getCuenta',
-                        detail: 'Error en el servicio de obtener datos de la cuenta'
-                    });
-                    reject();
+                    this.showMessage('error', 'Error getCuenta', 'Error en el servicio de obtener datos de la cuenta');                    
                 });
         });
     }
@@ -409,13 +375,8 @@ export class AutorizacionesComponent implements OnInit {
 
     filterElementTipoDocumento(event: any, data: any) {
         this.filteredElementTipoDocumento = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementTipoDocumento.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementTipoDocumento = UtilService.filterByField(data, query, 'descripcion');
     }
 
     selectCuenta(data: any) {
@@ -435,80 +396,24 @@ export class AutorizacionesComponent implements OnInit {
         this.datosAutorizaciones = [];
         this.loadingAutorizaciones = true;
 
-        let ffin = new Date(this.ffinAutorizaciones);
-        ffin.setDate(ffin.getDate() + 1);
-        ffin.setMinutes(ffin.getMinutes() - 1);
-
-        const form = this.formBusquedaAutorizaciones.value;
-
-        const uidCliente = this.uidCliente;
-        const uidCuenta = this.uidCuenta;
         const fechaInicio = this.commonService.dateFormatISO8601(this.finiAutorizaciones);
-        const fechaFin = ffin.toISOString();
-        const tamanio = 999999000;
-        const pagina = 0;
+        const fechaFin = this.buildFechaFinIso();
+        const filtros = this.getAutorizacionFilters();
 
         this.autorizacionesService.getCuentaAutorizaciones(
-            uidCliente,
-            uidCuenta,
+            this.uidCliente,
+            this.uidCuenta,
             fechaInicio,
             fechaFin,
-            pagina,
-            tamanio
-        ).subscribe((resp: any) => {
-            this.loadingAutorizaciones = false;
-
-            if (resp['codigo'] == 0) {
-
-                this.datosAutorizaciones = resp.data.content.filter((dato: any) => {
-                    const esValidoOperacion = !form.codigoOperacion || dato.codigoOperacion == form.codigoOperacion;
-                    const esValidoGrupo = !form.codigoGrupo || dato.transaccionProcesada.groupingCode == form.codigoGrupo;
-                    const esValidoEntrada = !form.codigoEntrada || dato.transaccionProcesada.entryCode == form.codigoEntrada;
-
-                    return esValidoOperacion && esValidoGrupo && esValidoEntrada;
-                }).sort((a: any, b: any) => { return b.idTransaccion - a.idTransaccion });
-
-                this.datosAutorizaciones = this.datosAutorizaciones.map((dato: any) => {
-
-                    dato['fechaTransaccion'] = this.dateTzPipe.transform(dato.fechaTransaccion, 'DD/MM/YYYY HH:mm:ss');
-
-                    dato['fechaConfirmacion'] = this.dateTzPipe.transform(dato.fechaConfirmacion, 'DD/MM/YYYY');
-
-                    if (dato.transaccionRequest.dataElements) {
-                        dato['referencia'] = (dato.transaccionRequest.dataElements.retrievalReferenceNumber) ? dato.transaccionRequest.dataElements.retrievalReferenceNumber : dato.uIdreferenciaExterna;
-                    } else {
-                        dato['referencia'] = dato.uIdreferenciaExterna;
-                    }
-
-                    if (dato.estadoAutorizacion == 'REJECTED') {
-                        dato['codigoRechazo'] = dato.codigoEstadoOrigen ? dato.codigoEstadoOrigen : dato.codEstadoTransaccion;
-                        dato.transaccionResponse['ftcCode'] = `${dato.transaccionRequest.messageType ?? ''}${dato.transaccionRequest.operationCode ?? ''}${dato.transaccionRequest.groupingCode ?? ''}${dato.transaccionRequest.entryCode ?? ''}`;
-                    }
-
-                    dato['estadoReversado'] = !dato.reversado ? 'NO' : 'SI';
-
-                    const red = this.tipoRedes.find((x: any) => x.id == dato.descOrigen);
-                    dato.descOrigenInt = red ? red.descripcion : ''
-
-                    dato.tarjeta['numTarjetaVisible'] = false;
-
-                    return dato;
-                });
-            } else if (resp['codigo'] == -1) {
-                this.toastr.add({
-                    severity: 'error',
-                    summary: 'Error searchCuentaAutorizaciones',
-                    detail: resp['mensaje']
-                });
-
-            }
-        }, (_error) => {
-            this.loadingAutorizaciones = false;
-            this.toastr.add({
-                severity: 'error',
-                summary: 'Error searchCuentaAutorizaciones',
-                detail: 'Error en el servicio de obtener autorizaciones de la cuenta'
-            });
+            0,
+            AutorizacionesComponent.TAMANIO_AUTORIZACIONES
+        ).pipe(
+            finalize(() => {
+                this.loadingAutorizaciones = false;
+            })
+        ).subscribe({
+            next: (resp: any) => this.handleAutorizacionesResponse(resp, filtros),
+            error: () => this.showMessage('error', 'Error searchCuentaAutorizaciones', 'Error en el servicio de obtener autorizaciones de la cuenta')
         });
     }
 
@@ -523,50 +428,40 @@ export class AutorizacionesComponent implements OnInit {
     }
 
     visibilidadTarjeta(autorizacion: any) {
-        if (autorizacion.tarjeta.numTarjetaVisible) {
-            this.datosAutorizaciones = this.datosAutorizaciones.map((item: any) => {
-                if (item.tarjeta.idTarjeta == autorizacion.tarjeta.idTarjeta) {
-                    item.tarjeta.numTarjetaVisible = false;
-                }
-                return item;
-            })
-        } else if (autorizacion.tarjeta?.desenmascarado) {
-            this.datosAutorizaciones = this.datosAutorizaciones.map((item: any) => {
-                if (item.tarjeta.idTarjeta == autorizacion.tarjeta.idTarjeta) {
-                    item.tarjeta.numTarjetaVisible = true;
-                }
-                return item;
-            })
-        } else {
-            const token = autorizacion.tarjeta.token
-            this.commonService.getCardNumberFullEncrypted(token).subscribe((resp: any) => {
-                if (resp['codigo'] == 0) {
-                    const body = resp;
-                    const datosTarjetaDecrypted = this.commonService.decryptResponseCardNumber(body);
-                    this.datosAutorizaciones = this.datosAutorizaciones.map((item: any) => {
-                        if (item.tarjeta.idTarjeta == autorizacion.tarjeta.idTarjeta) {
-                            item.tarjeta.numTarjetaVisible = true;
-                            const desenmascarado = datosTarjetaDecrypted.tarjeta.slice(3);
-                            item.tarjeta['desenmascarado'] = desenmascarado;
-                        }
-                        return item;
-                    })
-                } else {
-                    this.toastr.add({
-                        severity: 'error',
-                        summary: 'Error visibilidadTarjeta()',
-                        detail: resp['mensaje']
-                    });
-                }
-            }, (_error) => {
-                this.toastr.add({
-                    severity: 'error',
-                    summary: 'Error visibilidadTarjeta()',
-                    detail: 'Error en el servicio de obtener tarjeta desencriptada'
-                });
-
-            })
+        const tarjeta = autorizacion.tarjeta;
+        if (!tarjeta) {
+            return;
         }
+
+        if (tarjeta.numTarjetaVisible) {
+            this.updateTarjetaVisibility(tarjeta.idTarjeta, false);
+            return;
+        }
+
+        if (tarjeta?.desenmascarado) {
+            this.updateTarjetaVisibility(tarjeta.idTarjeta, true);
+            return;
+        }
+
+        const token = tarjeta.token;
+        if (!token) {
+            return;
+        }
+
+        this.commonService.getCardNumberFullEncrypted(token).subscribe({
+            next: (resp: any) => {
+                if (resp['codigo'] == 0) {
+                    const datosTarjetaDecrypted = this.commonService.decryptResponseCardNumber(resp);
+                    const desenmascarado = datosTarjetaDecrypted.tarjeta.slice(3);
+                    this.updateTarjetaVisibility(tarjeta.idTarjeta, true, desenmascarado);
+                } else {
+                    this.showMessage('error', 'Error visibilidadTarjeta()', resp['mensaje']);
+                }
+            },
+            error: () => {
+                this.showMessage('error', 'Error visibilidadTarjeta()', 'Error en el servicio de obtener tarjeta desencriptada');
+            }
+        });
     }
 
     clearFilterCuenta() {
@@ -590,14 +485,11 @@ export class AutorizacionesComponent implements OnInit {
             this.ffinAutorizaciones = moment(event[1]).format('YYYY-MM-DD');
 
             const ffinAutorizaciones = new Date(this.ffinAutorizaciones);
-            ffinAutorizaciones.setMonth(ffinAutorizaciones.getMonth() - 2);
+            ffinAutorizaciones.setMonth(ffinAutorizaciones.getMonth() - AutorizacionesComponent.RANGO_FECHA_MESES);
             const finiAutorizacionesAux = new Date(this.finiAutorizaciones)
             if (finiAutorizacionesAux < ffinAutorizaciones) {
-                return this.toastr.add({
-                    severity: 'warn',
-                    summary: 'Validacion de Fechas:',
-                    detail: 'El intervalo de rango de fechas es 2 meses como maximo'
-                });
+                this.showMessage('warn', 'Validacion de Fechas:', 'El intervalo de rango de fechas es 2 meses como maximo');
+                return;
             }
             this.searchCuentaAutorizaciones();
         }
@@ -644,89 +536,195 @@ export class AutorizacionesComponent implements OnInit {
             dialogRef.onClose.subscribe((resp: any) => {
                 if (resp && resp !== undefined) {
                     if (resp.data['codigo'] == 0) {
-                        this.toastr.add({
-                            severity: 'success',
-                            summary: '',
-                            detail: 'Liberacion Manual de Autorizacion registrada'
-                        });
+                        this.showMessage('success', '', 'Liberacion Manual de Autorizacion registrada');
                         this.searchCuentaAutorizaciones();
                     } else {
-                        this.toastr.add({
-                            severity: 'error',
-                            summary: 'Error openDialogLiberarManualAutorizacion',
-                            detail: 'Error en el servicio de liberacion manual de autorizacion'
-                        });
+                        this.showMessage('error', 'Error openDialogLiberarManualAutorizacion', 'Error en el servicio de liberacion manual de autorizacion');
                     }
                 }
             })
         }
     }
 
-    exportExcel() {
-        const numeroCuenta = this.datosCuenta.numeroCuenta;
-        const bin = numeroCuenta.slice(0, 2);
-        const moneda = ACCOUNT_TYPES.find(type => type.bin === bin)?.moneda;
+    private handleAutorizacionesResponse(resp: any, filtros: AutorizacionFilters): void {
+        if (resp['codigo'] == 0) {
+            const content = resp?.data?.content ?? [];
+            this.datosAutorizaciones = content
+                .filter((dato: any) => this.cumpleFiltrosAutorizacion(dato, filtros))
+                .sort((a: any, b: any) => b.idTransaccion - a.idTransaccion)
+                .map((dato: any) => this.mapAutorizacion(dato));
+        } else if (resp['codigo'] == -1) {
+            this.showMessage('error', 'Error searchCuentaAutorizaciones', resp['mensaje']);
+        }
+    }
 
-        const fechaReporte = new Date();
-        const excelName = 'Reporte autorizaciones ' + moment(fechaReporte).format('DD/MM/YYYY') + '.xlsx';
-        const sheetName = 'Datos';
-        const datos: any[] = [];
-        const header = [];
-        const isCurrency: any[] = [];
-        const filterLavel = 'Fecha de Reporte';
+    private getAutorizacionFilters(): AutorizacionFilters {
+        const formValue = this.formBusquedaAutorizaciones.value ?? {};
+        return {
+            codigoOperacion: formValue.codigoOperacion ?? '',
+            codigoGrupo: formValue.codigoGrupo ?? '',
+            codigoEntrada: formValue.codigoEntrada ?? ''
+        };
+    }
 
-        header.push('Id Transacción');
-        header.push('Fecha Transacción');
-        header.push('Fecha Proceso');
-        header.push('Cuenta');
-        header.push('Cod. Descripción');
-        header.push('Descripción');
-        header.push('Referencia');
-        header.push('Código Autorización');
-        header.push('Importe');
-        header.push('Moneda');
-        header.push('Red');
-        header.push('Estado Confirmación');
-        header.push('Estado Autorización');
-        header.push('Estado Reversado');
-        header.push('Cod. Rechazo');
-        header.push('Num. Tarjeta');
-        header.push('Token');
-        header.push('Id Transacción Original');
-        header.push('Razón Estado');
+    private buildFechaFinIso(): string {
+        const fechaFin = new Date(this.ffinAutorizaciones);
+        fechaFin.setDate(fechaFin.getDate() + 1);
+        fechaFin.setMinutes(fechaFin.getMinutes() - 1);
+        return fechaFin.toISOString();
+    }
 
-        this.datosAutorizaciones.forEach(x => {
-            const list = [];
+    private cumpleFiltrosAutorizacion(dato: any, filtros: AutorizacionFilters): boolean {
+        const esValidoOperacion = !filtros.codigoOperacion || dato.codigoOperacion == filtros.codigoOperacion;
+        const esValidoGrupo = !filtros.codigoGrupo || dato.transaccionProcesada?.groupingCode == filtros.codigoGrupo;
+        const esValidoEntrada = !filtros.codigoEntrada || dato.transaccionProcesada?.entryCode == filtros.codigoEntrada;
+        return esValidoOperacion && esValidoGrupo && esValidoEntrada;
+    }
 
-            list.push(x.idTransaccion);
-            list.push(x.fechaTransaccion);
-            list.push(x.fechaConfirmacion);
-            list.push(numeroCuenta);
-            list.push(x.transaccionResponse.ftcCode);
-            list.push(x.transaccionResponse.ftcDescription);
-            list.push(x.transaccionRequest.dataElements ? x.transaccionRequest.dataElements.retrievalReferenceNumber : x.uIdreferenciaExterna);
-            list.push(x.codigoAutorizacion);
-            list.push(parseFloat(x.transaccionProcesada.monto));
-            list.push(moneda);
-            list.push(x.descOrigenInt);
-            list.push(x.estadoAutorizacion == 'REJECTED' ? '' : x.estadoConfirmacion)
-            list.push(x.estadoAutorizacion)
-            list.push(x.estadoReversado)
-            list.push(x.codigoRechazo);
-            list.push(x.tarjeta.enmascarado);
-            list.push(x.tarjeta.token);
-            list.push(x.transaccionResponse.financialTransaction.parentTransactionId);
-            list.push(x.motivoTransaccion)
+    private mapAutorizacion(dato: any): any {
+        const referencia = dato.transaccionRequest?.dataElements?.retrievalReferenceNumber ?? dato.uIdreferenciaExterna;
+        const mapped: any = {
+            ...dato,
+            fechaTransaccion: this.dateTzPipe.transform(dato.fechaTransaccion, 'DD/MM/YYYY HH:mm:ss'),
+            fechaConfirmacion: this.dateTzPipe.transform(dato.fechaConfirmacion, 'DD/MM/YYYY'),
+            referencia,
+            estadoReversado: dato.reversado ? 'SI' : 'NO',
+            descOrigenInt: this.getDescripcionRed(dato.descOrigen),
+            tarjeta: {
+                ...dato.tarjeta,
+                numTarjetaVisible: false
+            }
+        };
 
-            datos.push(list);
+        if (dato.estadoAutorizacion == 'REJECTED') {
+            const request = dato.transaccionRequest ?? {};
+            const ftcCode = `${request.messageType ?? ''}${request.operationCode ?? ''}${request.groupingCode ?? ''}${request.entryCode ?? ''}`;
+            mapped.codigoRechazo = dato.codigoEstadoOrigen ?? dato.codEstadoTransaccion;
+            mapped.transaccionResponse = {
+                ...dato.transaccionResponse,
+                ftcCode
+            };
+        }
+
+        return mapped;
+    }
+
+    private getDescripcionRed(descOrigen: any): string {
+        const red = this.tipoRedes.find((x: any) => x.id == descOrigen);
+        return red?.descripcion ?? '';
+    }
+
+    private updateTarjetaVisibility(idTarjeta: any, visible: boolean, desenmascarado?: string): void {
+        this.datosAutorizaciones = this.datosAutorizaciones.map((item: any) => {
+            if (item.tarjeta?.idTarjeta !== idTarjeta) {
+                return item;
+            }
+
+            const tarjetaActualizada: any = {
+                ...item.tarjeta,
+                numTarjetaVisible: visible
+            };
+
+            if (desenmascarado) {
+                tarjetaActualizada['desenmascarado'] = desenmascarado;
+            }
+
+            return {
+                ...item,
+                tarjeta: tarjetaActualizada
+            };
         });
+    }
 
-        this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, fechaReporte, filterLavel);
+    private showMessage(severity: ToastSeverity, summary: string, detail: string): void {
+        this.toastr.add({ severity, summary, detail });
     }
-    onKeyToggle(event: KeyboardEvent, rowData: any): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.visibilidadTarjeta(rowData);
+
+    exportExcel(): void {
+        if (!this.datosCuenta?.numeroCuenta || !this.datosAutorizaciones?.length) {
+            return;
+        }
+
+        const numeroCuenta: string = this.datosCuenta.numeroCuenta;
+        const bin: string = numeroCuenta.substring(0, 2);
+
+        const moneda: string =
+            ACCOUNT_TYPES.find(type => type.bin === bin)?.moneda ?? '';
+
+        const fechaReporte: Date = new Date();
+
+        // ❗ Evitar "/" en nombres de archivo
+        const excelName: string =
+            `Reporte_Autorizaciones_${this.formatDate(fechaReporte)}.xlsx`;
+
+        const sheetName = 'Datos';
+        const filterLabel = 'Fecha de Reporte';
+
+        const header: readonly string[] = [
+            'Id Transacción',
+            'Fecha Transacción',
+            'Fecha Proceso',
+            'Cuenta',
+            'Cod. Descripción',
+            'Descripción',
+            'Referencia',
+            'Código Autorización',
+            'Importe',
+            'Moneda',
+            'Red',
+            'Estado Confirmación',
+            'Estado Autorización',
+            'Estado Reversado',
+            'Cod. Rechazo',
+            'Num. Tarjeta',
+            'Token',
+            'Id Transacción Original',
+            'Razón Estado'
+        ];
+
+        const datos: (string | number | null)[][] = [];
+        const isCurrency: number[] = [];
+
+        for (const x of this.datosAutorizaciones) {
+            datos.push([
+                x.idTransaccion ?? null,
+                x.fechaTransaccion ?? null,
+                x.fechaConfirmacion ?? null,
+                numeroCuenta,
+                x.transaccionResponse?.ftcCode ?? '',
+                x.transaccionResponse?.ftcDescription ?? '',
+                x.transaccionRequest?.dataElements?.retrievalReferenceNumber
+                ?? x.uIdreferenciaExterna
+                ?? '',
+                x.codigoAutorizacion ?? '',
+                Number(x.transaccionProcesada?.monto ?? 0),
+                moneda,
+                x.descOrigenInt ?? '',
+                x.estadoAutorizacion === 'REJECTED'
+                    ? ''
+                    : x.estadoConfirmacion ?? '',
+                x.estadoAutorizacion ?? '',
+                x.estadoReversado ?? '',
+                x.codigoRechazo ?? '',
+                x.tarjeta?.enmascarado ?? '',
+                x.tarjeta?.token ?? '',
+                x.transaccionResponse?.financialTransaction?.parentTransactionId ?? '',
+                x.motivoTransaccion ?? ''
+            ]);
+        }
+
+        this.excelService.generateExcel(
+            [...header],
+            excelName,
+            sheetName,
+            isCurrency,
+            datos,
+            fechaReporte,
+            filterLabel
+        );
     }
-}
+    private formatDate(date: Date): string {
+        const pad = (n: number): string => n.toString().padStart(2, '0');
+        return `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()}`;
+    }
 }

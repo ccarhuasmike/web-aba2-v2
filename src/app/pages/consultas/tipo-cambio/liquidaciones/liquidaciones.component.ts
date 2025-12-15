@@ -390,7 +390,7 @@ export class LiquidacionesComponent implements OnInit {
 
         if (this.dialogRef) {
             this.dialogRef.onClose.subscribe((resp: any) => {
-                if (resp && resp.data && resp.accion === 'create') {
+                if (resp?.data && resp.accion === 'create') {
                     if (resp.data['codigo'] === 0) {
                         this.showMessage('success', 'Pago proveedor', 'El pago fue exitoso');
                         this.getLiquidaciones();
@@ -411,7 +411,7 @@ export class LiquidacionesComponent implements OnInit {
 
         if (this.dialogRef) {
             this.dialogRef.onClose.subscribe((resp: any) => {
-                if (resp && resp.data) {
+                if (resp?.data) {
                     if (resp.data['codigo'] === 0) {
                         this.showMessage('success', '', 'Regularización registrada');
                         this.getLiquidacionDetalle(this.datoLiquidado);
@@ -447,8 +447,6 @@ export class LiquidacionesComponent implements OnInit {
         });
 
         this.datosLiquidaciones.forEach(x => {
-            const list: any[] = [];
-
             const totalDolaresTcCompraOhFormat = this.currencyPipe.transform(x.totalDolaresTcCompraOh || 0, ' ', 'symbol', '1.2-2');
             const totalDolaresTcVentaOhhFormat = this.currencyPipe.transform(x.totalDolaresTcVentaOh || 0, ' ', 'symbol', '1.2-2');
             const totalSolesTcVentaOhFormat = this.currencyPipe.transform(x.totalSolesTcVentaOh || 0, ' ', 'symbol', '1.2-2');
@@ -462,32 +460,32 @@ export class LiquidacionesComponent implements OnInit {
             const netoRecibirPartnerFormat = this.currencyPipe.transform(x.netoRecibirPartner || 0, ' ', 'symbol', '1.2-2');
             const netoEnviarPartnerFormat = this.currencyPipe.transform(x.netoEnviarPartner || 0, ' ', 'symbol', '1.2-2');
 
-            list.push(this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(x.idCambioMonedaLiqDiariaRes);
-            list.push(x.nroLoteLiquidado);
-            list.push(this.datepipe.transform(x.fechaHoraEnvioPartner, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraRespuestaPartner, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraEnvioPagar, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraConfirmacionPago, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(x.descBanco);
-            list.push(x.cuentaCorriente);
-            list.push(totalDolaresTcCompraOhFormat);
-            list.push(totalDolaresTcVentaOhhFormat);
-            list.push(totalSolesTcVentaOhFormat);
-            list.push(totalSolesTcCompraOhFormat);
-            list.push(totalDolaresTcCompraPartnerFormat);
-            list.push(totalDolaresTcVentaPartnerFormat);
-            list.push(totalSolesTcVentaPartnerFormat);
-            list.push(totalSolesTcCompraPartnerFormat);
-            list.push(totalSpreadCompraOhFormat);
-            list.push(totalSpreadVentaOhFormat);
-            list.push(x.descripcionMonedaRecibirPartner);
-            list.push(netoRecibirPartnerFormat);
-            list.push(x.descripcionMonedaEnvioPartner);
-            list.push(netoEnviarPartnerFormat);
-            list.push(x.descEstadoTipoCambio);
-
-            datos.push(list);
+            datos.push([
+                this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'),
+                x.idCambioMonedaLiqDiariaRes,
+                x.nroLoteLiquidado,
+                this.datepipe.transform(x.fechaHoraEnvioPartner, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraRespuestaPartner, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraEnvioPagar, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraConfirmacionPago, 'dd/MM/yyyy HH:mm:ss'),
+                x.descBanco,
+                x.cuentaCorriente,
+                totalDolaresTcCompraOhFormat,
+                totalDolaresTcVentaOhhFormat,
+                totalSolesTcVentaOhFormat,
+                totalSolesTcCompraOhFormat,
+                totalDolaresTcCompraPartnerFormat,
+                totalDolaresTcVentaPartnerFormat,
+                totalSolesTcVentaPartnerFormat,
+                totalSolesTcCompraPartnerFormat,
+                totalSpreadCompraOhFormat,
+                totalSpreadVentaOhFormat,
+                x.descripcionMonedaRecibirPartner,
+                netoRecibirPartnerFormat,
+                x.descripcionMonedaEnvioPartner,
+                netoEnviarPartnerFormat,
+                x.descEstadoTipoCambio
+            ]);
         });
 
         this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, date, filterLavel);
@@ -509,8 +507,6 @@ export class LiquidacionesComponent implements OnInit {
         });
 
         this.datosLiquidacionDetalle.forEach(x => {
-            const list: any[] = [];
-
             const importeOrigenPartnerFormat = this.currencyPipe.transform(x.importeOrigenPartner || 0, ' ', 'symbol', '1.2-2');
             const importeOrigenOhFormat = this.currencyPipe.transform(x.importeOrigenOh || 0, ' ', 'symbol', '1.2-2');
             const importeDestinoPartnerFormat = this.currencyPipe.transform(x.importeDestinoPartner || 0, ' ', 'symbol', '1.2-2');
@@ -522,34 +518,35 @@ export class LiquidacionesComponent implements OnInit {
             const tipoCambioTransaccionFormat = this.currencyPipe.transform(x.tipoCambioTransaccion || 0, ' ', 'symbol', '1.4-4');
             const tipoCambioLiqPartnerFormat = this.currencyPipe.transform(x.tipoCambioLiqPartner || 0, ' ', 'symbol', '1.4-4');
 
-            list.push(x.nroCambioMonedaOperacion);
-            list.push(x.idOperacionPartner);
-            list.push(x.cuentaOrigen);
-            list.push(x.descripcionMonedaOrigen);
-            list.push(importeOrigenPartnerFormat);
-            list.push(importeOrigenOhFormat);
-            list.push(x.nroOperacionCuentaOrigen);
-            list.push(x.cuentaDestino);
-            list.push(x.descripcionMonedaDestino);
-            list.push(importeDestinoPartnerFormat);
-            list.push(importeDestinoOhFormat);
-            list.push(x.nroOperacionCuentaDestino);
-            list.push(spreadCompraOhFormat);
-            list.push(spreadVentaOhFormat);
-            list.push(x.descEstadoTipoCambio);
-            list.push(x.tipoDocIdentidadDescripcion);
-            list.push(x.numeroDocIdentidad);
-            list.push(x.tipoOperacionOh);
-            list.push(this.datepipe.transform(x.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraEjecucionOperacion, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(tipoCambioOhFormat);
-            list.push(tipoCambioPartnerFormat);
-            list.push(tipoCambioTransaccionFormat);
-            list.push(tipoCambioLiqPartnerFormat);
-            list.push(x.idConsultaPartner);
-            list.push(x.nroLoteLiquidado);
-            datos.push(list);
+            datos.push([
+                x.nroCambioMonedaOperacion,
+                x.idOperacionPartner,
+                x.cuentaOrigen,
+                x.descripcionMonedaOrigen,
+                importeOrigenPartnerFormat,
+                importeOrigenOhFormat,
+                x.nroOperacionCuentaOrigen,
+                x.cuentaDestino,
+                x.descripcionMonedaDestino,
+                importeDestinoPartnerFormat,
+                importeDestinoOhFormat,
+                x.nroOperacionCuentaDestino,
+                spreadCompraOhFormat,
+                spreadVentaOhFormat,
+                x.descEstadoTipoCambio,
+                x.tipoDocIdentidadDescripcion,
+                x.numeroDocIdentidad,
+                x.tipoOperacionOh,
+                this.datepipe.transform(x.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraEjecucionOperacion, 'dd/MM/yyyy HH:mm:ss'),
+                this.datepipe.transform(x.fechaHoraLiquidacion, 'dd/MM/yyyy HH:mm:ss'),
+                tipoCambioOhFormat,
+                tipoCambioPartnerFormat,
+                tipoCambioTransaccionFormat,
+                tipoCambioLiqPartnerFormat,
+                x.idConsultaPartner,
+                x.nroLoteLiquidado
+            ]);
         });
 
         this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, date, filterLavel);

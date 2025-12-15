@@ -25,7 +25,7 @@ import { DisableContentByRoleDirective } from '@/layout/Utils/directives/disable
     styleUrls: ['./detalle-autorizacion.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [DisableContentByRoleDirective,TooltipModule, DividerModule, TabsModule, InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
+    imports: [DisableContentByRoleDirective, TooltipModule, DividerModule, TabsModule, InputGroupAddonModule, InputGroupModule, MessageModule, ToastModule, ButtonModule, FileUploadModule, ReactiveFormsModule, CommonModule, InputTextModule, AutoCompleteModule],
     providers: [MessageService, DialogService, ConfirmationService],
 })
 export class DetalleAutorizacionComponent implements OnInit {
@@ -42,20 +42,20 @@ export class DetalleAutorizacionComponent implements OnInit {
     roles: any = ROLES;
 
     constructor(
-        private cuentasDetailsService: CuentasDetailsService,
-        private commonService: CommonService,
+        private readonly cuentasDetailsService: CuentasDetailsService,
+        private readonly commonService: CommonService,
         private readonly toastr: MessageService,
         public dialogRef: DynamicDialogRef,
         public config: DynamicDialogConfig,
     ) {
-        const dataCopy = JSON.parse(JSON.stringify(this.config.data));
+        const dataCopy = structuredClone(this.config.data);
         this.datosAutorizaciones = dataCopy.datosAutorizaciones;
         this.datosCliente = dataCopy.datosCliente;
         this.datosCuenta = dataCopy.datosCuenta;
 
-        if (this.datosAutorizaciones && this.datosAutorizaciones.descRequerimiento) {
+        if (this.datosAutorizaciones?.descRequerimiento)
             this.datosRequest = JSON.parse(this.datosAutorizaciones.descRequerimiento);
-        }
+        
 
         const numeroCuenta = this.datosCuenta.numeroCuenta;
         const bin = numeroCuenta.slice(0, 2);
@@ -93,7 +93,7 @@ export class DetalleAutorizacionComponent implements OnInit {
                 }
             });
 
-            if (this.datosAutorizaciones && this.datosAutorizaciones.transaccionRequest.dataElements) {
+            if (this.datosAutorizaciones?.transaccionRequest.dataElements) {
                 const moneda = this.tipoMonedas.find((e: any) => String(e.valNumEntero) == this.datosAutorizaciones.transaccionRequest.dataElements.transactionCurrencyCode);
 
                 const pais = this.tipoPais.find((e: any) => String(e.valNumEntero) == this.datosAutorizaciones.transaccionRequest.dataElements.countryCode)
@@ -106,7 +106,7 @@ export class DetalleAutorizacionComponent implements OnInit {
                 }
             }
 
-            if (this.datosRequest && this.datosRequest.originAccountData) {
+            if (this.datosRequest?.originAccountData) {
                 const documentType = tipoDocumentos.find((e: any) => String(e.id) == this.datosRequest.originAccountData.identDocType);
                 if (documentType) {
                     this.datosRequest.originAccountData.documentType = documentType.descripcion;
@@ -118,7 +118,7 @@ export class DetalleAutorizacionComponent implements OnInit {
                 }
             }
 
-            if (this.datosRequest && this.datosRequest.destinationAccountData) {
+            if (this.datosRequest?.destinationAccountData) {
                 const documentType = tipoDocumentos.find((e: any) => String(e.id) == this.datosRequest.destinationAccountData.identDocType);
                 if (documentType) {
                     this.datosRequest.destinationAccountData.documentType = documentType.descripcion;
@@ -141,10 +141,10 @@ export class DetalleAutorizacionComponent implements OnInit {
                     this.disableTabAjuste = false;
 
                 } else if (resp['codigo'] == -1) {
-                    this.toastr.add({ severity: 'error', summary: 'Error getDatosAjuste', detail: resp['mensaje'] });                   
+                    this.toastr.add({ severity: 'error', summary: 'Error getDatosAjuste', detail: resp['mensaje'] });
                 }
             }, (_error) => {
-                this.toastr.add({ severity: 'error', summary: 'Error getDatosAjuste', detail: 'Error en el servicio de obtener datos del ajuste'});
+                this.toastr.add({ severity: 'error', summary: 'Error getDatosAjuste', detail: 'Error en el servicio de obtener datos del ajuste' });
             });
     }
 
@@ -163,10 +163,10 @@ export class DetalleAutorizacionComponent implements OnInit {
                     const desenmascarado = datosTarjetaDecrypted.tarjeta.slice(3);
                     this.datosAutorizaciones.tarjeta['desenmascarado'] = desenmascarado;
                 } else {
-                    this.toastr.add({ severity: 'error', summary: 'Error visibilidadTarjeta', detail: resp['mensaje'] });                       
+                    this.toastr.add({ severity: 'error', summary: 'Error visibilidadTarjeta', detail: resp['mensaje'] });
                 }
             }, (_error) => {
-                this.toastr.add({ severity: 'error', summary: 'Error visibilidadTarjeta', detail:'Error en el servicio de obtener tarjeta encriptada' });                   
+                this.toastr.add({ severity: 'error', summary: 'Error visibilidadTarjeta', detail: 'Error en el servicio de obtener tarjeta encriptada' });
             })
         }
     }
@@ -182,11 +182,14 @@ export class DetalleAutorizacionComponent implements OnInit {
         this.commonService.downloadFile(file, fileName);
     }
 
-    formatAttributes() {
-        if (this.datosAutorizaciones && this.datosAutorizaciones.transaccionRequest.dataElements) {
-            let transactionAmount = this.datosAutorizaciones.transaccionRequest.dataElements.transactionAmount;
-            transactionAmount = Number(transactionAmount) / 100;
-            this.datosAutorizaciones.transaccionRequest.dataElements.transactionAmountFormatted = transactionAmount;
+    formatAttributes(): void {
+        const dataElements = this.datosAutorizaciones?.transaccionRequest?.dataElements;
+
+        if (!dataElements?.transactionAmount) {
+            return;
         }
+
+        const transactionAmount = Number(dataElements.transactionAmount) / 100;
+        dataElements.transactionAmountFormatted = transactionAmount;
     }
 }

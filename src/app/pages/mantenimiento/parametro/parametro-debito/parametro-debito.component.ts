@@ -22,7 +22,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ParametroDebitoAddComponent } from './parametro-debito-add/parametro-debito-add.component';
 import { ParametroDebitoEditComponent } from './parametro-debito-edit/parametro-debito-edit.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { environment } from 'src/environments/environment';
 import { finalize } from 'rxjs';
 
 @Component({

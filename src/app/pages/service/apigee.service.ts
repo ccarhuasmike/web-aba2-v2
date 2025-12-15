@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
 import { environment } from 'src/environments/environment';
 import { CommonService } from './commonService';
-
-environment
 @Injectable({
     providedIn: 'root'
 })
@@ -15,8 +12,8 @@ export class ApigeeService {
     ClientSecretTarOh = environment.ClientSecretTarOh;
 
     constructor(
-        private http: HttpClient,
-        private commonService: CommonService
+        private readonly http: HttpClient,
+        private readonly commonService: CommonService
     ) {
         // This a constructor
     }

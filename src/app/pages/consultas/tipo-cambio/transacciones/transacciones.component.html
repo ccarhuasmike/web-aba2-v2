@@ -19,20 +19,20 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker formControlName="fechaRangoTrx" dateFormat="dd/mm/yy"
-                                    yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
-                                    styleClass="w-full">
+                                <label for="fechaRangoTrx" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker inputId="fechaRangoTrx" formControlName="fechaRangoTrx"
+                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
+                                    [readonlyInput]="true" appendTo="body" styleClass="w-full">
                                 </p-datepicker>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nº operación</label>
-                                <input type="text" pInputText formControlName="numOperacion" class="w-full"
-                                    autocomplete="off">
+                                <label for="numOperacion" class="block mb-1 text-sm">Nº operación</label>
+                                <input id="numOperacion" type="text" pInputText formControlName="numOperacion"
+                                    class="w-full" autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Tipo de documento</label>
-                                <p-autoComplete formControlName="tipoDocumento"
+                                <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de documento</label>
+                                <p-autoComplete id="tipoDocumento" formControlName="tipoDocumento"
                                     [suggestions]="filteredElementTipoDocumentos" field="descripcion"
                                     emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
@@ -44,27 +44,27 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nro. de documento</label>
-                                <input type="text" pInputText formControlName="numDocumento" class="w-full"
-                                    autocomplete="off"
-                                     (input)="onNumDocumentoInput($event)">
+                                <label for="numDocumento" class="block mb-1 text-sm">Nro. de documento</label>
+                                <input id="numDocumento" type="text" pInputText formControlName="numDocumento"
+                                    class="w-full" autocomplete="off" (input)="onNumDocumentoInput($event)">
                                 <div class="text-right text-xs mt-1" *ngIf="nroCaracter !== 0">
                                     {{formBusqueda.get('numDocumento')?.value?.length || 0}} / {{nroCaracter}}
                                 </div>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Cuenta de origen</label>
-                                <input type="text" pInputText formControlName="numCuentaOrigen" class="w-full"
-                                    autocomplete="off">
+                                <label for="numCuentaOrigen" class="block mb-1 text-sm">Cuenta de origen</label>
+                                <input id="numCuentaOrigen" type="text" pInputText formControlName="numCuentaOrigen"
+                                    class="w-full" autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Cuenta destino</label>
-                                <input type="text" pInputText formControlName="numCuentaDestino" class="w-full"
-                                    autocomplete="off">
+                                <label for="numCuentaDestino" class="block mb-1 text-sm">Cuenta destino</label>
+                                <input id="numCuentaDestino" type="text" pInputText formControlName="numCuentaDestino"
+                                    class="w-full" autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Tipo de operación</label>
-                                <p-autoComplete formControlName="tipoOperacion" [suggestions]="filteredElement"
+                                <label for="tipoOperacion" class="block mb-1 text-sm">Tipo de operación</label>
+                                <p-autoComplete id="tipoOperacion" formControlName="tipoOperacion"
+                                    [suggestions]="filteredElement"
                                     (completeMethod)="filterElement($event, tiposOperacion)" field="descripcion"
                                     emptyMessage="Sin resultados" [dropdown]="true" appendTo="body" styleClass="w-full">
                                     <ng-template let-element>
@@ -73,13 +73,15 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nº operación proveedor</label>
-                                <input type="text" pInputText formControlName="numOperacionProveedor" class="w-full"
-                                    autocomplete="off">
+                                <label for="numOperacionProveedor" class="block mb-1 text-sm">Nº operación
+                                    proveedor</label>
+                                <input id="numOperacionProveedor" type="text" pInputText
+                                    formControlName="numOperacionProveedor" class="w-full" autocomplete="off">
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Estado transacción</label>
-                                <p-autoComplete formControlName="estadoTipoCambio" [suggestions]="filteredElement"
+                                <label for="estadoTipoCambio" class="block mb-1 text-sm">Estado transacción</label>
+                                <p-autoComplete id="estadoTipoCambio" formControlName="estadoTipoCambio"
+                                    [suggestions]="filteredElement"
                                     (completeMethod)="filterElementEstadoTipoCambio($event, estadosTipoCambio)"
                                     field="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
                                     appendTo="body" styleClass="w-full">
@@ -124,7 +126,7 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>
@@ -194,16 +196,15 @@
                     <td>{{rowData.descCanal}}</td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="rowexpansion" let-rowData>
+            <ng-template #expandedrow let-rowData>
                 <tr>
                     <td [attr.colspan]="cols.length" class="bg-surface-50 p-4">
-                        <!-- <p-tabView>
-                            <p-tabPanel header="LOG"> -->
+                        <h5>LOG</h5>
                         <p-table [paginator]="false" [value]="datosTrxLogs" [totalRecords]="datosTrxLogs.length"
                             [columns]="colsLog" [loading]="loadingDatosTrxLogs">
                             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>
@@ -227,8 +228,7 @@
                 </tr>
             </ng-template>
         </p-table>
-        <!-- </p-tabPanel>
-                        </p-tabView> -->
+
         </td>
         </tr>
         </ng-template>
