@@ -3,7 +3,7 @@
     <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
         <div class="flex items-center gap-2">
             <i class="pi pi-exchange text-2xl"></i>
-            <span class="text-xl font-semibold">Transacciones Tipo de Cambio</span>
+            <span class="text-xl font-semibold">Transacciones</span>
         </div>
     </div>
 
@@ -20,10 +20,12 @@
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
                                 <label for="fechaRangoTrx" class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker inputId="fechaRangoTrx" formControlName="fechaRangoTrx"
-                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
-                                    [readonlyInput]="true" appendTo="body" styleClass="w-full">
+
+                                <p-datepicker styleClass="w-full" inputId="fechaRangoTrx"
+                                    formControlName="fechaRangoTrx" dateFormat="dd/mm/yy" yearRange="1940:2030"
+                                    selectionMode="range" [readonlyInput]="true" appendTo="body">
                                 </p-datepicker>
+
                             </div>
                             <div class="md:col-span-3">
                                 <label for="numOperacion" class="block mb-1 text-sm">Nº operación</label>
@@ -33,11 +35,10 @@
                             <div class="md:col-span-3">
                                 <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de documento</label>
                                 <p-autoComplete id="tipoDocumento" formControlName="tipoDocumento"
-                                    [suggestions]="filteredElementTipoDocumentos" field="descripcion"
+                                    [suggestions]="filteredElementTipoDocumentos" optionLabel="descripcion"
                                     emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
-                                    (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body"
-                                    styleClass="w-full">
+                                    (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body" class="w-full">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
                                     </ng-template>
@@ -65,7 +66,7 @@
                                 <label for="tipoOperacion" class="block mb-1 text-sm">Tipo de operación</label>
                                 <p-autoComplete id="tipoOperacion" formControlName="tipoOperacion"
                                     [suggestions]="filteredElement"
-                                    (completeMethod)="filterElement($event, tiposOperacion)" field="descripcion"
+                                    (completeMethod)="filterElement($event, tiposOperacion)" optionLabel="descripcion"
                                     emptyMessage="Sin resultados" [dropdown]="true" appendTo="body" styleClass="w-full">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
@@ -83,7 +84,7 @@
                                 <p-autoComplete id="estadoTipoCambio" formControlName="estadoTipoCambio"
                                     [suggestions]="filteredElement"
                                     (completeMethod)="filterElementEstadoTipoCambio($event, estadosTipoCambio)"
-                                    field="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
+                                    optionLabel="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
                                     appendTo="body" styleClass="w-full">
                                     <ng-template let-element>
                                         <div>{{element.descripcionCorta}}</div>
@@ -141,16 +142,10 @@
           rowData.codigoEstado == '04' ||
           rowData.codigoEstado == '05' ||
           rowData.codigoEstado == '06')">
-
-                                <p-menu #menuAccioness [model]="menuAcciones" [popup]="true">
-                                </p-menu>
-
-                                <button type="button" pButton icon="pi pi-ellipsis-v"
-                                    class="p-button-text p-button-rounded"
-                                    (click)="buildMenu(rowData); menuAccioness.toggle($event)" pTooltip="Acciones"
-                                    tooltipPosition="top">
-                                </button>
-
+                                <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)"
+                                    (keydown.enter)="onButtonClick($event, rowData, menusss)" icon="pi pi-ellipsis-v"
+                                    pTooltip="Acciones" />
+                                <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
                             </ng-container>
                         </div>
                     </td>

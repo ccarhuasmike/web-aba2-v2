@@ -133,20 +133,58 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
         this.createForm();
     }
 
-    menuAcciones: MenuItem[] = [];
-    buildMenu(rowData: any) {
-        const actions = [];
+    // menuAcciones: MenuItem[] = [];
+    // buildMenu(rowData: any) {
+    //     const actions = [];
+    //     debugger;
+    //     if (rowData.codigoEstado === '01') {
+    //         actions.push({
+    //             label: 'Regularizar Trx',
+    //             icon: 'pi pi-pencil',
+    //             command: () => this.openDialogRegularizarTrx(rowData)
+    //         });
+    //     }
 
-        if (rowData.codigoEstado === '01') {
-            actions.push({
-                label: 'Regularizar Trx',
-                icon: 'pi pi-pencil',
-                command: () => this.openDialogRegularizarTrx(rowData)
-            });
-        }
+    //     this.menuAcciones = actions;
+    // }
 
-        this.menuAcciones = actions;
+
+    menuItems: any[] = [];
+    onButtonClick(event: Event, rowData: any, menu: any) {
+        this.menuItems = this.getMenuItems(rowData);
+        menu.toggle(event);
     }
+    getMenuItems(rowData: any, menu?: any): MenuItem[] {
+        return [
+            this.createMenuItemWithClose(
+                'Regularizar Trx',
+                'pi pi-pencil',
+                () => this.openDialogRegularizarTrx(rowData),
+                menu
+            ),           
+        ];
+    }
+
+ 
+
+    private createMenuItemWithClose(
+        label: string,
+        icon: string,
+        action: () => void,
+        menu?: any
+    ): MenuItem {
+        return {
+            label,
+            icon,
+            command: () => this.executeActionAndClose(action, menu)
+        };
+    }
+    private executeActionAndClose(action: () => void, menu?: any): void {
+        setTimeout(() => {
+            action();
+            menu?.hide();
+        }, 5);
+    }    
 
     onNumDocumentoInput(event: Event) {
         const input = event.target as HTMLInputElement;

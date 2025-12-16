@@ -53,9 +53,6 @@ export class ParametroDebitoComponent implements OnInit {
 
     getParametros() {
         this.loading = true;
-
-
-
         this.parametroDebitoService.getParametros().pipe(
             finalize(() => {
                 this.loading = false;
