@@ -338,8 +338,19 @@ export class SolicitudesAhorrosohComponent implements OnInit {
 
   openDialogDetalle(data: any) {
     this.dialog.open(DetalleInfoSolicitudComponent, {
-      width: '1000px',
+      header: 'Detalle Informacion Solicitud',
+      width: '60vw',
+      modal: true,
+      styleClass: 'header-modal',
+      dismissableMask: true,  // permite cerrar al hacer click fuera
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
       data: data
+
+      // width: '1000px',
+      // data: data
     });
   }
 
