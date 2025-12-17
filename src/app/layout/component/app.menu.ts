@@ -45,6 +45,12 @@ export class AppMenu implements OnInit {
 
                             },
                             {
+                                label: 'Ahorro',
+                                icon: 'pi pi-fw pi-bookmark',
+                                routerLink: ['mantenimiento/parametro/ahorro']
+
+                            },
+                            {
                                 label: 'Tipo de Cambio',
                                 icon: 'pi pi-fw pi-bookmark',
                                 routerLink: ['mantenimiento/parametro/tipo-cambio']

@@ -5,9 +5,11 @@ import { BancoComponent } from './banco/banco.component';
 import { FeriadoComponent } from './feriado/feriado.component';
 import { ProveedorComponent } from './proveedor/proveedor.component';
 import { CambioMonedaComponent } from './cambiomoneda/cambiomoneda.component';
+import { ParametroAhorroComponent } from './parametro/parametro-ahorro/parametro-ahorro.component';
 
 export default [
     { path: 'parametro/debito', data: { breadcrumb: 'Button' }, component: ParametroDebitoComponent },
+    { path: 'parametro/ahorro', data: { breadcrumb: 'Button' }, component: ParametroAhorroComponent },
     { path: 'parametro/tipo-cambio', data: { breadcrumb: 'Button' }, component: ParametroTipoCambioComponent },
     { path: 'banco', data: { breadcrumb: 'Button' }, component: BancoComponent },
     { path: 'feriado', data: { breadcrumb: 'Button' }, component: FeriadoComponent },

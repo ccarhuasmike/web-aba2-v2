@@ -1,0 +1,8 @@
+<app-parametro-add
+  [formAdd]="formAdd"
+  [groups]="groups"
+  [filteredElement]="filteredElement"
+  (addParametro)="addParametro()"
+  (filterElement)="filterElement($event, groups)"
+  (addGrupo)="openDialogAgregarGrupo()"
+></app-parametro-add>
