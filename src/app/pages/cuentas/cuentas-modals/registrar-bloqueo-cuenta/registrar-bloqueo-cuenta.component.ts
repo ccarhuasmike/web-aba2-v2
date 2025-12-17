@@ -15,7 +15,6 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { UtilService } from '@/utils/util.services';
-import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-registrar-bloqueo-cuenta',

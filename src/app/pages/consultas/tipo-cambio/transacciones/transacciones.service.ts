@@ -10,29 +10,19 @@ export class TransaccionesService {
 
     constructor(private readonly http: HttpClient) { }
 
-    getReporteTransacciones(
-        fechaEjecucionDesde: any,
-        fechaEjecucionHasta: any,
-        cuentaDestino: any,
-        cuentaOrigen: any,
-        idOperacionPartner: any,
-        nroCambioMonedaOperacion: any,
-        tipoOperacionOh: any,
-        tipoDoc: any,
-        numDoc: any,
-        idCambioMonedaEstado: any
+    getReporteTransacciones(paramsFiltro: ReporteTransaccionesParams
     ) {
         const params = new HttpParams()
-            .set('fechaEjecucionDesde', fechaEjecucionDesde)
-            .set('fechaEjecucionHasta', fechaEjecucionHasta)
-            .set('cuentaDestino', cuentaDestino)
-            .set('cuentaOrigen', cuentaOrigen)
-            .set('idOperacionPartner', idOperacionPartner)
-            .set('nroCambioMonedaOperacion', nroCambioMonedaOperacion)
-            .set('tipoOperacionOh', tipoOperacionOh)
-            .set('tipoDoc', tipoDoc)
-            .set('numDoc', numDoc)
-            .set('idCambioMonedaEstado', idCambioMonedaEstado);
+            .set('fechaEjecucionDesde', paramsFiltro.fechaEjecucionDesde)
+            .set('fechaEjecucionHasta', paramsFiltro.fechaEjecucionHasta)
+            .set('cuentaDestino', paramsFiltro.cuentaDestino)
+            .set('cuentaOrigen', paramsFiltro.cuentaOrigen)
+            .set('idOperacionPartner', paramsFiltro.idOperacionPartner)
+            .set('nroCambioMonedaOperacion', paramsFiltro.nroCambioMonedaOperacion)
+            .set('tipoOperacionOh', paramsFiltro.tipoOperacionOh)
+            .set('tipoDoc', paramsFiltro.tipoDoc)
+            .set('numDoc', paramsFiltro.numDoc)
+            .set('idCambioMonedaEstado', paramsFiltro.idCambioMonedaEstado);
 
         return this.http.get(`${this.APICamMon}/v1/reportes/transacciones-cambio-moneda`, { params: params });
     }
@@ -49,4 +39,15 @@ export class TransaccionesService {
     postRegularizarTransaccion(data: any) {
         return this.http.post(`${this.APICamMon}/v1/reportes/transacciones-regularizar`, data);
     }
+}export interface ReporteTransaccionesParams {
+  fechaEjecucionDesde?: any;
+  fechaEjecucionHasta?: any;
+  cuentaDestino?: any;
+  cuentaOrigen?: any;
+  idOperacionPartner?: any;
+  nroCambioMonedaOperacion?: any;
+  tipoOperacionOh?: any;
+  tipoDoc?: any;
+  numDoc?: any;
+  idCambioMonedaEstado?: any;
 }

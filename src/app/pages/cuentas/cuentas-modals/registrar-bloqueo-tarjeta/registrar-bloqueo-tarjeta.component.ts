@@ -14,7 +14,6 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { environment } from 'src/environments/environment';
 import { UtilService } from '@/utils/util.services';
 @Component({
     selector: 'app-registrar-bloqueo-tarjeta',

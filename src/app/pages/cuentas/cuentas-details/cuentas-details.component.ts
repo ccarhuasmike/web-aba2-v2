@@ -46,7 +46,6 @@ import { DetalleMovimientoComponent } from '../cuentas-modals/detalle-movimiento
 import { DatePicker } from 'primeng/datepicker';
 import moment from 'moment';
 import { ExcelService } from '@/pages/service/excel.service';
-import { environment } from 'src/environments/environment';
 import { VerArchivoComponent } from '../cuentas-modals/ver-archivo/ver-archivo.component';
 @Component({
     selector: 'app-cuentas-details',

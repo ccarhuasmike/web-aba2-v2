@@ -132,23 +132,6 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
     ) {
         this.createForm();
     }
-
-    // menuAcciones: MenuItem[] = [];
-    // buildMenu(rowData: any) {
-    //     const actions = [];
-    //     debugger;
-    //     if (rowData.codigoEstado === '01') {
-    //         actions.push({
-    //             label: 'Regularizar Trx',
-    //             icon: 'pi pi-pencil',
-    //             command: () => this.openDialogRegularizarTrx(rowData)
-    //         });
-    //     }
-
-    //     this.menuAcciones = actions;
-    // }
-
-
     menuItems: any[] = [];
     onButtonClick(event: Event, rowData: any, menu: any) {
         this.menuItems = this.getMenuItems(rowData);
@@ -161,11 +144,11 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
                 'pi pi-pencil',
                 () => this.openDialogRegularizarTrx(rowData),
                 menu
-            ),           
+            ),
         ];
     }
 
- 
+
 
     private createMenuItemWithClose(
         label: string,
@@ -184,7 +167,7 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
             action();
             menu?.hide();
         }, 5);
-    }    
+    }
 
     onNumDocumentoInput(event: Event) {
         const input = event.target as HTMLInputElement;
@@ -315,18 +298,18 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.transaccionesService.getReporteTransacciones(
-            fechaEjecucionDesde,
-            fechaEjecucionHasta,
-            cuentaDestino,
-            cuentaOrigen,
-            idOperacionPartner,
-            nroCambioMonedaOperacion,
-            tipoOperacionOh,
-            tipoDoc,
-            numDoc,
-            idCambioMonedaEstado
-        ).subscribe({
+        this.transaccionesService.getReporteTransacciones({
+            fechaEjecucionDesde: fechaEjecucionDesde,
+            fechaEjecucionHasta: fechaEjecucionHasta,
+            cuentaDestino: cuentaDestino,
+            cuentaOrigen: cuentaOrigen,
+            idOperacionPartner: idOperacionPartner,
+            nroCambioMonedaOperacion: nroCambioMonedaOperacion,
+            tipoOperacionOh: tipoOperacionOh,
+            tipoDoc: tipoDoc,
+            numDoc: numDoc,
+            idCambioMonedaEstado: idCambioMonedaEstado
+        }).subscribe({
             next: (resp: any) => {
                 this.loadingDatosTipoCambioTrx = false;
 

@@ -12,7 +12,6 @@ import { TabsModule } from 'primeng/tabs';
 import { DisableContentByRoleDirective } from '@/layout/Utils/directives/disable-content-by-role.directive';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { environment } from 'src/environments/environment.qa';
 @Component({
     selector: 'app-detalle-botonera',
     templateUrl: './detalle-botonera.component.html',
