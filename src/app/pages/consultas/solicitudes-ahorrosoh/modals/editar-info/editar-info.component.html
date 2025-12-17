@@ -25,44 +25,48 @@
     <form class="md:col-span-3" [formGroup]="formEditar" novalidate>
         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Primer nombre</label>
-                <input type="text" formControlName="primerNombre" autocomplete="off" pInputText name="primerNombre">
+                <label class="block mb-1 text-sm" for="primerNombre">Primer nombre</label>
+                <input type="text" formControlName="primerNombre" autocomplete="off" pInputText name="primerNombre"
+                    id="primerNombre">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Segundo nombre</label>
-                <input type="text" formControlName="segundoNombre" autocomplete="off" pInputText name="segundoNombre">
+                <label class="block mb-1 text-sm" for="segundoNombre">Segundo nombre</label>
+                <input type="text" formControlName="segundoNombre" autocomplete="off" pInputText name="segundoNombre"
+                    id="segundoNombre">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Apellido paterno</label>
+                <label class="block mb-1 text-sm" for="apellidoPaterno">Apellido paterno</label>
                 <input type="text" formControlName="apellidoPaterno" autocomplete="off" pInputText
-                    name="apellidoPaterno">
+                    name="apellidoPaterno" id="apellidoPaterno">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Apellido materno</label>
+                <label class="block mb-1 text-sm" for="apellidoMaterno">Apellido materno</label>
                 <input type="text" formControlName="apellidoMaterno" autocomplete="off" pInputText
-                    name="apellidoMaterno">
+                    name="apellidoMaterno" id="apellidoMaterno">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Celular</label>
-                <input type="text" formControlName="celular" autocomplete="off" pInputText name="celular"
+                <label class="block mb-1 text-sm" for="celular">Celular</label>
+                <input type="text" formControlName="celular" autocomplete="off" pInputText name="celular" id="celular"
                     oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Correo</label>
-                <input type="text" formControlName="email" autocomplete="off" pInputText name="email">
+                <label class="block mb-1 text-sm" for="email">Correo</label>
+                <input type="text" formControlName="email" autocomplete="off" pInputText name="email" id="email">
             </div>
             <div class="md:col-span-1">
-                <label class="block mb-1 text-sm">Fecha nacimiento</label>
-                <p-datepicker formControlName="fechaNacimiento" name="fechaNacimiento" [showIcon]="true" 
-                    dateFormat="dd/mm/yy" yearRange="1940:2030"
-                    [readonlyInput]="true" appendTo="body"></p-datepicker>
+                <label class="block mb-1 text-sm" for="fechaNacimiento">Fecha nacimiento</label>
+                <p-datepicker formControlName="fechaNacimiento" name="fechaNacimiento" inputId="fechaNacimiento"
+                    [showIcon]="true" dateFormat="dd/mm/yy" yearRange="1940:2030" [readonlyInput]="true"
+                    appendTo="body"></p-datepicker>
             </div>
         </div>
     </form>
 
     <div class="md:col-span-3 flex items-end justify-end gap-2 footer-modal">
-        <p-button label="Cancelar" severity="secondary" (click)="cerrarModal()"></p-button>
-        <p-button label="Actualizar Datos" [disabled]="formEditar.invalid" (click)="actualizarDatosSolicitud()">
+        <p-button label="Cancelar" severity="secondary" (click)="cerrarModal()" (keydown.enter)="cerrarModal()"
+            (keydown)="cerrarModal()"></p-button>
+        <p-button label="Actualizar Datos" [disabled]="formEditar.invalid" (click)="actualizarDatosSolicitud()"
+            (keydown.enter)="actualizarDatosSolicitud()" (keydown)="actualizarDatosSolicitud()">
         </p-button>
     </div>
 </div>

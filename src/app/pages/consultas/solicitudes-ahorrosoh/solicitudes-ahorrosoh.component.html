@@ -19,17 +19,16 @@
                     <form [formGroup]="searchForm" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Rango de Fechas</label>
-                                <p-datepicker formControlName="rangoFechas" [showIcon]="true"
-                                    dateFormat="dd/mm/yy" 
-                                    yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
-                                    showButtonBar="true"></p-datepicker>
+                                <label class="block mb-1 text-sm" for="rangoFechas">Rango de Fechas</label>
+                                <p-datepicker formControlName="rangoFechas" inputId="rangoFechas" [showIcon]="true"
+                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
+                                    [readonlyInput]="true" appendTo="body" showButtonBar="true"></p-datepicker>
                             </div>
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Tipo de documento</label>
+                                <label class="block mb-1 text-sm" for="tipoDocumentos">Tipo de documento</label>
                                 <p-autoComplete name="tipoDocumentos" formControlName="tipoDocumentos"
-                                    [suggestions]="filteredElementTipoDocumento" optionLabel="descripcion"
-                                    emptyMessage="Sin resultados" [dropdown]="true"
+                                    inputId="tipoDocumentos" [suggestions]="filteredElementTipoDocumento"
+                                    optionLabel="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
                                     (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body">
                                     <ng-template let-element>
@@ -38,8 +37,8 @@
                                 </p-autoComplete>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block mb-1 text-sm">Nro. de documento</label>
-                                <input type="text" pInputText #valorDocumento name="numDocumento"
+                                <label class="block mb-1 text-sm" for="numDocumento">Nro. de documento</label>
+                                <input type="text" pInputText #valorDocumento name="numDocumento" id="numDocumento"
                                     formControlName="numDocumento" autocomplete="off" [attr.maxlength]="nroCaracter">
                                 <small class="block text-right text-xs mt-1" *ngIf="nroCaracter !== 0">
                                     {{valorDocumento.value.length || 0}} / {{nroCaracter}}
@@ -64,15 +63,15 @@
         <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
             <div class="text-lg font-semibold">Reporte Solicitudes de Ahorros Oh</div>
             <p-button label="Excel" icon="pi pi-file-excel" styleClass="p-button-success p-button-sm"
-                [disabled]="dataSolicitudes.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
-                tooltipPosition="left"></p-button>
+                [disabled]="dataSolicitudes.length === 0" (click)="exportExcel()" (keydown.enter)="exportExcel()"
+                (keydown)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="left"></p-button>
         </div>
 
         <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
-            [value]="dataSolicitudes" liveResize="true"
-            class="mi-tabla-personalizada" [showCurrentPageReport]="true" [columns]="cols"
-            dataKey="nroSolicitud" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
-            [paginator]="true" [rows]="rows" [totalRecords]="dataSolicitudes.length" [filterDelay]="0">
+            [value]="dataSolicitudes" liveResize="true" class="mi-tabla-personalizada" [showCurrentPageReport]="true"
+            [columns]="cols" dataKey="nroSolicitud"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [rows]="rows" [totalRecords]="dataSolicitudes.length" [filterDelay]="0">
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th scope="col" *ngFor="let col of columns">{{col.header}}</th>
@@ -86,16 +85,19 @@
                         </ng-container>
                         <ng-template #actionColumn>
                             <p-button icon="pi pi-refresh" severity="secondary" pTooltip="Refrescar" showDelay="1000"
-                                hideDelay="300" (click)="getSolicitudes()" rounded raised></p-button>
+                                hideDelay="300" (click)="getSolicitudes()" (keydown.enter)="getSolicitudes()"
+                                (keydown)="getSolicitudes()" rounded raised></p-button>
                         </ng-template>
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon">
+                <tr id="tableWithIcon2">
                     <td style="text-align: center; width: 39px;">
                         <p-button severity="secondary" (click)="onRowMenuClick($event, rowData, menu)"
-                            icon="pi pi-ellipsis-v" pTooltip="Opciones" tooltipPosition="top"></p-button>
+                            (keydown.enter)="onRowMenuClick($event, rowData, menu)"
+                            (keydown)="onRowMenuClick($event, rowData, menu)" icon="pi pi-ellipsis-v"
+                            pTooltip="Opciones" tooltipPosition="top"></p-button>
                         <p-menu appendTo="body" #menu [model]="menuItems" [popup]="true"></p-menu>
                     </td>
                     <td>{{rowData.nroSolicitud}}</td>

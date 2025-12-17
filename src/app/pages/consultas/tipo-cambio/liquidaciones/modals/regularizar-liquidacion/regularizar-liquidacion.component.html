@@ -1,28 +1,28 @@
 <div class="p-fluid space-y-4">
     <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Nº Lote</label>
-            <span class="secondary-text">{{datoLiquidacion.nroLoteLiquidado}}</span>
+            <label for="nroLoteLiquidado" class="font-medium block mb-1">Nº Lote</label>
+            <span id="nroLoteLiquidado" class="secondary-text">{{datoLiquidacion.nroLoteLiquidado}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Fecha Liquidación</label>
-            <span class="secondary-text">{{datoLiquidacion.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+            <label for="fechaHoraLiquidacion" class="font-medium block mb-1">Fecha Liquidación</label>
+            <span id="fechaHoraLiquidacion" class="secondary-text">{{datoLiquidacion.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Nº operación cambio</label>
-            <span class="secondary-text">{{datoLiquidacion.nroCambioMonedaOperacion}}</span>
+            <label for="nroCambioMonedaOperacion" class="font-medium block mb-1">Nº operación cambio</label>
+            <span id="nroCambioMonedaOperacion" class="secondary-text">{{datoLiquidacion.nroCambioMonedaOperacion}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Nº operación proveedor</label>
-            <span class="secondary-text">{{datoLiquidacion.idOperacionPartner}}</span>
+            <label for="idOperacionPartner" class="font-medium block mb-1">Nº operación proveedor</label>
+            <span id="idOperacionPartner" class="secondary-text">{{datoLiquidacion.idOperacionPartner}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Cuenta destino</label>
-            <span class="secondary-text">{{datoLiquidacion.nroOperacionCuentaDestino}}</span>
+            <label for="nroOperacionCuentaDestino" class="font-medium block mb-1">Cuenta destino</label>
+            <span id="nroOperacionCuentaDestino" class="secondary-text">{{datoLiquidacion.nroOperacionCuentaDestino}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Cuenta origen</label>
-            <span class="secondary-text">{{datoLiquidacion.nroOperacionCuentaOrigen}}</span>
+            <label for="nroOperacionCuentaOrigen" class="font-medium block mb-1">Cuenta origen</label>
+            <span id="nroOperacionCuentaOrigen" class="secondary-text">{{datoLiquidacion.nroOperacionCuentaOrigen}}</span>
         </div>
     </div>
 
@@ -30,8 +30,8 @@
         <h3 class="text-lg font-semibold">Modificar Liquidación</h3>
         <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Tipo cambio observado proveedor</label>
-                <p-inputNumber formControlName="importeOrigen" locale="en-US" minFractionDigits="2"
+                <label for="importeOrigen" class="block mb-1 text-sm">Tipo cambio observado proveedor</label>
+                <p-inputNumber id="importeOrigen" formControlName="importeOrigen" locale="en-US" minFractionDigits="2"
                     maxFractionDigits="4" [inputStyle]="{'text-align': 'right'}" appendTo="body"></p-inputNumber>
             </div>
         </div>
