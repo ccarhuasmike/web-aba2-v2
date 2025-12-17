@@ -171,7 +171,7 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
 
     onNumDocumentoInput(event: Event) {
         const input = event.target as HTMLInputElement;
-        const soloNumeros = input.value.replaceAll(/[^0-9]/g, '');
+        const soloNumeros = input.value.replaceAll(/\D/g, '');
 
         this.formBusqueda.get('numDocumento')?.setValue(soloNumeros, {
             emitEvent: false
