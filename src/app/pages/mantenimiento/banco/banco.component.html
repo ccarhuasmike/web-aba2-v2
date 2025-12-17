@@ -4,7 +4,7 @@
     </div>
     <div class="md:col-span-1">
         <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idBanco" [rows]="rows" [value]="data"
             [totalRecords]="data.length" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loading">

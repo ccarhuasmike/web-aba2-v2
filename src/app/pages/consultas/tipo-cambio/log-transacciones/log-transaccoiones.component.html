@@ -33,7 +33,7 @@
                             <div class="md:col-span-3">
                                 <label for="tipoDocumento" class="block mb-1 text-sm">Tipo de documento</label>
                                 <p-autoComplete id="tipoDocumento" formControlName="tipoDocumento" [suggestions]="filteredElementTipoDocumento"
-                                    field="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
+                                    optionLabel="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
                                     (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body"
                                     styleClass="w-full">
@@ -73,7 +73,7 @@
         </div>
 
         <p-table #dt resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idCambioMonedaOperacion" [columns]="cols"
             [rows]="rows" [value]="datosLogTransacciones" [totalRecords]="datosLogTransacciones.length"

@@ -1,16 +1,16 @@
 <div class="p-fluid space-y-4">
     <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Nº Lote</label>
-            <span class="secondary-text">{{datosPago.nroLoteLiquidado}}</span>
+            <label for="nroLoteLiquidado" class="font-medium block mb-1">Nº Lote</label>
+            <span id="nroLoteLiquidado" class="secondary-text">{{datosPago.nroLoteLiquidado}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Fecha Liquidación</label>
-            <span class="secondary-text">{{datosPago.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+            <label for="fechaHoraLiquidacion" class="font-medium block mb-1">Fecha Liquidación</label>
+            <span id="fechaHoraLiquidacion" class="secondary-text">{{datosPago.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</span>
         </div>
         <div class="md:col-span-4">
-            <label class="font-medium block mb-1">Razón social proveedor</label>
-            <span class="secondary-text">{{datosProveedor?.razonSocial}}</span>
+            <label for="razonSocial" class="font-medium block mb-1">Razón social proveedor</label>
+            <span id="razonSocial" class="secondary-text">{{datosProveedor?.razonSocial}}</span>
         </div>
     </div>
 
@@ -18,10 +18,10 @@
         <h3 class="text-lg font-semibold">Datos de pago</h3>
         <div class="grid grid-flow-row-dense md:grid-cols-12 gap-4">
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Banco</label>
-                <p-autoComplete formControlName="banco" [suggestions]="filteredElement"
+                <label for="banco" class="block mb-1 text-sm">Banco</label>
+                <p-autoComplete id="banco" formControlName="banco" [suggestions]="filteredElement"
                     (completeMethod)="filterElementBanco($event, cuentasProveedor)"
-                    (ngModelChange)="changeModelBanco($event)" field="nombreBanco" emptyMessage="Sin resultados"
+                    (ngModelChange)="changeModelBanco($event)" optionLabel="nombreBanco" emptyMessage="Sin resultados"
                     [dropdown]="true" appendTo="body" styleClass="w-full">
                     <ng-template let-element>
                         <div>{{element.nombreBanco}}</div>
@@ -29,24 +29,24 @@
                 </p-autoComplete>
             </div>
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Tipo de cuenta</label>
-                <input type="text" pInputText class="w-full" formControlName="tipoCuenta" autocomplete="off">
+                <label for="tipoCuenta" class="block mb-1 text-sm">Tipo de cuenta</label>
+                <input id="tipoCuenta" type="text" pInputText class="w-full" formControlName="tipoCuenta" autocomplete="off">
             </div>
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Cuenta bancaria</label>
-                <input type="text" pInputText class="w-full" formControlName="numCuenta" autocomplete="off">
+                <label for="numCuenta" class="block mb-1 text-sm">Cuenta bancaria</label>
+                <input id="numCuenta" type="text" pInputText class="w-full" formControlName="numCuenta" autocomplete="off">
             </div>
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Tipo moneda</label>
-                <span class="secondary-text">{{tipoMonedaProveedor?.valCadCorto}}</span>
+                <label for="valCadCorto" class="block mb-1 text-sm">Tipo moneda</label>
+                <span id="valCadCorto" class="secondary-text">{{tipoMonedaProveedor?.valCadCorto}}</span>
             </div>
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Monto a pagar</label>
-                <span class="secondary-text">{{datosPago.netoEnviarPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
+                <label for="netoEnviarPartner" class="block mb-1 text-sm">Monto a pagar</label>
+                <span id="netoEnviarPartner" class="secondary-text">{{datosPago.netoEnviarPartner | currency:"&nbsp;":"symbol":'1.2-2'}}</span>
             </div>
             <div class="md:col-span-4">
-                <label class="block mb-1 text-sm">Estado liquidación</label>
-                <p-tag [styleClass]="getTagClass(datosPago.codigoEstado)"
+                <label for="descEstadoTipoCambio" class="block mb-1 text-sm">Estado liquidación</label>
+                <p-tag id="descEstadoTipoCambio" [styleClass]="getTagClass(datosPago.codigoEstado)"
                     [value]="datosPago.descEstadoTipoCambio"></p-tag>
             </div>
         </div>

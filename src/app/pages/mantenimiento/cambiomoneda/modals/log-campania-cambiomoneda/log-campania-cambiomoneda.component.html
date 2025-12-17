@@ -3,7 +3,7 @@
 
 <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
     <div class="md:col-span-1">
-        <p-table #dt1  styleClass="p-datatable-striped p-datatable-gridlines"
+        <p-table #dt1  class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" dataKey="idCambioMonedaCamLog" [rows]="rows" [value]="datosLogs"
             [totalRecords]="datosLogs.length" [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loadingLogs">

@@ -70,7 +70,7 @@
 
         <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
             [value]="dataSolicitudes" liveResize="true"
-            styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true" [columns]="cols"
+            class="mi-tabla-personalizada" [showCurrentPageReport]="true" [columns]="cols"
             dataKey="nroSolicitud" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
             [paginator]="true" [rows]="rows" [totalRecords]="dataSolicitudes.length" [filterDelay]="0">
             <ng-template pTemplate="header" let-columns>

@@ -4,7 +4,7 @@
         <span class="text-xl font-semibold">Logs Notificaciones</span>
     </div>
 
-    <p-table #dt1 rowExpandMode="single" styleClass="p-datatable-striped p-datatable-gridlines"
+    <p-table #dt1 rowExpandMode="single" class="mi-tabla-personalizada"
         (onRowExpand)="getOtps($event)"
         currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
         [showCurrentPageReport]="true" dataKey="operationId" [rows]="rows" [value]="datosNotificaciones"

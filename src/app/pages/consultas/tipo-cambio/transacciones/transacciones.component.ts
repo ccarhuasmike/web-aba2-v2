@@ -400,14 +400,17 @@ export class TransaccionesComponent implements OnInit, OnDestroy {
         this.dialogRef = this.dialogService.open(RegularizarTransaccionComponent, {
             header: 'Regularizar Transacción',
             width: '60vw',
+            modal: true,
+            styleClass: 'header-modal',
+            dismissableMask: true,  // permite cerrar al hacer click fuera
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
             data: {
                 datosTrx,
                 estadosTipoCambio: this.estadosTipoCambio
-            },
-            breakpoints: {
-                '960px': '80vw',
-                '640px': '95vw'
-            }
+            }           
         });
 
         if (this.dialogRef) {

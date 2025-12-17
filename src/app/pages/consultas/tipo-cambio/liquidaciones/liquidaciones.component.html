@@ -53,7 +53,7 @@
         </div>
 
         <p-table #dtResumen resizableColumns="true" rowExpandMode="single" [scrollable]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableResumen"
             dataKey="nroLoteLiquidado" [columns]="cols" [rows]="rows" [value]="datosLiquidaciones"
@@ -120,87 +120,85 @@
     </div>
 
     <div class="md:col-span-1">
-        <div class="card">
-            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-                <div class="flex flex-col">
-                    <span class="text-lg font-semibold">Detalle</span>
-                    <small *ngIf="datoLiquidado">Lote: {{datoLiquidado?.nroLoteLiquidado}}</small>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium" *ngIf="datoLiquidado">
-                        Lote: {{datoLiquidado?.nroLoteLiquidado}}
-                    </span>
-                    <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
-                        [disabled]="datosLiquidacionDetalle.length === 0" (click)="exportExcelDetalle()"
-                        pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
-                </div>
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <div class="flex flex-col">
+                <span class="text-lg font-semibold">Detalle</span>
+                <small *ngIf="datoLiquidado">Lote: {{datoLiquidado?.nroLoteLiquidado}}</small>
             </div>
-            <p-table #dtDetalle resizableColumns="true" rowExpandMode="single" [scrollable]="true"
-                styleClass="p-datatable-striped p-datatable-gridlines"
-                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
-                [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableDetalle"
-                dataKey="nroCambioMonedaOperacion" [columns]="colsDetalle" [rows]="rows"
-                [value]="datosLiquidacionDetalle" [totalRecords]="datosLiquidacionDetalle.length"
-                [loading]="loadingDatosLiquidacionDetalle" (onPage)="onPaginadoDetalle($event)">
-                <ng-template pTemplate="colgroup" let-columns>
-                    <colgroup>
-                        <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
-                    </colgroup>
-                </ng-template>
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th *ngFor="let col of columns" scope="col">
-                            {{col.header}}
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData>
-                    <tr id="tableWithoutIcon">
-                        <td class="text-center">
-                            <p-menu #menuDetalle [popup]="true" [model]="getDetalleActions(rowData)">
-                            </p-menu>
-                            <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
-                                (click)="menuDetalle.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
-                        </td>
-                        <td>{{rowData.nroCambioMonedaOperacion}}</td>
-                        <td>{{rowData.idOperacionPartner}}</td>
-                        <td>{{rowData.cuentaOrigen}}</td>
-                        <td>{{rowData.descripcionMonedaOrigen}}</td>
-                        <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
-                        </td>
-                        <td class="text-right">{{rowData.importeOrigenOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                        <td>{{rowData.nroOperacionCuentaOrigen}}</td>
-                        <td>{{rowData.cuentaDestino}}</td>
-                        <td>{{rowData.descripcionMonedaDestino}}</td>
-                        <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
-                        </td>
-                        <td class="text-right">{{rowData.importeDestinoOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                        <td>{{rowData.nroOperacionCuentaDestino}}</td>
-                        <td class="text-right">{{rowData.spreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                        <td class="text-right">{{rowData.spreadVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
-                        <td>{{rowData.descEstadoTipoCambio}}</td>
-                        <td>{{rowData.tipoDocIdentidadDescripcion}}</td>
-                        <td>{{rowData.numeroDocIdentidad}}</td>
-                        <td>{{rowData.tipoOperacionOh}}</td>
-                        <td>{{rowData.fechaHoraConfirmacionUsuario | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-                        <td>{{rowData.fechaHoraEjecucionOperacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-                        <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-                        <td class="text-right">{{rowData.tipoCambioOh | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
-                        <td class="text-right">{{rowData.tipoCambioPartner | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
-                        <td class="text-right">{{rowData.tipoCambioTransaccion | currency:"&nbsp;":"symbol":'1.4-4'}}
-                        </td>
-                        <td class="text-right">{{rowData.tipoCambioLiqPartner | currency:"&nbsp;":"symbol":'1.4-4'}}
-                        </td>
-                        <td>{{rowData.idConsultaPartner}}</td>
-                        <td>{{rowData.nroLoteLiquidado}}</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="28" style="text-align:left">Sin registros encontrados</td>
-                    </tr>
-                </ng-template>
-            </p-table>
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-medium" *ngIf="datoLiquidado">
+                    Lote: {{datoLiquidado?.nroLoteLiquidado}}
+                </span>
+                <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                    [disabled]="datosLiquidacionDetalle.length === 0" (click)="exportExcelDetalle()"
+                    pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
+            </div>
         </div>
+        <p-table #dtDetalle resizableColumns="true" rowExpandMode="single" [scrollable]="true"
+            class="mi-tabla-personalizada"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableDetalle"
+            dataKey="nroCambioMonedaOperacion" [columns]="colsDetalle" [rows]="rows" [value]="datosLiquidacionDetalle"
+            [totalRecords]="datosLiquidacionDetalle.length" [loading]="loadingDatosLiquidacionDetalle"
+            (onPage)="onPaginadoDetalle($event)">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" scope="col">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithoutIcon">
+                    <td class="text-center">
+                        <p-menu #menuDetalle [popup]="true" [model]="getDetalleActions(rowData)">
+                        </p-menu>
+                        <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
+                            (click)="menuDetalle.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
+                    </td>
+                    <td>{{rowData.nroCambioMonedaOperacion}}</td>
+                    <td>{{rowData.idOperacionPartner}}</td>
+                    <td>{{rowData.cuentaOrigen}}</td>
+                    <td>{{rowData.descripcionMonedaOrigen}}</td>
+                    <td class="text-right">{{rowData.importeOrigenPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.importeOrigenOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td>{{rowData.nroOperacionCuentaOrigen}}</td>
+                    <td>{{rowData.cuentaDestino}}</td>
+                    <td>{{rowData.descripcionMonedaDestino}}</td>
+                    <td class="text-right">{{rowData.importeDestinoPartner | currency:"&nbsp;":"symbol":'1.2-2'}}
+                    </td>
+                    <td class="text-right">{{rowData.importeDestinoOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td>{{rowData.nroOperacionCuentaDestino}}</td>
+                    <td class="text-right">{{rowData.spreadCompraOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td class="text-right">{{rowData.spreadVentaOh | currency:"&nbsp;":"symbol":'1.2-2'}}</td>
+                    <td>{{rowData.descEstadoTipoCambio}}</td>
+                    <td>{{rowData.tipoDocIdentidadDescripcion}}</td>
+                    <td>{{rowData.numeroDocIdentidad}}</td>
+                    <td>{{rowData.tipoOperacionOh}}</td>
+                    <td>{{rowData.fechaHoraConfirmacionUsuario | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td>{{rowData.fechaHoraEjecucionOperacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                    <td class="text-right">{{rowData.tipoCambioOh | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
+                    <td class="text-right">{{rowData.tipoCambioPartner | currency:"&nbsp;":"symbol":'1.4-4'}}</td>
+                    <td class="text-right">{{rowData.tipoCambioTransaccion | currency:"&nbsp;":"symbol":'1.4-4'}}
+                    </td>
+                    <td class="text-right">{{rowData.tipoCambioLiqPartner | currency:"&nbsp;":"symbol":'1.4-4'}}
+                    </td>
+                    <td>{{rowData.idConsultaPartner}}</td>
+                    <td>{{rowData.nroLoteLiquidado}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="28" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>

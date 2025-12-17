@@ -21,7 +21,7 @@
                             <div class="md:col-span-6">
                                 <label for="proveedor" class="block mb-1 text-sm">Partner</label>
                                 <p-autoComplete id="proveedor" formControlName="proveedor"
-                                    [suggestions]="filteredElementProveedor" field="nombreGenerico"
+                                    [suggestions]="filteredElementProveedor" optionLabel="nombreGenerico"
                                     emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementProveedor($event, proveedores)"
                                     (ngModelChange)="changeModelProveedor($event)" appendTo="body" styleClass="w-full">
@@ -53,7 +53,7 @@
                 tooltipPosition="bottom"></button>
         </div>
         <p-table #dt resizableColumns="true" rowExpandMode="single" [scrollable]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" [columns]="cols" [rows]="rows"
             dataKey="idCambioMonedaPreLiqDiariaRes" [value]="datosLiquidaciones"
@@ -106,7 +106,7 @@
                     pTooltip="Descargar excel" tooltipPosition="bottom"></button>
             </div>
             <p-table #dt2 resizableColumns="true" columnResizeMode="expand"
-                styleClass="p-datatable-striped p-datatable-gridlines"
+                class="mi-tabla-personalizada"
                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
                 [showCurrentPageReport]="true" [value]="datosLiquidacionDetalle"
                 [totalRecords]="datosLiquidacionDetalle.length" [columns]="colsDetalle" [rows]="rows"

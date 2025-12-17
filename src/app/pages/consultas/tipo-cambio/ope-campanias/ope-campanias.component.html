@@ -6,7 +6,6 @@
             <span class="text-xl font-semibold">Operaciones por Campaña</span>
         </div>
     </div>
-
     <div class="md:col-span-1">
         <p-accordion [(value)]="panelOpenState">
             <p-accordion-panel value="0">
@@ -19,17 +18,19 @@
                     <form [formGroup]="formBusqueda" novalidate>
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker formControlName="fechaRangoOperacion"  dateFormat="dd/mm/yy"
-                                     yearRange="1940:2030"
-                                    selectionMode="range" [readonlyInput]="true" appendTo="body" styleClass="w-full">
+                                <label for="fechaRangoOperacion" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker id="fechaRangoOperacion" formControlName="fechaRangoOperacion"
+                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
+                                    [readonlyInput]="true" appendTo="body" styleClass="w-full">
                                 </p-datepicker>
                             </div>
                             <div class="md:col-span-4">
-                                <label class="block mb-1 text-sm">Campaña</label>
-                                <p-autoComplete formControlName="campania" [suggestions]="filteredElementCampanias"
-                                    (completeMethod)="filterElementCampania($event, campanias)" field="descripcion"
-                                    emptyMessage="Sin resultados" [dropdown]="true" appendTo="body" styleClass="w-full">
+                                <label for="campania" class="block mb-1 text-sm">Campaña</label>
+                                <p-autoComplete id="campania" formControlName="campania"
+                                    [suggestions]="filteredElementCampanias"
+                                    (completeMethod)="filterElementCampania($event, campanias)"
+                                    optionLabel="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
+                                    appendTo="body" styleClass="w-full">
                                     <ng-template let-element>
                                         <div>{{element.descripcion}}</div>
                                     </ng-template>
@@ -52,16 +53,17 @@
     <div class="md:col-span-1">
         <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
             <span class="text-lg font-semibold">Operaciones</span>
-            <button pButton label="Excel" icon="pi pi-file-excel"
-                class="p-button-outlined p-button-success" [disabled]="datosOperaciones.length === 0"
-                (click)="exportExcel()" pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosOperaciones.length === 0" (click)="exportExcel()" pTooltip="Descargar excel"
+                tooltipPosition="bottom"></button>
         </div>
-        <p-table #dtResumen resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+        <p-table #dtResumen resizableColumns="true" rowExpandMode="single" [scrollable]="true"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idCambioMonedaCamOpeRes" [columns]="cols"
             [rows]="rows" [value]="datosOperaciones" [totalRecords]="datosOperaciones.length"
-            [loading]="loadingDatosOperaciones" [scrollHeight]="heightTableResumen" (onPage)="onPaginadoResumen($event)">
+            [loading]="loadingDatosOperaciones" [scrollHeight]="heightTableResumen"
+            (onPage)="onPaginadoResumen($event)">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                     <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
@@ -69,13 +71,15 @@
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr id="tableWithIcon" (click)="getOperacionesDetalle(rowData)" style="cursor: pointer;">
+                <tr id="tableWithIcon" (click)="getOperacionesDetalle(rowData)"
+                    (keydown.enter)="getOperacionesDetalle(rowData)" (keydown)="getOperacionesDetalle(rowData)"
+                    style="cursor: pointer;">
                     <td>{{rowData.idCambioMonedaCamOpeRes}}</td>
                     <td>{{rowData.idCambioMonedaCampana}}</td>
                     <td>{{rowData.fechaOperacion}}</td>
@@ -98,53 +102,51 @@
     </div>
 
     <div class="md:col-span-1">
-        <div class="card">
-            <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-                <div class="flex flex-col">
-                    <span class="text-lg font-semibold">Detalle</span>
-                    <small *ngIf="datoOperacion">Operación: {{datoOperacion?.idCambioMonedaCamOpeRes}}</small>
-                </div>
-                <button pButton label="Excel" icon="pi pi-file-excel"
-                    class="p-button-outlined p-button-success" [disabled]="datosOperacionesDetalle.length === 0"
-                    (click)="exportExcelDetalle()" pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <div class="flex flex-col">
+                <span class="text-lg font-semibold">Detalle</span>
+                <small *ngIf="datoOperacion">Operación: {{datoOperacion?.idCambioMonedaCamOpeRes}}</small>
             </div>
-            <p-table #dtDetalle resizableColumns="true" rowExpandMode="single"  [scrollable]="true"
-                styleClass="p-datatable-striped p-datatable-gridlines"
-                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
-                [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableDetalle"
-                dataKey="idCambioMonedaCamOpeDet" [columns]="colsDetalle" [rows]="rows"
-                [value]="datosOperacionesDetalle" [totalRecords]="datosOperacionesDetalle.length"
-                [loading]="loadingDatosOperacionesDetalle" (onPage)="onPaginadoDetalle($event)">
-                <ng-template pTemplate="colgroup" let-columns>
-                    <colgroup>
-                        <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
-                    </colgroup>
-                </ng-template>
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th *ngFor="let col of columns">
-                            {{col.header}}
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData>
-                    <tr id="tableWithoutIcon">
-                        <td>{{rowData.idCambioMonedaCamOpeDet}}</td>
-                        <td>{{rowData.idCambioMonedaOperacion}}</td>
-                        <td>{{rowData.fechaOperacion}}</td>
-                        <td class="text-right">{{rowData.importeCampana}}</td>
-                        <td class="text-right">{{rowData.spreadCompraOh}}</td>
-                        <td class="text-right">{{rowData.spreadVentaOh}}</td>
-                        <td>{{rowData.usuarioRegistro}}</td>
-                        <td>{{rowData.fechaRegistro}}</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="8" style="text-align:left">Sin registros encontrados</td>
-                    </tr>
-                </ng-template>
-            </p-table>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosOperacionesDetalle.length === 0" (click)="exportExcelDetalle()"
+                pTooltip="Descargar detalle" tooltipPosition="bottom"></button>
         </div>
+        <p-table #dtDetalle resizableColumns="true" rowExpandMode="single" [scrollable]="true"
+            class="mi-tabla-personalizada"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [showCurrentPageReport]="true" [filterDelay]="0" [scrollHeight]="heightTableDetalle"
+            dataKey="idCambioMonedaCamOpeDet" [columns]="colsDetalle" [rows]="rows" [value]="datosOperacionesDetalle"
+            [totalRecords]="datosOperacionesDetalle.length" [loading]="loadingDatosOperacionesDetalle"
+            (onPage)="onPaginadoDetalle($event)">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [ngStyle]="{width: col.width}">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" scope="col">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithoutIcon">
+                    <td>{{rowData.idCambioMonedaCamOpeDet}}</td>
+                    <td>{{rowData.idCambioMonedaOperacion}}</td>
+                    <td>{{rowData.fechaOperacion}}</td>
+                    <td class="text-right">{{rowData.importeCampana}}</td>
+                    <td class="text-right">{{rowData.spreadCompraOh}}</td>
+                    <td class="text-right">{{rowData.spreadVentaOh}}</td>
+                    <td>{{rowData.usuarioRegistro}}</td>
+                    <td>{{rowData.fechaRegistro}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </div>

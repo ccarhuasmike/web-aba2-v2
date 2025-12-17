@@ -20,7 +20,6 @@
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
                                 <label for="fechaRangoTrx" class="block mb-1 text-sm">Rango de fechas</label>
-
                                 <p-datepicker styleClass="w-full" inputId="fechaRangoTrx"
                                     formControlName="fechaRangoTrx" dateFormat="dd/mm/yy" yearRange="1940:2030"
                                     selectionMode="range" [readonlyInput]="true" appendTo="body">
@@ -114,7 +113,7 @@
         </div>
 
         <p-table #dt resizableColumns="true" rowExpandMode="single" [scrollable]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines"
+            class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" dataKey="nroCambioMonedaOperacion" [columns]="cols"
             [rows]="rows" [value]="datosTipoCambioTrx" [totalRecords]="datosTipoCambioTrx.length"

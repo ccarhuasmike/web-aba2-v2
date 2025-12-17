@@ -45,7 +45,7 @@
                 <div class="md:col-span-6">
                     <label for="monedaEstado" class="block mb-1 text-sm">Estado transacción</label>
                     <p-autoComplete id="monedaEstado" formControlName="monedaEstado" [suggestions]="filteredElementEstadoTipoCambio"
-                        field="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
+                        optionLabel="descripcionCorta" emptyMessage="Sin resultados" [dropdown]="true"
                         (completeMethod)="filterElementEstadoTipoCambio($event, estadosTipoCambio)" appendTo="body"
                         styleClass="w-full">
                         <ng-template let-element>
