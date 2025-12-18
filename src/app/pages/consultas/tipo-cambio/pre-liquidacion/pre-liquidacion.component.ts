@@ -275,7 +275,9 @@ export class PreLiquidacionComponent implements OnInit {
         });
     }
 
+    
     filterElementProveedor(event: any, data: any): void {
+        debugger;
         this.filteredElementProveedor = [];
         const query = event?.query?.toLowerCase() ?? '';
         if (!data) {
@@ -286,6 +288,7 @@ export class PreLiquidacionComponent implements OnInit {
     }
 
     changeModelProveedor(event: any): void {
+        debugger;
         if (!event) {
             this.formBusqueda.get('proveedor')?.setValue(null);
             this.datosLiquidaciones = [];

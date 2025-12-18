@@ -21,6 +21,7 @@
                             <div class="md:col-span-6">
                                 <label for="proveedor" class="block mb-1 text-sm">Partner</label>
                                 <p-autoComplete id="proveedor" formControlName="proveedor"
+                                
                                     [suggestions]="filteredElementProveedor" optionLabel="nombreGenerico"
                                     emptyMessage="Sin resultados" [dropdown]="true"
                                     (completeMethod)="filterElementProveedor($event, proveedores)"
