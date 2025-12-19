@@ -75,11 +75,19 @@
                 <tr id="tableWithIcon3" style="cursor: pointer;" (click)="getLiquidacionDetalle(rowData)"
                     (keydown.enter)="getLiquidacionDetalle(rowData)" (keydown)="getLiquidacionDetalle(rowData)">
                     <td class="text-center">
-                        <p-menu #menuResumen [popup]="true" [model]="getResumenActions(rowData)">
+
+                          <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"
+                            icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>       
+                        
+                        <!-- <p-menu #menuResumen [popup]="true" [model]="getResumenActions(rowData)">
                         </p-menu>
                         <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
                             (click)="menuResumen.toggle($event)" (click)="$event.stopPropagation()" pTooltip="Acciones"
-                            tooltipPosition="top"></button>
+                            tooltipPosition="top"></button> -->
+
+
+
                     </td>
                     <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                     <td>{{rowData.idCambioMonedaLiqDiariaRes}}</td>

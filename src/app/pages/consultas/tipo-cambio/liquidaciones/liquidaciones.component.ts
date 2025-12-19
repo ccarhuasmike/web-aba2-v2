@@ -262,7 +262,7 @@ export class LiquidacionesComponent implements OnInit {
                 this.loadingDatosLiquidaciones = false;
 
                 if (resp['codigo'] === 0) {
-                    this.datosLiquidaciones = (resp.data || []).map((item:any) => {
+                    this.datosLiquidaciones = (resp.data || []).map((item: any) => {
                         const monedaEnvioPartner = this.tipoMonedas.find((e: any) => e.id == item.monedaEnviarPartner);
                         const monedaRecibirPartner = this.tipoMonedas.find((e: any) => e.id == item.monedaRecibirPartner);
                         const estadoTipoCambio = this.estadosTipoCambio.find((e: any) => e.idCambioMonedaEstado == item.idCambioMonedaEstado);
@@ -328,7 +328,7 @@ export class LiquidacionesComponent implements OnInit {
                 this.loadingDatosLiquidacionDetalle = false;
 
                 if (resp['codigo'] === 0) {
-                    this.datosLiquidacionDetalle = (resp.data || []).map((item:any) => {
+                    this.datosLiquidacionDetalle = (resp.data || []).map((item: any) => {
                         const tipoDocumentoIdentidad = this.tipoDocumentos.find((e: any) => e.id == item.tipoDocIdentidad);
                         const monedaOrigen = this.tipoMonedas.find((e: any) => e.id == item.monedaOrigen);
                         const monedaDestino = this.tipoMonedas.find((e: any) => e.id == item.monedaDestino);
@@ -355,21 +355,72 @@ export class LiquidacionesComponent implements OnInit {
         });
     }
 
-    getResumenActions(rowData: any): MenuItem[] {
+
+
+    // getResumenActions(rowData: any): MenuItem[] {
+    //     return [
+    //         {
+    //             label: 'Pagar',
+    //             icon: 'pi pi-credit-card',
+    //             disabled: !(rowData.tipoEstado == 2 && (rowData.codigoEstado === '01' || rowData.codigoEstado === '03')),
+    //             command: () => this.openDialogPagoLiquidacion(rowData)
+    //         },
+    //         {
+    //             label: 'Asientos contables',
+    //             icon: 'pi pi-book',
+    //             command: () => this.openDialogAsientosContables(rowData)
+    //         }
+    //     ];
+    // }
+
+
+    menuItems: any[] = [];
+    onButtonClick(event: Event, rowData: any, menu: any) {
+        this.menuItems = this.getMenuItems(rowData);
+        menu.toggle(event);
+    }
+
+    getMenuItems(rowData: any, menu?: any): MenuItem[] {
         return [
-            {
-                label: 'Pagar',
-                icon: 'pi pi-credit-card',
-                disabled: !(rowData.tipoEstado == 2 && (rowData.codigoEstado === '01' || rowData.codigoEstado === '03')),
-                command: () => this.openDialogPagoLiquidacion(rowData)
-            },
-            {
-                label: 'Asientos contables',
-                icon: 'pi pi-book',
-                command: () => this.openDialogAsientosContables(rowData)
-            }
+            this.createMenuItem(
+                'Pagar',
+                'pi pi-credit-card',
+                () => this.openDialogPagoLiquidacion(rowData),
+                !(rowData.tipoEstado == 2 && (rowData.codigoEstado === '01' || rowData.codigoEstado === '03')),//disabled
+                menu
+            ),
+            this.createMenuItem(
+                'Asientos contables',
+                'pi pi-book',
+                () => this.openDialogAsientosContables(rowData),
+                menu
+            )
         ];
     }
+
+    private createMenuItem(
+        label: string,
+        icon: string,
+        action: () => void,
+        disabled?: boolean,
+        menu?: any
+    ): MenuItem {
+        return {
+            label,
+            icon,
+            ...(disabled !== undefined && { disabled }),
+            command: () => this.executeMenuAction(action, menu)
+        };
+    }
+
+
+    private executeMenuAction(action: () => void, menu?: any): void {
+        setTimeout(() => {
+            action();
+            menu?.hide();
+        }, 5);
+    }
+
 
     getDetalleActions(rowData: any): MenuItem[] {
         return [
