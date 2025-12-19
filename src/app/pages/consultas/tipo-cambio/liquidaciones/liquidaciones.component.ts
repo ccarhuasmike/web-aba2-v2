@@ -354,26 +354,6 @@ export class LiquidacionesComponent implements OnInit {
             }
         });
     }
-
-
-
-    // getResumenActions(rowData: any): MenuItem[] {
-    //     return [
-    //         {
-    //             label: 'Pagar',
-    //             icon: 'pi pi-credit-card',
-    //             disabled: !(rowData.tipoEstado == 2 && (rowData.codigoEstado === '01' || rowData.codigoEstado === '03')),
-    //             command: () => this.openDialogPagoLiquidacion(rowData)
-    //         },
-    //         {
-    //             label: 'Asientos contables',
-    //             icon: 'pi pi-book',
-    //             command: () => this.openDialogAsientosContables(rowData)
-    //         }
-    //     ];
-    // }
-
-
     menuItems: any[] = [];
     onButtonClick(event: Event, rowData: any, menu: any) {
         this.menuItems = this.getMenuItems(rowData);
