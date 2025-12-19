@@ -380,6 +380,7 @@ export class LiquidacionesComponent implements OnInit {
         menu.toggle(event);
     }
 
+
     getMenuItems(rowData: any, menu?: any): MenuItem[] {
         return [
             this.createMenuItem(
@@ -422,21 +423,34 @@ export class LiquidacionesComponent implements OnInit {
     }
 
 
-    getDetalleActions(rowData: any): MenuItem[] {
-        return [
-            {
-                label: 'Regularizar detalle',
-                icon: 'pi pi-pencil',
-                command: () => this.openDialogRegularizarLiquidacion(rowData)
-            }
-        ];
+    menuItemsDetalle: any[] = [];
+    onButtonDetalleClick(event: Event, rowData: any, menu: any) {
+        this.menuItemsDetalle = this.getMenuItemsDetalle(rowData);
+        menu.toggle(event);
     }
 
+    getMenuItemsDetalle(rowData: any, menu?: any): MenuItem[] {
+        return [
+            this.createMenuItem(
+                'Regularizar detalle',
+                'pi pi-pencil',
+                () => this.openDialogRegularizarLiquidacion(rowData),
+                menu
+            )
+        ];
+    }
     openDialogPagoLiquidacion(data: any): void {
         this.dialogRef = this.dialogService.open(PagoLiquidacionComponent, {
             header: 'Pagar Liquidación',
             width: '50vw',
-            data
+            modal: true,
+            styleClass: 'header-modal',
+            dismissableMask: true,  // permite cerrar al hacer click fuera
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: data
         });
 
         if (this.dialogRef) {
@@ -457,7 +471,14 @@ export class LiquidacionesComponent implements OnInit {
         this.dialogRef = this.dialogService.open(RegularizarLiquidacionComponent, {
             header: 'Regularizar Liquidación',
             width: '50vw',
-            data
+            modal: true,
+            styleClass: 'header-modal',
+            dismissableMask: true,  // permite cerrar al hacer click fuera
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: data
         });
 
         if (this.dialogRef) {
@@ -478,7 +499,14 @@ export class LiquidacionesComponent implements OnInit {
         this.dialogRef = this.dialogService.open(AsientosContableComponent, {
             header: 'Asientos Contables',
             width: '60vw',
-            data
+            modal: true,
+            styleClass: 'header-modal',
+            dismissableMask: true,  // permite cerrar al hacer click fuera
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            data: data
         });
     }
 

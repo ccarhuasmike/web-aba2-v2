@@ -75,19 +75,9 @@
                 <tr id="tableWithIcon3" style="cursor: pointer;" (click)="getLiquidacionDetalle(rowData)"
                     (keydown.enter)="getLiquidacionDetalle(rowData)" (keydown)="getLiquidacionDetalle(rowData)">
                     <td class="text-center">
-
-                          <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)" (keydown.enter)="onButtonClick($event, rowData, menusss)"
-                            icon="pi pi-ellipsis-v" />
-                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>       
-                        
-                        <!-- <p-menu #menuResumen [popup]="true" [model]="getResumenActions(rowData)">
-                        </p-menu>
-                        <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
-                            (click)="menuResumen.toggle($event)" (click)="$event.stopPropagation()" pTooltip="Acciones"
-                            tooltipPosition="top"></button> -->
-
-
-
+                        <p-button severity="secondary" (click)="onButtonClick($event, rowData, menusss)"
+                            (keydown.enter)="onButtonClick($event, rowData, menusss)" icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menusss [model]="menuItems" [popup]="true"></p-menu>
                     </td>
                     <td>{{rowData.fechaHoraLiquidacion | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                     <td>{{rowData.idCambioMonedaLiqDiariaRes}}</td>
@@ -164,10 +154,15 @@
             <ng-template pTemplate="body" let-rowData>
                 <tr id="tableWithoutIcon">
                     <td class="text-center">
-                        <p-menu #menuDetalle [popup]="true" [model]="getDetalleActions(rowData)">
+
+                         <p-button severity="secondary" (click)="onButtonDetalleClick($event, rowData, menuDetalle)"
+                            (keydown.enter)="onButtonDetalleClick($event, rowData, menuDetalle)" icon="pi pi-ellipsis-v" />
+                        <p-menu appendTo="body" #menuDetalle [model]="menuItemsDetalle" [popup]="true"></p-menu>
+
+                        <!-- <p-menu #menuDetalle [popup]="true" [model]="getDetalleActions(rowData)">
                         </p-menu>
                         <button type="button" pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded"
-                            (click)="menuDetalle.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button>
+                            (click)="menuDetalle.toggle($event)" pTooltip="Acciones" tooltipPosition="top"></button> -->
                     </td>
                     <td>{{rowData.nroCambioMonedaOperacion}}</td>
                     <td>{{rowData.idOperacionPartner}}</td>
