@@ -318,7 +318,15 @@ export class SolicitudesAhorrosohComponent implements OnInit {
 
   openDialogActualizarDatos(data: any) {
     const dialogRef = this.dialog.open(EditarInfoSolicitudComponent, {
-      width: '1000px',
+      header: 'Editar Información Solicitud',
+      width: '90vw',
+      modal: true,
+      styleClass: 'header-modal',
+      dismissableMask: true,  // permite cerrar al hacer click fuera
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
       data: data
     });
 

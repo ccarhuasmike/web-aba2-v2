@@ -102,12 +102,12 @@
             [value]="data" [columns]="cols" [rows]="rows">
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         {{col.header}}
                     </th>
                 </tr>
                 <tr id="tableWithIcon_1">
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" scope="col">
                         <input *ngIf="col.field" class="w-full" pInputText type="text"
                             (input)="dt.filter($event.target.value, col.field, 'startsWith')"
                             placeholder="Filtrar (comienza)">
@@ -121,11 +121,15 @@
                             <ng-template pTemplate="item" let-item>
                                 <ng-container *ngIf="item.restrictedRoles?.length; else defaultItem">
                                     <span *appDisableContentByRole="item.restrictedRoles">
-                                        <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
+                                        
+                                        
+                                        <!-- <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
                                             <span class="p-menuitem-icon" [ngClass]="item.icon"
                                                 *ngIf="item.icon"></span>
                                             <span class="p-menuitem-text">{{item.label}}</span>
-                                        </a>
+                                        </a> -->
+
+                                        
                                     </span>
                                 </ng-container>
                                 <ng-template #defaultItem>
