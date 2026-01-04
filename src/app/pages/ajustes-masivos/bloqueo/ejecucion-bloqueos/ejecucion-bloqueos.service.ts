@@ -26,7 +26,7 @@ export class EjecucionBloqueosService {
         if (
             codigoBloqueo == null ||
             codigoBloqueo == undefined ||
-            !codigosBloqueo.find(e => e.codigo === codigoBloqueo)
+            !codigosBloqueo.some(e => e.codigo === codigoBloqueo)
         ) { return true; }
 
         return false;
@@ -36,7 +36,7 @@ export class EjecucionBloqueosService {
         if (
             motivoBloqueo == null ||
             motivoBloqueo == undefined ||
-            !motivosBloqueo.find(e => e.codigo === motivoBloqueo)
+            !motivosBloqueo.some(e => e.codigo === motivoBloqueo)
         ) { return true; }
 
         return false;
