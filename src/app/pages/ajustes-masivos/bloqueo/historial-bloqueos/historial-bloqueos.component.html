@@ -20,10 +20,10 @@
                         <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
                             <div class="md:col-span-3">
                                 <label for="fechaRangoBloqueo" class="block mb-1 text-sm">Rango de fechas</label>
-                                <p-datepicker id="fechaRangoBloqueo" formControlName="fechaRangoBloqueo"
+                                <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaRangoBloqueo" formControlName="fechaRangoBloqueo"
                                     [showIcon]="true" dateFormat="dd/mm/yy" yearRange="1940:2030"
                                     selectionMode="range" [readonlyInput]="true" appendTo="body"
-                                    showButtonBar="true" style="width: 100%;" inputStyleClass="w-full"></p-datepicker>
+                                    showButtonBar="true" ></p-datepicker>
                             </div>
                             <div class="md:col-span-3">
                                 <label for="nroLote" class="block mb-1 text-sm">Num. Lote</label>

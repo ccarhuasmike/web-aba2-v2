@@ -81,7 +81,7 @@
         <div class="md:col-span-1">
             <label for="fechaAjuste" class="block mb-1 text-sm">Fecha Ajuste</label>
 
-            <p-datepicker id="fechaAjuste" class="w-full" (ngModelChange)="getTasas($event)" yearRange="2020:2050"
+            <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaAjuste" class="w-full" (ngModelChange)="getTasas($event)" yearRange="2020:2050"
                 formControlName="fechaAjuste" dateFormat="dd/mm/yy" [showIcon]="true" inputId="monthpicker"
                 [showOnFocus]="false" />
             <p-message

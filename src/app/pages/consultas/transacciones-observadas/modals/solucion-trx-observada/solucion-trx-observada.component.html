@@ -64,7 +64,7 @@
             </div>
             <div class="md:col-span-1" *ngIf="formSolucionTransaccion?.value.tipoSolucion?.valCadCorto === '06'">
                 <label for="" class="block mb-1 text-sm">Rango de Fechas</label>
-                <p-datepicker formControlName="fechaRangoAutorizaciones"
+                <p-datepicker  style="width: 100%;" inputStyleClass="w-full" formControlName="fechaRangoAutorizaciones"
                     (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" dateFormat="dd/mm/yy"
                     yearRange="1940:2030" selectionMode="range"                   
                     appendTo="body" styleClass="w-full"></p-datepicker>

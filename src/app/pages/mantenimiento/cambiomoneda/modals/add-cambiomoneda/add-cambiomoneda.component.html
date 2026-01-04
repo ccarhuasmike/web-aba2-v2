@@ -140,13 +140,13 @@
             <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-1">
                     <label for="fechaInicio" class="block mb-1 text-sm">Fecha Inicio</label>
-                    <p-datepicker   id="fechaInicio" class="w-full" formControlName="fechaInicio" dateFormat="dd/mm/yy"
+                    <p-datepicker  style="width: 100%;" inputStyleClass="w-full"   id="fechaInicio" class="w-full" formControlName="fechaInicio" dateFormat="dd/mm/yy"
                         (ngModelChange)="changeModelFecha()" yearRange="2020:2050" inputId="monthpicker">
                     </p-datepicker>
                 </div>
                 <div class="md:col-span-1">
                     <label for="fechaFin" class="block mb-1 text-sm">Fecha Fin</label>
-                    <p-datepicker id="fechaFin" class="w-full" formControlName="fechaFin" dateFormat="dd/mm/yy"
+                    <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaFin" class="w-full" formControlName="fechaFin" dateFormat="dd/mm/yy"
                         (ngModelChange)="changeModelFecha()" appendTo="body" yearRange="2020:2050"
                         inputId="monthpicker">
                     </p-datepicker>

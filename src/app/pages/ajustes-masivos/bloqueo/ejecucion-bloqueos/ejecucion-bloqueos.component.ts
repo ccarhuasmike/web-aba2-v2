@@ -86,7 +86,7 @@ export class EjecucionBloqueosComponent implements OnInit {
                 }
             }, (_error) => {
                 this.toastr.add({ severity: 'error', summary: 'Error getCodigosBloqueoCuenta', detail: 'Error en el servicio de obtener códigos de bloqueo de cuenta' });
-                reject();
+                reject(new Error('Error getCodigosBloqueoCuenta'));
             })
         });
     }
@@ -100,7 +100,7 @@ export class EjecucionBloqueosComponent implements OnInit {
                 }
             }, (_error) => {
                 this.toastr.add({ severity: 'error', summary: 'Error getCodigosBloqueoTarjeta', detail: 'Error en el servicio de obtener códigos de bloqueo de tarjeta' });
-                reject();
+                reject(new Error('Error getCodigosBloqueoTarjeta'));
             })
         });
     }
@@ -114,7 +114,7 @@ export class EjecucionBloqueosComponent implements OnInit {
                 }
             }, (_error) => {
                 this.toastr.add({ severity: 'error', summary: 'Error getMotivosBloqueoCuenta', detail: 'Error en el servicio de obtener motivos de bloqueo de cuenta' });
-                reject();
+                reject(new Error('Error getMotivosBloqueoCuenta'));
             })
         });
     }
@@ -128,7 +128,7 @@ export class EjecucionBloqueosComponent implements OnInit {
                 }
             }, (_error) => {
                 this.toastr.add({ severity: 'error', summary: 'Error getMotivosBloqueoTarjeta', detail: 'Error en el servicio de obtener motivos de bloqueo de tarjeta' });
-                reject();
+                reject(new Error('Error getMotivosBloqueoTarjeta'));
             })
         });
     }
@@ -142,7 +142,7 @@ export class EjecucionBloqueosComponent implements OnInit {
                 }
             }, (_error) => {
                 this.toastr.add({ severity: 'error', summary: 'Error getEstadosMotivosBloqueoCuenta', detail: 'Error en el servicio de obtener estados - motivos de bloqueo de cuenta' });
-                reject();
+                reject(new Error('Error getEstadosMotivosBloqueoCuenta'));
             })
         });
     }
@@ -425,8 +425,7 @@ export class EjecucionBloqueosComponent implements OnInit {
         return datosBloqueosList;
     }
     downloadFormat() {
-        debugger;
-        window.open('../../../../../assets/documents/Formato ajustes masivos - bloqueos.xlsx', '_blank');
-        //window.open('@assets/documents/Formato ajustes masivos - bloqueos.xlsx', '_blank');
+        const fileUrl = encodeURI('/assets/documents/Formato ajustes masivos - bloqueos.xlsx');
+        this.commonService.downloadFile(fileUrl, 'Formato ajustes masivos - bloqueos.xlsx');
     }
 }

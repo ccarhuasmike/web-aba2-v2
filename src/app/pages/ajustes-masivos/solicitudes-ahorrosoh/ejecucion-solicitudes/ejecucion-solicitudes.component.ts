@@ -155,6 +155,39 @@ export class EjecucionSolicitudesComponent implements OnInit {
             });
     }
 
+    private validateField(fieldIndex: string, value: any, element: string, tipoDocumento: string, tieneRuc: boolean, msgError: string): { valor: any; error: string; fieldIndex: string } {
+        const validationMap: { [key: string]: () => { error: boolean; message: string } } = {
+            '0': () => ({ error: value == undefined || this.solicitudesService.validateTipoDoc(value, this.tipoDocumentos), message: 'El tipo de documento es inválido.' }),
+            '1': () => ({ error: value == undefined || this.solicitudesService.validateNumeroDocu(value, tipoDocumento), message: 'El número de documento es inválido.' }),
+            '2': () => ({ error: value == undefined || this.solicitudesService.validateFlagSiNo(value), message: 'El Flag de Tratamientos de datos obligatorios debe ser valido (Si/No).' }),
+            '3': () => ({ error: value == undefined || this.solicitudesService.validateFlagSiNo(value), message: 'El Flag de Tratamientos de datos opcionales debe ser valido (Si/No).' }),
+            '4': () => ({ error: value == undefined, message: 'El primer nombre es requerido.' }),
+            '6': () => ({ error: value == undefined, message: 'El apellido paterno es requerido.' }),
+            '7': () => ({ error: value == undefined, message: 'El apellido materno es requerido.' }),
+            '8': () => ({ error: value == undefined || this.solicitudesService.validateGenero(value), message: 'El género debe ser valido (M ó F).' }),
+            '9': () => ({ error: value == undefined || this.solicitudesService.validateFecha(value), message: 'La fecha de nacimiento debe ser válida.' }),
+            '10': () => ({ error: value == undefined, message: 'El estado civil es requerido.' }),
+            '11': () => ({ error: value == undefined || this.solicitudesService.validateNumTel(value), message: 'El número de celular es requerido.' }),
+            '12': () => ({ error: value == undefined || this.solicitudesService.validateEmail(value), message: 'El correo electronico debe ser valido.' }),
+            '13': () => ({ error: value == undefined || this.solicitudesService.validateFlagSiNo(value), message: 'El Flag de Misma direccion de DNI debe ser valido (Si/No).' }),
+            '14': () => ({ error: value == undefined, message: 'El tipo de vivienda es requerido.' }),
+            '15': () => ({ error: value == undefined || this.solicitudesService.validateUbigeo(value, 2), message: 'El código de departamento debe ser valido.' }),
+            '16': () => ({ error: value == undefined || this.solicitudesService.validateUbigeo(value, 4), message: 'El código de provincia debe ser valido.' }),
+            '17': () => ({ error: value == undefined || this.solicitudesService.validateUbigeo(value, 6), message: 'El código de distrito debe ser valido.' }),
+            '18': () => ({ error: value == undefined, message: 'La dirección es requerido.' }),
+            '21': () => ({ error: value == undefined, message: 'El tipo de ocupacion es requerido.' }),
+            '32': () => ({ error: value == undefined, message: 'El código de call center es requerido.' })
+        };
+
+        if (validationMap[fieldIndex]) {
+            const validation = validationMap[fieldIndex]();
+            const errorMsg = validation.error ? msgError + '<li><i class="pi pi-times-circle"></i>' + validation.message + '</li>' : msgError;
+            return { valor: value, error: errorMsg, fieldIndex };
+        }
+
+        return { valor: value || '', error: msgError, fieldIndex };
+    }
+
     enviarListaSolicitudes() {
         const usuario = JSON.parse(localStorage.getItem('userABA')!);
 
@@ -236,357 +269,57 @@ export class EjecucionSolicitudesComponent implements OnInit {
                     const element = this.headerSolicitud[key];
                     let error = false;
 
-                    switch (key) {
-                        case "0":
-                            if (arr[key] == undefined || this.solicitudesService.validateTipoDoc(arr[key], this.tipoDocumentos)) {
+                    // Handle special cases with conditional logic
+                    if (key === "0") {
+                        if (arr[key] == undefined || this.solicitudesService.validateTipoDoc(arr[key], this.tipoDocumentos)) {
+                            error = true;
+                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El tipo de documento es inválido.</li>';
+                        }
+                        tipoDocumento = arr[key];
+                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
+                    } else if (key === "20") {
+                        if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
+                            error = true;
+                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Pep debe ser valido (Si/No).</li>';
+                        } else {
+                            tieneRuc = (arr[key].toUpperCase() == 'SI');
+                        }
+                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
+                    } else if (key === "24") {
+                        if (arr[key]) {
+                            error = this.solicitudesService.validateFecha(arr[key]);
+                            msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>La fecha de ingreso laboral debe ser valido.</li>' : msgError;
+                        }
+                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
+                    } else if (key === "27") {
+                        if (arr[key] != undefined) {
+                            error = this.solicitudesService.validateFlagSiNo(arr[key]);
+                            msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Negocio propio debe ser valido (Si/No).</li>' : msgError;
+                        }
+                        obj[element] = { valor: arr[key] || '', error: error ? msgError : '' }
+                    } else if (key === "30") {
+                        if (arr[key] == undefined) {
+                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de tiene ruc propio debe ser valido (Si/No).</li>';
+                        } else {
+                            error = this.solicitudesService.validateFlagSiNo(arr[key])
+                            tieneRuc = ((arr[key]).toUpperCase() == 'SI');
+                        }
+                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
+                    } else if (key === "31") {
+                        if (tieneRuc) {
+                            if (arr[key] == undefined || this.solicitudesService.validateRUC(arr[key])) {
                                 error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El tipo de documento es inválido.</li>';
+                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El numero de RUC no es valido.</li>';
                             }
-                            tipoDocumento = arr[key];
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "1":
-                            if (arr[key] == undefined || this.solicitudesService.validateNumeroDocu(arr[key], tipoDocumento)) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El número de documento es inválido.</li>';
-                            }
-                            obj[element] = {
-                                valor: (arr[key]) ? String(arr[key]) : "",
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "2":
-                            if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Tratamientos de datos obligatorios debe ser valido (Si/No).</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "3":
-                            if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Tratamientos de datos opcionales debe ser valido (Si/No).</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "4":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El primer nombre es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "5":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "6":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El apellido paterno es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "7":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El apellido materno es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "8":
-                            if (arr[key] == undefined || this.solicitudesService.validateGenero(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El género debe ser valido (M ó F).</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "9":
-                            if (arr[key] == undefined || this.solicitudesService.validateFecha(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>La fecha de nacimiento debe ser válida.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "10":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El estado civil es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "11":
-                            if (arr[key] == undefined || this.solicitudesService.validateNumTel(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El número de celular es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "12":
-                            if (arr[key] == undefined || this.solicitudesService.validateEmail(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El correo electronico debe ser valido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "13":
-                            if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Misma direccion de DNI debe ser valido (Si/No).</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "14":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El tipo de vivienda es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "15":
-                            if (arr[key] == undefined || this.solicitudesService.validateUbigeo(arr[key], 2)) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El código de departamento debe ser valido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "16":
-                            if (arr[key] == undefined || this.solicitudesService.validateUbigeo(arr[key], 4)) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El código de provincia debe ser valido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "17":
-                            if (arr[key] == undefined || this.solicitudesService.validateUbigeo(arr[key], 6)) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El código de distrito debe ser valido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "18":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>La dirección es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "19":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "20":
-                            if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Pep debe ser valido (Si/No).</li>';
-                            } else {
-                                tieneRuc = (arr[key].toUpperCase() == 'SI') ? true : false;
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "21":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El tipo de ocupacion es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "22":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "23":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "24":
-                            if (arr[key]) {
-                                error = this.solicitudesService.validateFecha(arr[key]);
-                                msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>La fecha de ingreso laboral debe ser valido.</li>' : msgError;
-                            } else {
-                                error = false;
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "25":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "26":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "27":
-                            if (arr[key] == undefined) {
-                                error = false;
-                            } else {
-                                error = this.solicitudesService.validateFlagSiNo(arr[key]);
-                                msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Negocio propio debe ser valido (Si/No).</li>' : msgError;
-                            }
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "28":
-                            obj[element] = {
-                                valor: arr[key] || '',
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "29":
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "30":
-                            if (arr[key] == undefined) {
-                                error = false;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de tiene ruc propio debe ser valido (Si/No).</li>';
-                            } else {
-                                error = this.solicitudesService.validateFlagSiNo(arr[key])
-                                tieneRuc = ((arr[key]).toUpperCase() == 'SI') ? true : false;
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        case "31":
-                            if (tieneRuc) {
-                                if (arr[key] == undefined || this.solicitudesService.validateRUC(arr[key])) {
-                                    error = true;
-                                    msgError = msgError + '<li><i class="pi pi-times-circle"></i>El numero de RUC no es valido.</li>';
-                                }
-                                obj[element] = {
-                                    valor: arr[key],
-                                    error: error ? msgError : ''
-                                }
-                            } else {
-                                obj[element] = {
-                                    valor: '',
-                                    error: error ? msgError : ''
-                                }
-                            }
-                            error = false;
-                            break;
-                        case "32":
-                            if (arr[key] == undefined) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El código de call center es requerido.</li>';
-                            }
-                            obj[element] = {
-                                valor: arr[key],
-                                error: error ? msgError : ''
-                            }
-                            error = false;
-                            break;
-                        default:
-                            break;
+                            obj[element] = { valor: arr[key], error: error ? msgError : '' }
+                        } else {
+                            obj[element] = { valor: '', error: error ? msgError : '' }
+                        }
+                    } else {
+                        // Use validation map for remaining cases
+                        const validation = this.validateField(key, arr[key], element, tipoDocumento, tieneRuc, msgError);
+                        obj[element] = { valor: validation.valor, error: validation.error }
+                        msgError = validation.error;
                     }
                 }
 
@@ -642,10 +375,12 @@ export class EjecucionSolicitudesComponent implements OnInit {
             let existe = false;
 
             for (const key in item) {
-                (key != 'id') ? arrString.push(item[key]['valor']) : '';
+                if (key !== 'id') {
+                    arrString.push(item[key]['valor']);
+                }
             }
 
-            existe = arrString.find(e => String(e).toLowerCase().includes(event.toLowerCase())) ? true : false;
+            existe = arrString.some(e => String(e).toLowerCase().includes(event.toLowerCase()));
             return existe;
         })
     }
@@ -659,8 +394,8 @@ export class EjecucionSolicitudesComponent implements OnInit {
         this.counterSolicitud = 0;
     }
 
-    downloadFormat() {   
-        debugger;                                  
-        window.open('@assets/documents/Formato carga trama solicitudes.xlsx', '_blank');
+    downloadFormat() {
+        const fileUrl = encodeURI('/assets/documents/Formato carga trama solicitudes.xlsx');
+        this.commonService.downloadFile(fileUrl, 'Formato carga trama solicitudes.xlsx');
     }
 }

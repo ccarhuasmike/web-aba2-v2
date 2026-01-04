@@ -13,9 +13,9 @@
             <div *ngIf="mostrarFiltro" class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                 <div class="md:col-span-1">
                     <label for="fechaRangoFeriados" class="block mb-1 text-sm">Rango de Fechas</label>
-                    <p-datepicker id="fechaRangoFeriados" class="w-full" formControlName="fechaRangoFeriados"
+                    <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaRangoFeriados" class="w-full" formControlName="fechaRangoFeriados"
                         (ngModelChange)="changeModelFechaRangoFeriado($event)" dateFormat="dd/mm/yy"
-                        yearRange="1940:2030" selectionMode="range" />
+                        yearRange="1940:2030" selectionMode="range"  style="width: 100%;" inputStyleClass="w-full" />
                 </div>
                 <div class="md:col-span-1">
                     <label for="isRepeat" class="block mb-1 text-sm">Feriado Recurrente</label>

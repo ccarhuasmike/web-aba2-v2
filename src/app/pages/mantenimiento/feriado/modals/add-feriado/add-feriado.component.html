@@ -28,7 +28,7 @@
         </div>
         <div class="md:col-span-1">
             <label for="fecha" class="block mb-1 text-sm">Fecha</label>
-            <p-datepicker id="fecha" class="w-full" formControlName="fecha" dateFormat="dd/mm/yy" yearRange="1940:2030"
+            <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fecha" class="w-full" formControlName="fecha" dateFormat="dd/mm/yy" yearRange="1940:2030"
                 appendTo="body" />
             <p-message *ngIf="form.get('fecha')?.dirty && form.get('fecha')?.errors?.['required']" severity="error"
                 text="Es requerido">

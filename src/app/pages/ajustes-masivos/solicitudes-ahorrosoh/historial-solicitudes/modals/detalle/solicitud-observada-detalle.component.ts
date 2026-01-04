@@ -59,7 +59,6 @@ export class SolicitudObservadaDetalleComponent implements OnInit {
                 this.data.descDistrito = distrito.desUbigeo;
             });
     }
-
     cerrarModal() {
         this.dialogRef.close();
     }

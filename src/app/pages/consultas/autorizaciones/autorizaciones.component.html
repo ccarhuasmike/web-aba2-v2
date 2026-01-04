@@ -113,7 +113,7 @@
                 </div>
                 <div class="md:col-span-3">
                     <label for="fechaRangoAutorizaciones" class="block mb-1 text-sm">Fecha rango</label>
-                    <p-datepicker id="fechaRangoAutorizaciones" formControlName="fechaRangoAutorizaciones"
+                    <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaRangoAutorizaciones" formControlName="fechaRangoAutorizaciones"
                         (ngModelChange)="changeModelFechaRangoAutorizaciones($event)" dateFormat="dd/mm/yy"
                         yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
                         class="w-full"></p-datepicker>
