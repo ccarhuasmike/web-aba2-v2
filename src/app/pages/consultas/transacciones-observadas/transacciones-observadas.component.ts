@@ -22,6 +22,7 @@ import { SolucionTrxObservadaComponent } from './modals/solucion-trx-observada/s
 import moment from 'moment';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DatePickerModule } from 'primeng/datepicker';
+import { SecurityEncryptedService } from '@/layout/service/SecurityEncryptedService';
 
 type MenuItemWithRoles = MenuItem & { restrictedRoles?: string[] };
 
@@ -74,6 +75,8 @@ export class TransaccionesObservadasComponent implements OnInit {
     tipoMonedas: any[] = [];
     tipoDocumentos: any[] = [];
 
+    menuItems: MenuItem[] = [];
+
     uidCliente = '';
     uidCuenta = '';
 
@@ -84,7 +87,8 @@ export class TransaccionesObservadasComponent implements OnInit {
         private readonly commonService: CommonService,
         private readonly transaccionesObservadasService: TransaccionesObservadasService,
         private readonly messageService: MessageService,
-        private readonly dialog: DialogService
+        private readonly dialog: DialogService,
+        private readonly securityEncryptedService: SecurityEncryptedService
     ) {
         this.formObservedTransaction = new FormGroup({
             id: new FormControl(null),
@@ -242,17 +246,26 @@ export class TransaccionesObservadasComponent implements OnInit {
         }
     }
 
-    getRowMenuItems(rowData: any): MenuItemWithRoles[] {
+    onRowMenuClick(event: Event, rowData: any, menu: any) {
+        this.menuItems = this.getRowMenuItems(rowData, menu);
+        menu.toggle(event);
+    }
+
+    getRowMenuItems(rowData: any, menu?: any): MenuItemWithRoles[] {
+        const role = this.securityEncryptedService.getRolesDecrypted();
+        const isRestricted = (restrictedRoles?: string[]) =>
+            !!role && !!restrictedRoles?.includes(role);
+
         return [
             {
                 label: 'Ver detalle',
                 icon: 'pi pi-eye',
-                command: () => this.openDialogDetalle(rowData)
+                command: () => this.executeMenuAction(() => this.openDialogDetalle(rowData), menu)
             },
             {
                 label: 'Solucionar',
                 icon: 'pi pi-wrench',
-                command: () => this.openDialogSolucion(rowData),
+                command: () => this.executeMenuAction(() => this.openDialogSolucion(rowData), menu),
                 disabled: rowData.estado == '02',
                 restrictedRoles: [
                     this.roles.OPERACION_CONTABLE,
@@ -260,17 +273,32 @@ export class TransaccionesObservadasComponent implements OnInit {
                     this.roles.PLAFT,
                     this.roles.ATENCION_CLIENTE_TD,
                     this.roles.CONSULTA
-                ]
+                ],
+                visible: !isRestricted([
+                    this.roles.OPERACION_CONTABLE,
+                    this.roles.FRAUDE,
+                    this.roles.PLAFT,
+                    this.roles.ATENCION_CLIENTE_TD,
+                    this.roles.CONSULTA
+                ])
             },
             {
                 label: 'Ir a la cuenta',
                 icon: 'pi pi-reply',
-                command: () => this.getCuentaCliente(rowData)
+                command: () => this.executeMenuAction(() => this.getCuentaCliente(rowData), menu)
             }
         ];
     }
 
+    private executeMenuAction(action: () => void, menu?: any): void {
+        setTimeout(() => {
+            action();
+            menu?.hide();
+        }, 5);
+    }
+
     openDialogDetalle(data: any): void {
+        debugger;
         this.dialog.open(DetalleTrxObservadaComponent, {
             header: 'Detalle Transacción',
             width: '60vw',
@@ -323,7 +351,7 @@ export class TransaccionesObservadasComponent implements OnInit {
                         const nroDocumento = resp['data'].numeroDocIdent;
                         const numeroCuenta = resp['data'].numeroCuenta;
 
-                        const url = `/apps/consultas/autorizaciones;tipoDocumento=${tipoDocumentoId};descDocumento=${descDocumento};nroDocumento=${nroDocumento};numeroCuenta=${numeroCuenta}`;
+                        const url = `/consultas/autorizaciones;tipoDocumento=${tipoDocumentoId};descDocumento=${descDocumento};nroDocumento=${nroDocumento};numeroCuenta=${numeroCuenta}`;
 
                         window.open(url, '_blank');
                     }

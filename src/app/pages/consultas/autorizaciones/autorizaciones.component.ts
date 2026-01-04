@@ -472,7 +472,7 @@ export class AutorizacionesComponent implements OnInit {
         this.datosCliente = new Cliente();
         this.uidCliente = '';
         this.uidCuenta = '';
-        this.router.navigate(['/apps/consultas/autorizaciones']);
+        this.router.navigate(['/consultas/autorizaciones']);
     }
 
     changeModelFechaRangoAutorizaciones(event: any) {

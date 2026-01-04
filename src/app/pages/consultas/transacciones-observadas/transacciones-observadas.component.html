@@ -62,8 +62,9 @@
                             </div>
                             <div class="md:col-span-3">
                                 <label for="fechaRango" class="block mb-1 text-sm">Fecha rango *</label>
-                                <p-datepicker  style="width: 100%;" inputStyleClass="w-full" id="fechaRango" formControlName="fechaRango" dateFormat="dd/mm/yy"
-                                    yearRange="1940:2030" selectionMode="range" [readonlyInput]="true" appendTo="body"
+                                <p-datepicker style="width: 100%;" inputStyleClass="w-full" id="fechaRango"
+                                    formControlName="fechaRango" dateFormat="dd/mm/yy" yearRange="1940:2030"
+                                    selectionMode="range" [readonlyInput]="true" appendTo="body"
                                     styleClass="w-full"></p-datepicker>
                             </div>
                             <div class="md:col-span-12 flex items-end justify-end gap-2">
@@ -91,13 +92,12 @@
 
         <p-paginator [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)">
             <ng-template pTemplate="paginatorleft">
-                <label for="" >{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                <label for="">{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
                     totalRecords + ' registros' }}</label>
             </ng-template>
         </p-paginator>
 
-        <p-table #dt resizableColumns="true" columnResizeMode="expand"
-            class="mi-tabla-personalizada"
+        <p-table #dt resizableColumns="true" columnResizeMode="expand" class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" dataKey="id"
             [value]="data" [columns]="cols" [rows]="rows">
             <ng-template pTemplate="header" let-columns>
@@ -117,32 +117,12 @@
             <ng-template pTemplate="body" let-rowData>
                 <tr id="tableWithIcon_2">
                     <td style="text-align: center; width: 48px;">
-                        <p-menu #actionMenu [popup]="true" [model]="getRowMenuItems(rowData)" appendTo="body">
-                            <ng-template pTemplate="item" let-item>
-                                <ng-container *ngIf="item.restrictedRoles?.length; else defaultItem">
-                                    <span *appDisableContentByRole="item.restrictedRoles">
-                                        
-                                        
-                                        <!-- <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
-                                            <span class="p-menuitem-icon" [ngClass]="item.icon"
-                                                *ngIf="item.icon"></span>
-                                            <span class="p-menuitem-text">{{item.label}}</span>
-                                        </a> -->
-
-                                        
-                                    </span>
-                                </ng-container>
-                                <ng-template #defaultItem>
-                                    <a class="p-menuitem-link" (click)="actionMenu.itemClick($event, item)">
-                                        <span class="p-menuitem-icon" [ngClass]="item.icon" *ngIf="item.icon"></span>
-                                        <span class="p-menuitem-text">{{item.label}}</span>
-                                    </a>
-                                </ng-template>
-                            </ng-template>
-                        </p-menu>
-                        <button type="button" pButton icon="pi pi-ellipsis-v"
-                            class="p-button-text p-button-rounded p-button-sm" (click)="actionMenu.toggle($event)"
-                            pTooltip="Acciones" tooltipPosition="top"></button>
+                        <div>
+                            <button pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-sm"
+                                (click)="$event.stopPropagation(); onRowMenuClick($event, rowData, menu)"
+                                pTooltip="Acciones" tooltipPosition="top"></button>
+                            <p-menu #menu [model]="menuItems" [popup]="true" appendTo="body"></p-menu>
+                        </div>
                     </td>
                     <td>{{rowData.id}}</td>
                     <td>{{rowData.fechaCreacionConvert}}</td>
@@ -181,7 +161,7 @@
 
         <p-paginator [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)">
             <ng-template pTemplate="paginatorleft">
-                <label for="paginatorleft" >{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
+                <label for="paginatorleft">{{ 'Mostrando ' + (first + 1) + ' - ' + (first + rows) + ' de ' +
                     totalRecords + ' registros' }}</label>
             </ng-template>
         </p-paginator>
