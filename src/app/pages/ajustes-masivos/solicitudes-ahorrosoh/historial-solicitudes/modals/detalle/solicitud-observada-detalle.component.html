@@ -1,148 +1,172 @@
-﻿<div class="dialog-content-wrapper"
-    style="max-height: 85vh;display: flex;flex-direction: column;padding: 0 !important;margin-top: -24px !important;margin-bottom: -24px !important;">
-    <div class="m-0" style="text-align: center;padding: 12px 0;"><span class="title dialog-title">Detalle Informacion Solicitud Observada</span></div>
-    <div class="p-24 pb-24 m-0" fusePerfectScrollbar>
-        <div>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-6">
-                    <label for="" class="block mb-1 text-sm">Nombre completo:&nbsp;</label> <span class="secondary-text">{{data.primerNombre}}
-                        {{ data.segundoNombre}} {{data.apellidoPaterno}} {{data.apellidoMaterno}}</span>
-                </div>
-                <div class="p-col-6">
-                    <label for="" class="block mb-1 text-sm">Tipo y nÃºmero documento:&nbsp;</label> <span class="secondary-text">{{data.tipoDoc}} /
-                        {{data.numeroDoc}}</span>
-                </div>
-                <div class="p-col-6">
-                    <label for="" class="block mb-1 text-sm">Fecha proceso solicitud observada:&nbsp;</label> <span
-                        class="secondary-text">{{data.fechaHoraRegistro | date:'dd-MM-yyyy HH:mm:ss'}}</span>
-                </div>
-                <div class="p-col-6">
-                    <label for="" class="block mb-1 text-sm">Correo:&nbsp;</label> <span class="secondary-text">{{data.email}}</span>
-                </div>
-                <div class="p-col-3">
-                    <label for="" class="block mb-1 text-sm">Celular:&nbsp;</label> <span class="secondary-text">{{data.celular}}</span>
-                </div>
-                <div class="p-col-3">
-                    <label for="" class="block mb-1 text-sm">Sexo:&nbsp;</label> <span class="secondary-text">{{data.sexo}}</span>
-                </div>
-                <div class="p-col-3">
-                    <label for="" class="block mb-1 text-sm">Fecha nacimiento:&nbsp;</label> <span
-                        class="secondary-text">{{data.fechaNacimientoConvert}}</span>
-                </div>
-                <div class="p-col-3">
-                    <label for="" class="block mb-1 text-sm">Estado civil:&nbsp;</label> <span class="secondary-text">{{data.estadoCivil}}</span>
-                </div>
-            </div>
-            <hr>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Departamento:&nbsp;</label> <span class="secondary-text">{{data?.descDepartamento}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Provincia:&nbsp;</label> <span class="secondary-text">{{data?.descProvincia}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Distrito:&nbsp;</label> <span class="secondary-text">{{data?.descDistrito}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Direccion:&nbsp;</label> <span class="secondary-text">{{data.direccion}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Referencia:&nbsp;</label> <span class="secondary-text">{{data.referenciaDireccion}}</span>
-                </div>
-            </div>
-            <hr>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Acepto tratamiento datos obligatorios?:&nbsp;</label> <span
-                        class="secondary-text">{{data.flgAceptTratamDatosObligatorio | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Acepto tratamiento datos opcionales?:&nbsp;</label> <span
-                        class="secondary-text">{{data.flgAceptTratamDatosOpcional | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Acepto contrato?:&nbsp;</label> <span
-                        class="secondary-text">{{data.flgAceptacionContrato | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Misma direccion del DNI?:&nbsp;</label> <span
-                        class="secondary-text">{{data.flgMismaDireccionDni | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Negocio propio?:&nbsp;</label> <span
-                        class="secondary-text">{{data.flgNegocioPropio | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Nombre negocio:&nbsp;</label> <span class="secondary-text">{{data.nombreNegocio}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Es persona PEP?:&nbsp;</label> <span class="secondary-text">{{data.flgPep | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Â¿Tiene RUC?:&nbsp;</label> <span class="secondary-text">{{data.flgRuc | uppercase}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">RUC:&nbsp;</label> <span class="secondary-text">{{data.ruc}}</span>
-                </div>
-            </div>
-            <hr>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">CÃ³d. actividad ocupaciÃ³n:&nbsp;</label> <span
-                        class="secondary-text">{{data.codActividadOcupacion}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Actividad ocupaciÃ³n:&nbsp;</label> <span
-                        class="secondary-text">{{data.actividadOcupacion}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">CÃ³d. cargo actual:&nbsp;</label> <span class="secondary-text">{{data.codCargoActual}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Cargo actual:&nbsp;</label> <span class="secondary-text">{{data.cargoActual}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">CÃ³d. tipo ocupaciÃ³n:&nbsp;</label> <span class="secondary-text">{{data.tipoOcupacion}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Fecha ingreso laboral:&nbsp;</label> <span
-                        class="secondary-text">{{data.fechaIngresoLaboralConvert}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Ingreso mensual:&nbsp;</label> <span class="secondary-text">{{data.ingresoMensual}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Nombre empresa:&nbsp;</label> <span class="secondary-text">{{data.nombreEmpresa}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Tipo vivienda:&nbsp;</label> <span class="secondary-text">{{data.tipoVivienda}}</span>
-                </div>
-            </div>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Canal:&nbsp;</label> <span class="secondary-text">{{data.descCanal}}</span>
-                </div>
-                <div class="p-col-4">
-                    <label for="" class="block mb-1 text-sm">Moneda:&nbsp;</label> <span class="secondary-text">{{data.descMoneda}}</span>
-                </div>
-            </div>
-            <hr>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-6">
-                    <label for="" class="block mb-1 text-sm">Usuario creaciÃ³n:&nbsp;</label> <span class="secondary-text">{{data.usuarioCreacion}}</span>
-                </div>
-            </div>
-            <div class="p-grid p-fluid p-align-center">
-                <div class="p-col-12">
-                    <label for="" class="block mb-1 text-sm">ObservaciÃ³n de rechazo:&nbsp;</label>
-                    <span><b>{{data.observacionRechazo}}</b></span>
-                </div>
-            </div>
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
+        <div class="md:col-span-6">
+            <label for="nombreCompleto" class="block mb-1 text-sm">Nombre completo:&nbsp;</label>
+            <span class="secondary-text">{{data.primerNombre}} {{ data.segundoNombre}} {{data.apellidoPaterno}}
+                {{data.apellidoMaterno}}</span>
         </div>
-        <hr>
+        <div class="md:col-span-6">
+            <label for="tipoNumeroDoc" class="block mb-1 text-sm">Tipo y número documento:&nbsp;</label>
+            <span class="secondary-text">{{data.tipoDoc}} / {{data.numeroDoc}}</span>
+        </div>
+        <div class="md:col-span-6">
+            <label for="fechaProcesoSolicitud" class="block mb-1 text-sm">Fecha proceso solicitud
+                observada:&nbsp;</label>
+            <span class="secondary-text">{{data.fechaHoraRegistro | date:'dd-MM-yyyy HH:mm:ss'}}</span>
+        </div>
+        <div class="md:col-span-6">
+            <label for="correo" class="block mb-1 text-sm">Correo:&nbsp;</label>
+            <span class="secondary-text">{{data.email}}</span>
+        </div>
+        <div class="md:col-span-3">
+            <label for="celular" class="block mb-1 text-sm">Celular:&nbsp;</label>
+            <span class="secondary-text">{{data.celular}}</span>
+        </div>
+        <div class="md:col-span-3">
+            <label for="sexo" class="block mb-1 text-sm">Sexo:&nbsp;</label>
+            <span class="secondary-text">{{data.sexo}}</span>
+        </div>
+        <div class="md:col-span-3">
+            <label for="fechaNacimiento" class="block mb-1 text-sm">Fecha nacimiento:&nbsp;</label>
+            <span class="secondary-text">{{data.fechaNacimientoConvert}}</span>
+        </div>
+        <div class="md:col-span-3">
+            <label for="estadoCivil" class="block mb-1 text-sm">Estado civil:&nbsp;</label>
+            <span class="secondary-text">{{data.estadoCivil}}</span>
+        </div>
+
+        <div class="md:col-span-12">
+            <hr>
+        </div>
+
+        <div class="md:col-span-4">
+            <label for="departamento" class="block mb-1 text-sm">Departamento:&nbsp;</label>
+            <span class="secondary-text">{{data?.descDepartamento}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="provincia" class="block mb-1 text-sm">Provincia:&nbsp;</label>
+            <span class="secondary-text">{{data?.descProvincia}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="distrito" class="block mb-1 text-sm">Distrito:&nbsp;</label>
+            <span class="secondary-text">{{data?.descDistrito}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="direccion" class="block mb-1 text-sm">Direccion:&nbsp;</label>
+            <span class="secondary-text">{{data.direccion}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="referenciaDireccion" class="block mb-1 text-sm">Referencia:&nbsp;</label>
+            <span class="secondary-text">{{data.referenciaDireccion}}</span>
+        </div>
+
+        <div class="md:col-span-12">
+            <hr>
+        </div>
+
+        <div class="md:col-span-4">
+            <label for="flgAceptTratamDatosObligatorio" class="block mb-1 text-sm">?Acepto tratamiento datos
+                obligatorios?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgAceptTratamDatosObligatorio | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgAceptTratamDatosOpcional" class="block mb-1 text-sm">?Acepto tratamiento datos
+                opcionales?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgAceptTratamDatosOpcional | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgAceptacionContrato" class="block mb-1 text-sm">?Acepto contrato?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgAceptacionContrato | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgMismaDireccionDni" class="block mb-1 text-sm">?Misma direccion del DNI?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgMismaDireccionDni | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgNegocioPropio" class="block mb-1 text-sm">?Negocio propio?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgNegocioPropio | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="nombreNegocio" class="block mb-1 text-sm">Nombre negocio:&nbsp;</label>
+            <span class="secondary-text">{{data.nombreNegocio}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgPep" class="block mb-1 text-sm">?Es persona PEP?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgPep | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="flgRuc" class="block mb-1 text-sm">?Tiene RUC?:&nbsp;</label>
+            <span class="secondary-text">{{data.flgRuc | uppercase}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="ruc" class="block mb-1 text-sm">RUC:&nbsp;</label>
+            <span class="secondary-text">{{data.ruc}}</span>
+        </div>
+
+        <div class="md:col-span-12">
+            <hr>
+        </div>
+
+        <div class="md:col-span-4">
+            <label for="codActividadOcupacion" class="block mb-1 text-sm">Cód. actividad ocupación:&nbsp;</label>
+            <span class="secondary-text">{{data.codActividadOcupacion}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="actividadOcupacion" class="block mb-1 text-sm">Actividad ocupación:&nbsp;</label>
+            <span class="secondary-text">{{data.actividadOcupacion}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="codCargoActual" class="block mb-1 text-sm">Cód. cargo actual:&nbsp;</label>
+            <span class="secondary-text">{{data.codCargoActual}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="cargoActual" class="block mb-1 text-sm">Cargo actual:&nbsp;</label>
+            <span class="secondary-text">{{data.cargoActual}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="tipoOcupacion" class="block mb-1 text-sm">Cód. tipo ocupación:&nbsp;</label>
+            <span class="secondary-text">{{data.tipoOcupacion}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="fechaIngresoLaboralConvert" class="block mb-1 text-sm">Fecha ingreso laboral:&nbsp;</label>
+            <span class="secondary-text">{{data.fechaIngresoLaboralConvert}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="ingresoMensual" class="block mb-1 text-sm">Ingreso mensual:&nbsp;</label>
+            <span class="secondary-text">{{data.ingresoMensual}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="nombreEmpresa" class="block mb-1 text-sm">Nombre empresa:&nbsp;</label>
+            <span class="secondary-text">{{data.nombreEmpresa}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="tipoVivienda" class="block mb-1 text-sm">Tipo vivienda:&nbsp;</label>
+            <span class="secondary-text">{{data.tipoVivienda}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="descCanal" class="block mb-1 text-sm">Canal:&nbsp;</label>
+            <span class="secondary-text">{{data.descCanal}}</span>
+        </div>
+        <div class="md:col-span-4">
+            <label for="descMoneda" class="block mb-1 text-sm">Moneda:&nbsp;</label>
+            <span class="secondary-text">{{data.descMoneda}}</span>
+        </div>
+
+        <div class="md:col-span-12">
+            <hr>
+        </div>
+
+        <div class="md:col-span-6">
+            <label for="usuarioCreacion" class="block mb-1 text-sm">Usuario creación:&nbsp;</label>
+            <span class="secondary-text">{{data.usuarioCreacion}}</span>
+        </div>
+        <div class="md:col-span-12">
+            <label for="observacionRechazo" class="block mb-1 text-sm">Observación de rechazo:&nbsp;</label>
+            <span><b>{{data.observacionRechazo}}</b></span>
+        </div>
+        <div class="md:col-span-12  items-end justify-end  footer-modal">
+            <button id="buttonConfirm" pButton label="Cerrar" severity="danger" (click)="cerrarModal()"></button>
+        </div>
     </div>
-    <div class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
-        <button id="buttonConfirm" pButton label="Cerrar" severity="danger" (click)="cerrarModal()"></button>
-    </div>
+    <hr>
 </div>

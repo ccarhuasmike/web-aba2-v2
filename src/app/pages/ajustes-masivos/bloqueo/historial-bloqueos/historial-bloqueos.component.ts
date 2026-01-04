@@ -228,7 +228,7 @@ export class HistorialBloqueosComponent implements OnInit {
                 this.datosDetallelote = this.datosDetallelote.map((item: any) => {
                     let descBloqueo = '';
                     let descMotivo = '';
-                    const descError = (item.huboError) ? (JSON.parse(item.response))['mensaje'] : '';
+                    //const descError = (item.huboError) ? (JSON.parse(item.response))['mensaje'] : '';
                     if (item.tokenTarjeta) {
                         const bloqueo = this.codigosBloqueoTarjeta.find(e => e.codigo === item.codigoBloqueo);
                         descBloqueo = bloqueo.descripcion;
@@ -241,7 +241,7 @@ export class HistorialBloqueosComponent implements OnInit {
                         descMotivo = motivo.descripcion;
                     }
                     return {
-                        descError,
+                        //descError,
                         descBloqueo,
                         descMotivo,
                         ...item

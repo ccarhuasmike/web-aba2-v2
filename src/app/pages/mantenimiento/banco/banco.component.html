@@ -3,7 +3,7 @@
         <button pButton label="Agregar" icon="pi pi-plus" (click)="openDialogAdd()"></button>
     </div>
     <div class="md:col-span-1">
-        <p-table #dt1 class="mi-tabla-personalizada" resizableColumns="true" columnResizeMode="expand"
+        <p-table #dt1  resizableColumns="true" columnResizeMode="expand"
             class="mi-tabla-personalizada"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [showCurrentPageReport]="true" [filterDelay]="0" dataKey="idBanco" [rows]="rows" [value]="data"

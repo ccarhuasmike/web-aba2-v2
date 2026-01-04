@@ -204,7 +204,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                             valor: arr[key].trim(),
                             error: error ? msgError : ''
                         }
-                        error = false;
                     }
 
                     if (key == '1') {
@@ -217,7 +216,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                             valor: arr[key].trim(),
                             error: error ? msgError : ''
                         }
-                        error = false;
                     }
 
                     if (key == '2') {
@@ -229,7 +227,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                             valor: arr[key] != undefined && arr[key] != null ? arr[key].trim() : '',
                             error: ''
                         }
-                        error = false;
                     }
 
                     if (key == '3') {
@@ -255,8 +252,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                                 error: ''
                             }
                         }
-
-                        error = false;
                     }
 
                     if (key == '4') {
@@ -293,8 +288,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                                 error: ''
                             }
                         }
-
-                        error = false;
                     }
 
                     if (key == '5') {
@@ -312,7 +305,6 @@ export class EjecucionBloqueosComponent implements OnInit {
                             valor: arr[key] != undefined && arr[key] != null ? arr[key].trim() : '',
                             error: error ? msgError : ''
                         }
-                        error = false;
                     }
                 }
 

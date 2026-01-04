@@ -49,7 +49,7 @@
             <span class="text-lg font-semibold">Lotes</span>
         </div>
         <p-table #dt resizableColumns="true" [value]="datosLote" [lazy]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true" [columns]="colsLote"
+            class="mi-tabla-personalizada" [showCurrentPageReport]="true" [columns]="colsLote"
             dataKey="id" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
             [paginator]="true" [rows]="rows" [totalRecords]="totalRecordsLote" [filterDelay]="0"
             [loading]="loadingDatosLote" (onPage)="onPage($event)">
@@ -94,7 +94,7 @@
                 tooltipPosition="bottom"></button>
         </div>
         <p-table #dt2 resizableColumns="true" [value]="datosDetallelote" [lazy]="true"
-            styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true"
+            class="mi-tabla-personalizada" [showCurrentPageReport]="true"
             [columns]="colsDetalleLote" dataKey="id"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [rows]="rowsDetalle" [totalRecords]="totalRecordsDetalle" [filterDelay]="0"

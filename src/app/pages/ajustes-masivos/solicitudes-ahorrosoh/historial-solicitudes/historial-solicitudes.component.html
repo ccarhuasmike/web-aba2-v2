@@ -69,7 +69,7 @@
                 pTooltip="Descargar excel" tooltipPosition="bottom"></button>
         </div>
         <p-table #dt1 resizableColumns="true" columnResizeMode="expand" [value]="datosSolicitudesObservadas"
-            liveResize="true" styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true"
+            liveResize="true" class="mi-tabla-personalizada" [showCurrentPageReport]="true"
             [columns]="cols" dateKey="nroSolicitud"
             currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
             [rows]="rows" [totalRecords]="datosSolicitudesObservadas.length" [filterDelay]="0">
