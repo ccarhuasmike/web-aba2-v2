@@ -1,0 +1,134 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <p-toast></p-toast>
+    <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-check-circle text-2xl"></i>
+            <span class="text-xl font-semibold">Historial de Bloqueos</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-1">
+        <p-accordion [(value)]="panelOpenState">
+            <p-accordion-panel value="0">
+                <p-accordion-header>Filtro de b&uacute;squeda</p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="pi pi-search"></i>
+                        <span class="font-medium">B&uacute;squeda de Bloqueos</span>
+                    </div>
+                    <form [formGroup]="formBusqueda" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-3">
+                                <label for="fechaRangoBloqueo" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker id="fechaRangoBloqueo" formControlName="fechaRangoBloqueo"
+                                    [showIcon]="true" dateFormat="dd/mm/yy" yearRange="1940:2030"
+                                    selectionMode="range" [readonlyInput]="true" appendTo="body"
+                                    showButtonBar="true" styleClass="w-full"></p-datepicker>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label for="nroLote" class="block mb-1 text-sm">Num. Lote</label>
+                                <input id="nroLote" type="text" pInputText name="nroLote" class="w-full"
+                                    formControlName="nroLote" autocomplete="off">
+                            </div>
+                            <div class="md:col-span-12 flex items-end justify-end gap-2">
+                                <button pButton label="Buscar" icon="pi pi-search" (click)="getLoteBloqueo()"
+                                    pTooltip="Buscar bloqueos" tooltipPosition="top"></button>
+                                <button pButton label="Limpiar" icon="pi pi-times" class="p-button-outlined"
+                                    (click)="clearBusquedaFiltros()" pTooltip="Limpiar filtros"
+                                    tooltipPosition="top"></button>
+                            </div>
+                        </div>
+                    </form>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span class="text-lg font-semibold">Lotes</span>
+        </div>
+        <p-table #dt resizableColumns="true" [value]="datosLote" [lazy]="true"
+            styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true" [columns]="colsLote"
+            dataKey="id" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            [paginator]="true" [rows]="rows" [totalRecords]="totalRecordsLote" [filterDelay]="0"
+            [loading]="loadingDatosLote" (onPage)="onPage($event)">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" scope="col">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithIcon" [pContextMenuRow]="rowData" style="cursor: pointer;"
+                    (click)="getDetalleBloqueos(rowData)" (keydown.enter)="getDetalleBloqueos(rowData)">
+                    <td>{{rowData.id}}</td>
+                    <td>{{rowData.cantidad}}</td>
+                    <td>{{rowData.horaInicio | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                    <td>{{rowData.horaTermino | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                    <td>{{rowData.exitos}}</td>
+                    <td>{{rowData.fallas}}</td>
+                    <td>{{rowData.usuarioCreacion}}</td>
+                    <td>{{rowData.fechaCreacion | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span class="text-lg font-semibold">Detalle Lote: {{numLoteSeleccionado}}</span>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosDetallelote.length == 0" (click)="descargarExcel()" pTooltip="Descargar excel"
+                tooltipPosition="bottom"></button>
+        </div>
+        <p-table #dt2 resizableColumns="true" [value]="datosDetallelote" [lazy]="true"
+            styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true"
+            [columns]="colsDetalleLote" dataKey="id"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [rows]="rowsDetalle" [totalRecords]="totalRecordsDetalle" [filterDelay]="0"
+            [loading]="loadingDatosDetallelote" (onPage)="onPageDetalle($event)">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" scope="col">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td>{{rowData.uidcliente}}</td>
+                    <td>{{rowData.uidCuenta}}</td>
+                    <td>{{rowData.tokenTarjeta}}</td>
+                    <td>{{rowData.codigoBloqueo}}</td>
+                    <td>{{rowData.descBloqueo}}</td>
+                    <td>{{rowData.motivoBloqueo}}</td>
+                    <td>{{rowData.descMotivo}}</td>
+                    <td>{{rowData.detalle}}</td>
+                    <td>{{rowData.descError}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9" style="text-align:left">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

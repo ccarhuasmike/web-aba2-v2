@@ -1,0 +1,96 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-wallet text-2xl"></i>
+            <span class="text-xl font-semibold">Creación de Solicitudes de Ahorros Oh Masivo</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button pButton (click)="enviarListaSolicitudes()" class="add-button-tablas" pTooltip="Enviar"
+                tooltipPosition="bottom" severity="danger" icon="pi pi-send" [rounded]="true"
+                
+                [disabled]="dataSolicitudes.length<=0 || counterSolicitud >0">
+            </button>
+            <button pButton (click)="downloadFormat()" class="second-button"
+                pTooltip="Descargar formato Ajustes de Solicitudes" tooltipPosition="bottom" severity="info"
+                icon="pi pi-download" [rounded]="true" >
+            </button>
+        </div>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <!-- <span class="text-lg font-semibold">Solicitudes</span>          -->
+            <p-fileUpload name="files" customUpload="true" accept=".xlsx" maxFileSize="3700000"
+                invalidFileTypeMessageSummary="{0}: archivo inv?lido, "
+                invalidFileTypeMessageDetail="extensiones permitidas: {0}."
+                (uploadHandler)="uploaderSolicitudes($event)" (onClear)="removeAll()" (onRemove)="removeAll()"
+                uploadLabel="Importar" cancelLabel="Cancelar" chooseLabel="Seleccionar excel"></p-fileUpload>
+        </div>
+
+        <div *ngIf="filesSolicitud.length>0">
+            <div class="flex flex-wrap items-center gap-4 px-4 pb-3">
+                <div class="flex items-center gap-2">
+                    <strong class="text-xs">Errores encontrados:</strong>
+                    <span class="text-base font-semibold"
+                        [ngClass]="{'redColor': counterSolicitud>0, 'blueColor': counterSolicitud==0}">
+                        {{counterSolicitud}}
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <strong class="text-xs">Archivo:</strong>
+                    <span class="text-xs">{{this.filesSolicitud[0].name}}</span>
+                </div>
+                <div class="w-full md:w-auto md:ml-auto">
+                    <input pInputText class="w-full" (input)="filterGlobal($event.target.value)"
+                        placeholder="Filtrar por todos los campos (contenga)">
+                </div>
+            </div>
+
+            <p-table #dt resizableColumns="true" [value]="dataSolicitudes"
+                styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true"
+                [columns]="colsSolicitud" dataKey="id"
+                currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+                [rows]="rows" [totalRecords]="dataSolicitudes.length" [filterDelay]="0"
+                [rowsPerPageOptions]="rowsPerPageOptions" [loading]="loadingRecordsSolicitud">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" scope="col">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                    <tr id="tableWithIcon1">
+                        <th *ngFor="let col of columns" scope="col">
+                            <input pInputText type="text" (input)="filter($event.target.value, col)"
+                                placeholder="Filtrar (comienza)">
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr id="tableWithIcon2">
+                        <td *ngFor="let col of columns"
+                            [ngClass]="{'redColor': rowData[col.field]?.error, 'redSoftBgColor': rowData[col.field]?.valor == undefined || rowData[col.field]?.valor == '' && col.field !== 'ERROR'}">
+                            <ng-container *ngIf="col.field !== 'ERROR'">
+                                {{rowData[col.field]?.valor}}
+                            </ng-container>
+                            <ng-container *ngIf="col.field == 'ERROR'">
+                                <div [innerHTML]="rowData[col.field]?.valor"></div>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="29" style="text-align:left">Sin registros encontrados</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="filesSolicitud.length==0" style="text-align: center;"
+            >
+            <p-divider></p-divider>
+            <p>Por favor, importe un excel para procesar</p>
+            <p-divider></p-divider>
+        </div>
+    </div>
+</div>

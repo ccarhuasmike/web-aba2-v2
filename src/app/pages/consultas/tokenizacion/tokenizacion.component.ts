@@ -90,16 +90,18 @@ export class TokenizacionComponent implements OnInit {
       });
       return;
     }
-
     this.dialogService.open(LogNotificacionComponent, {
-      header: 'Logs Notificacion',
+      header: 'Logs Notificación',
       width: '50vw',
-      data: {
-        digitalCardId: this.digitalCardId.trim()
-      },
+      modal: true,
+      styleClass: 'header-modal',
+      dismissableMask: true,
       breakpoints: {
         '960px': '75vw',
         '640px': '90vw'
+      },
+      data: {
+        digitalCardId: this.digitalCardId.trim()
       }
     });
   }

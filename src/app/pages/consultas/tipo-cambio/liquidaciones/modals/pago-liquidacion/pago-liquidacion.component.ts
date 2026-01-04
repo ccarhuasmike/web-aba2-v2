@@ -11,6 +11,7 @@ import { CommonService } from '@/pages/service/commonService';
 import { LiquidacionesService } from '../../liquidaciones.service';
 import { ProveedorService } from '@/pages/mantenimiento/proveedor/proveedor.service';
 import { TYPE_CUENTA } from '@/layout/Utils/constants/aba.constants';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-pago-liquidacion',
@@ -55,7 +56,7 @@ export class PagoLiquidacionComponent implements OnInit {
     default:
       return 'p-tag-danger';    // rojo
   }
-}
+    }
 
     createForm(): void {
         this.formPagoLiquidacion = new FormGroup({
@@ -83,8 +84,8 @@ export class PagoLiquidacionComponent implements OnInit {
         const idPartnerCuentas = proveedor.idPartner;
         const monedaEnviar = this.datosPago.monedaEnviarPartner;
         this.proveedorServrice.getBancoCuentaProveedor(idPartnerCuentas).subscribe((resp: any) => {
-            if (resp && resp['codigo'] === 0) {
-                this.cuentasProveedor = (resp.data || []).filter((item:any) => +item.moneda === monedaEnviar);
+            if (resp?.['codigo'] === 0) {
+                this.cuentasProveedor = (resp.data || []).filter((item: any) => +item.moneda === monedaEnviar);
                 this.setCuenta(this.cuentasProveedor);
             }
         });
@@ -111,7 +112,7 @@ export class PagoLiquidacionComponent implements OnInit {
     }
 
     changeModelBanco(event: any): void {
-        if (event && event.tipoCuenta) {
+        if (event?.tipoCuenta) {
             const tipoCuenta = this.tipoCuenta.find(e => e.id === event.tipoCuenta);
             this.formPagoLiquidacion.get('tipoCuenta')?.setValue(tipoCuenta?.descripcion);
             this.formPagoLiquidacion.get('numCuenta')?.setValue(event.nroCuenta);
@@ -120,19 +121,14 @@ export class PagoLiquidacionComponent implements OnInit {
 
     filterElementBanco(event: any, data: any[]): void {
         this.filteredElement = [];
-        const query = event.query;
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.nombreBanco.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElement.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElement = UtilService.filterByField(data, query, 'nombreBanco');
     }
 
     getInfoProveedor(): void {
         this.proveedorServrice.getObtenerProveedor().subscribe({
             next: (resp: any) => {
-                if (resp && resp['codigo'] === 0) {
+                if (resp?.['codigo'] === 0) {
                     this.proveedores = resp.data;
                     this.datosProveedorPago = this.proveedores.find((item: any) => item.idPartnerRelacionado == this.datosPago.idPartner);
                     this.datosProveedor = this.proveedores.find((item: any) => item.idPartner == this.datosPago.idPartner);
@@ -164,7 +160,7 @@ export class PagoLiquidacionComponent implements OnInit {
 
         this.liquidacionService.postPagoProveedor(data).subscribe({
             next: (resp: any) => {
-                if (resp && resp['codigo'] === 0) {
+                if (resp?.['codigo'] === 0) {
                     this.dialogRef.close({
                         data: resp,
                         accion: 'create'

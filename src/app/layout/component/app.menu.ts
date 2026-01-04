@@ -116,11 +116,13 @@ export class AppMenu implements OnInit {
                         items: [
                             {
                                 label: 'Ejecutar Bloqueos',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark', 
+                                routerLink: ['ajuste-masivo/ejecucion-bloqueos']
                             },
                             {
                                 label: 'Historial Bloqueos',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark', 
+                                routerLink: ['ajuste-masivo/historial-bloqueos']
                             }
                         ]
                     },
@@ -129,11 +131,13 @@ export class AppMenu implements OnInit {
                         items: [
                             {
                                 label: 'Ejecutar Solicitudes',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark', 
+                                routerLink: ['ajuste-masivo/ejecucion-solicitudesoh']
                             },
                             {
                                 label: 'Historial Solicitudes',
-                                icon: 'pi pi-fw pi-bookmark'
+                                icon: 'pi pi-fw pi-bookmark', 
+                                routerLink: ['ajuste-masivo/historial-solicitudesoh']
                             }
                         ]
                     },

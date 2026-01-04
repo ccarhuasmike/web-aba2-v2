@@ -18,6 +18,7 @@ import { ExcelService } from '@/pages/service/excel.service';
 import { ParametroTipoCambioService } from '@/pages/mantenimiento/parametro/parametro-tipo-cambio/parametro-tipo-cambio.service';
 import { CALENDAR_DETAIL } from '@/layout/Utils/constants/aba.constants';
 import { DatePickerModule } from 'primeng/datepicker';
+import { UtilService } from '@/utils/util.services';
 
 @Component({
     selector: 'app-tipo-cambio-consultas',
@@ -229,16 +230,8 @@ export class ConsultasComponent implements OnInit {
 
     filterElementTipoDocumento(event: any, data: any): void {
         this.filteredElementTipoDocumento = [];
-        const query = event.query?.toLowerCase() ?? '';
-        if (!data) {
-            return;
-        }
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i];
-            if (element.descripcion.toLowerCase().indexOf(query) >= 0) {
-                this.filteredElementTipoDocumento.push(element);
-            }
-        }
+        const query = event?.query?.toLowerCase() ?? '';
+        this.filteredElementTipoDocumento = UtilService.filterByField(data, query, 'descripcion');
     }
 
     exportExcel(): void {
@@ -255,51 +248,7 @@ export class ConsultasComponent implements OnInit {
         });
 
         this.datosListadoConsultas.forEach(x => {
-            const list: any[] = [];
-
-            const importeDestinoPartner = x.importeDestinoPartner || 0;
-            const importeDestinoPartnerFormat = this.currencyPipe.transform(importeDestinoPartner, ' ', 'symbol', '1.2-2');
-
-            const importeDestinoOh = x.importeDestinoOh || 0;
-            const importeDestinoOhFormat = this.currencyPipe.transform(importeDestinoOh, ' ', 'symbol', '1.2-2');
-
-            const importeOrigenPartner = x.importeOrigenPartner || 0;
-            const importeOrigenPartnerFormat = this.currencyPipe.transform(importeOrigenPartner, ' ', 'symbol', '1.2-2');
-
-            const importeOrigenOh = x.importeOrigenOh || 0;
-            const importeOrigenOhFormat = this.currencyPipe.transform(importeOrigenOh, ' ', 'symbol', '1.2-2');
-
-            const tipoCambioCompraOh = x.tipoCambioCompraOh || 0;
-            const tipoCambioCompraOhFormat = this.currencyPipe.transform(tipoCambioCompraOh, ' ', 'symbol', '1.4-4');
-
-            const tipoCambioVentaOh = x.tipoCambioVentaOh || 0;
-            const tipoCambioVentaOhFormat = this.currencyPipe.transform(tipoCambioVentaOh, ' ', 'symbol', '1.4-4');
-
-            const tipoCambioCompraPartner = x.tipoCambioCompraPartner || 0;
-            const tipoCambioCompraPartnerFormat = this.currencyPipe.transform(tipoCambioCompraPartner, ' ', 'symbol', '1.4-4');
-
-            const tipoCambioVentaPartner = x.tipoCambioVentaPartner || 0;
-            const tipoCambioVentaPartnerFormat = this.currencyPipe.transform(tipoCambioVentaPartner, ' ', 'symbol', '1.4-4');
-
-            list.push(x.tipoDocIdentidadDescripcion);
-            list.push(x.numeroDocIdentidad);
-            list.push(x.idConsultaPartner);
-            list.push(x.nroCambioMonedaOperacion);
-            list.push(x.idOperacionPartner);
-            list.push(this.datepipe.transform(x.fechaHoraConsultaUsuario, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraConsultaPartner, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(this.datepipe.transform(x.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'));
-            list.push(importeDestinoPartnerFormat);
-            list.push(importeDestinoOhFormat);
-            list.push(importeOrigenPartnerFormat);
-            list.push(importeOrigenOhFormat);
-            list.push(tipoCambioCompraOhFormat);
-            list.push(tipoCambioVentaOhFormat);
-            list.push(tipoCambioCompraPartnerFormat);
-            list.push(tipoCambioVentaPartnerFormat);
-            list.push(x.descCanal);
-            list.push(x.descripcion);
-            datos.push(list);
+            datos.push(this.buildExcelRow(x));
         });
 
         this.excelService.generateExcel(header, excelName, sheetName, isCurrency, datos, date, filterLavel);
@@ -307,5 +256,33 @@ export class ConsultasComponent implements OnInit {
 
     private showMessage(severity: 'success' | 'info' | 'warn' | 'error', summary: string, detail: string): void {
         this.messageService.add({ severity, summary, detail });
+    }
+
+    private formatCurrency(value: number | null | undefined, digits: string): string | null {
+        const safeValue = value ?? 0;
+        return this.currencyPipe.transform(safeValue, ' ', 'symbol', digits);
+    }
+
+    private buildExcelRow(item: any): any[] {
+        return [
+            item.tipoDocIdentidadDescripcion,
+            item.numeroDocIdentidad,
+            item.idConsultaPartner,
+            item.nroCambioMonedaOperacion,
+            item.idOperacionPartner,
+            this.datepipe.transform(item.fechaHoraConsultaUsuario, 'dd/MM/yyyy HH:mm:ss'),
+            this.datepipe.transform(item.fechaHoraConsultaPartner, 'dd/MM/yyyy HH:mm:ss'),
+            this.datepipe.transform(item.fechaHoraConfirmacionUsuario, 'dd/MM/yyyy HH:mm:ss'),
+            this.formatCurrency(item.importeDestinoPartner, '1.2-2'),
+            this.formatCurrency(item.importeDestinoOh, '1.2-2'),
+            this.formatCurrency(item.importeOrigenPartner, '1.2-2'),
+            this.formatCurrency(item.importeOrigenOh, '1.2-2'),
+            this.formatCurrency(item.tipoCambioCompraOh, '1.4-4'),
+            this.formatCurrency(item.tipoCambioVentaOh, '1.4-4'),
+            this.formatCurrency(item.tipoCambioCompraPartner, '1.4-4'),
+            this.formatCurrency(item.tipoCambioVentaPartner, '1.4-4'),
+            item.descCanal,
+            item.descripcion
+        ];
     }
 }

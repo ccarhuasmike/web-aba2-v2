@@ -1,0 +1,123 @@
+<div class="card grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-1 gap-4">
+    <div class="col-span-1 flex items-start justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <i class="pi pi-file text-2xl"></i>
+            <span class="text-xl font-semibold">Historial de Solicitudes Rechazadas de Ahorros Oh</span>
+        </div>
+    </div>
+
+    <div class="md:col-span-1">
+        <p-accordion [(value)]="panelOpenState">
+            <p-accordion-panel value="0">
+                <p-accordion-header>Filtro de b&uacute;squeda</p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="pi pi-search"></i>
+                        <span class="font-medium">B&uacute;squeda</span>
+                    </div>
+                    <form [formGroup]="searchForm" novalidate>
+                        <div class="grid grid-flow-row-dense sm:grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-3">
+                                <label for="rangoFechas" class="block mb-1 text-sm">Rango de fechas</label>
+                                <p-datepicker id="rangoFechas" formControlName="rangoFechas" [showIcon]="true"
+                                    dateFormat="dd/mm/yy" yearRange="1940:2030" selectionMode="range"
+                                    [readonlyInput]="true" appendTo="body" showButtonBar="true"
+                                    styleClass="w-full">
+                                </p-datepicker>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label for="tipoDocumentos" class="block mb-1 text-sm">Tipo de documento</label>
+                                <p-autoComplete id="tipoDocumentos" name="tipoDocumentos"
+                                    formControlName="tipoDocumentos" [suggestions]="filteredElementTipoDocumento"
+                                    field="descripcion" emptyMessage="Sin resultados" [dropdown]="true"
+                                    (completeMethod)="filterElementTipoDocumento($event, tipoDocumentos)"
+                                    (ngModelChange)="changeModelTipoDocumento($event)" appendTo="body"
+                                    styleClass="w-full">
+                                    <ng-template let-element>
+                                        <div>{{element.descripcion}}</div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label for="numDocumento" class="block mb-1 text-sm">Nro. de documento</label>
+                                <input id="numDocumento" type="text" pInputText #valorDocumento name="numDocumento"
+                                    class="w-full" formControlName="numDocumento" autocomplete="off"
+                                    [attr.maxlength]="nroCaracter">
+                                <div class="text-right text-xs mt-1" *ngIf="nroCaracter !== 0">
+                                    {{valorDocumento.value.length}} / {{nroCaracter}}
+                                </div>
+                            </div>
+                            <div class="md:col-span-12 flex items-end justify-end gap-2">
+                                <button pButton label="Buscar" icon="pi pi-search" (click)="getSolicitudesObservadas()"
+                                    pTooltip="Buscar consultas" tooltipPosition="top"></button>
+                                <button pButton label="Limpiar" icon="pi pi-times" class="p-button-outlined"
+                                    (click)="clearBusquedaFiltros()" pTooltip="Limpiar filtros"
+                                    tooltipPosition="top"></button>
+                            </div>
+                        </div>
+                    </form>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+
+    <div class="md:col-span-1">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <span class="text-lg font-semibold">Solicitudes Observadas</span>
+            <button pButton label="Excel" icon="pi pi-file-excel" class="p-button-outlined p-button-success"
+                [disabled]="datosSolicitudesObservadas.length == 0" (click)="exportExcel()"
+                pTooltip="Descargar excel" tooltipPosition="bottom"></button>
+        </div>
+        <p-table #dt1 resizableColumns="true" columnResizeMode="expand" [value]="datosSolicitudesObservadas"
+            liveResize="true" styleClass="p-datatable-striped p-datatable-gridlines" [showCurrentPageReport]="true"
+            [columns]="cols" dateKey="nroSolicitud"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true"
+            [rows]="rows" [totalRecords]="datosSolicitudesObservadas.length" [filterDelay]="0">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th scope="col" *ngFor="let col of columns">{{col.header}}</th>
+                </tr>
+                <tr id="tableWithIcon1">
+                    <th scope="col" *ngFor="let col of columns">
+                        <input *ngIf="col.nomProperty; else elseCondition" pInputText type="text"
+                            (input)="dt1.filter($event.target.value, col.nomProperty, 'startsWith')"
+                            placeholder="Filtrar (comienza)">
+                        <ng-template #elseCondition>
+                            <button pButton icon="pi pi-refresh" class="p-button-text p-button-sm"
+                                (click)="getSolicitudesObservadas()" tooltipPosition="below"
+                                pTooltip="Refrescar"></button>
+                        </ng-template>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr id="tableWithIcon2">
+                    <td>
+                        <div>
+                            <button pButton icon="pi pi-ellipsis-v" class="p-button-text p-button-sm"
+                                (click)="onRowMenuClick($event, rowData, menu)" tooltipPosition="above"
+                                pTooltip="Opciones"></button>
+                            <p-menu #menu [model]="menuItems" [popup]="true" appendTo="body"></p-menu>
+                        </div>
+                    </td>
+                    <td>{{rowData.fechaHoraRegistroConvert}}</td>
+                    <td>{{rowData.tipoDoc}}</td>
+                    <td>{{rowData.numeroDoc}}</td>
+                    <td>{{rowData.primerNombre}}</td>
+                    <td>{{rowData.segundoNombre}}</td>
+                    <td>{{rowData.apellidoPaterno}}</td>
+                    <td>{{rowData.apellidoMaterno}}</td>
+                    <td>{{rowData.celular}}</td>
+                    <td>{{rowData.email}}</td>
+                    <td>{{rowData.usuarioCreacion}}</td>
+                    <td>{{rowData.descCanal}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptyMessage">
+                <tr>
+                    <td colspan="12" style="text-align: left;">Sin registros encontrados</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
