@@ -298,7 +298,7 @@ export class TransaccionesObservadasComponent implements OnInit {
     }
 
     openDialogDetalle(data: any): void {
-        debugger;
+        
         this.dialog.open(DetalleTrxObservadaComponent, {
             header: 'Detalle Transacción',
             width: '60vw',
