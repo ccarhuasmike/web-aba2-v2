@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ButtonModule } from 'primeng/button';
@@ -19,7 +19,7 @@ import { SolicitudesAhorrosohService } from '../../solicitudes-ahorrosoh.service
     imports: [CommonModule, ReactiveFormsModule, ButtonModule, DatePickerModule, InputTextModule, DividerModule],
     providers: [MessageService, DatePipe]
 })
-export class EditarInfoSolicitudComponent implements OnInit {
+export class EditarInfoSolicitudComponent  {
 
     formEditar!: FormGroup;
     es = CALENDAR_DETAIL;
@@ -28,15 +28,15 @@ export class EditarInfoSolicitudComponent implements OnInit {
     constructor(
         public dialogRef: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private datePipe: DatePipe,
-        private messageService: MessageService,
-        private solicitudesAhorrosohService: SolicitudesAhorrosohService
+        private readonly datePipe: DatePipe,
+        private readonly messageService: MessageService,
+        private readonly solicitudesAhorrosohService: SolicitudesAhorrosohService
     ) {
         this.data = this.config.data || {};
         this.createForm();
     }
 
-    ngOnInit(): void { }
+    
 
     private createForm(): void {
         let fechaNacimientoDate = new Date(this.data.fechaNacimiento);

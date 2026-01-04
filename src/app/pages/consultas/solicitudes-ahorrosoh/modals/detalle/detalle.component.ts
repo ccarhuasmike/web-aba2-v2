@@ -18,7 +18,7 @@ export class DetalleInfoSolicitudComponent implements OnInit {
     constructor(
         public dialogRef: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private commonService: CommonService
+        private readonly commonService: CommonService
     ) { }
 
     ngOnInit(): void {

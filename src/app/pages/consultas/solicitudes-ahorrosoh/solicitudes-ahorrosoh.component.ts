@@ -271,7 +271,9 @@ export class SolicitudesAhorrosohComponent implements OnInit {
           const tipoMoneda = this.tipoMonedas.find(e => e.id === +item.moneda);
           const descMoneda = tipoMoneda?.descripcion || '';
           const solicitudEstaEnPlazo = this.validarFechaEnPlazo(item.fechaHoraRegistro, this.vigenciaSolicitud)
-          const descEstadoSolicitud = (item.nombEstadoSolicitud == 'PENDIENTE') ? ((solicitudEstaEnPlazo) ? item.nombEstadoSolicitud : 'RECHAZADA') : item.nombEstadoSolicitud
+          const descEstadoSolicitud = item.nombEstadoSolicitud === 'PENDIENTE' && !solicitudEstaEnPlazo
+            ? 'RECHAZADA'
+            : item.nombEstadoSolicitud;
           const tipoCanal = this.tipoCanales.find(e => e.id === item.canal);
           const descCanal = tipoCanal?.descripcion || '';
           const fechaHoraRegistroConvert = this.datePipe.transform(item.fechaHoraRegistro, 'dd/MM/yyyy HH:mm:ss');
@@ -279,11 +281,18 @@ export class SolicitudesAhorrosohComponent implements OnInit {
           const fechaIngresoLaboralConvert = this.datePipe.transform(item.fechaIngresoLaboral, 'dd/MM/yyyy');
           const fechaCreacionConvert = this.datePipe.transform(item.fechaCreacion, 'dd-MM-yyyy HH:mm:ss');
           const fechaModificacionConvert = this.datePipe.transform(item.fechaModificacion, 'dd-MM-yyyy HH:mm:ss');
-          const color = (descEstadoSolicitud == 'APROBADA') ? 'p-tag p-tag-success'
-            : ((descEstadoSolicitud == 'PENDIENTE') ? 'p-tag p-tag-warning'
-              : ((descEstadoSolicitud == 'RECHAZADA') ? 'p-tag p-tag-danger' : ''));
-          const descTipoProducto = (item.tipoProducto == 1) ? 'Ahorros oh'
-            : ((item.tipoProducto == 2) ? 'Ahorramas' : '');
+          const colorByEstado: Record<string, string> = {
+            APROBADA: 'p-tag p-tag-success',
+            PENDIENTE: 'p-tag p-tag-warning',
+            RECHAZADA: 'p-tag p-tag-danger',
+          };
+          const color = colorByEstado[descEstadoSolicitud] || '';
+
+          const tipoProductoMap: Record<number, string> = {
+            1: 'Ahorros oh',
+            2: 'Ahorramas',
+          };
+          const descTipoProducto = tipoProductoMap[item.tipoProducto] || '';
 
           return {
             ...item,
