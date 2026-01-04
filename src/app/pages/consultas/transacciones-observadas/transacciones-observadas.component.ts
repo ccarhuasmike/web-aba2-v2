@@ -23,6 +23,7 @@ import moment from 'moment';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SecurityEncryptedService } from '@/layout/service/SecurityEncryptedService';
+import { UtilService } from '@/utils/util.services';
 
 type MenuItemWithRoles = MenuItem & { restrictedRoles?: string[] };
 
@@ -63,9 +64,9 @@ export class TransaccionesObservadasComponent implements OnInit {
     ffin: string = moment().format('YYYY-MM-DD');
     es = CALENDAR_DETAIL;
 
-    filteredElementOrigen: any[]= [];
-    filteredElementTipoSolucion: any[]= [];
-    filteredElementEstado: any[]= [];
+    filteredElementOrigen: any[] = [];
+    filteredElementTipoSolucion: any[] = [];
+    filteredElementEstado: any[] = [];
 
     roles: any = ROLES;
     origenes: any[] = ORIGENES_TRANSACTION_OBS;
@@ -129,7 +130,7 @@ export class TransaccionesObservadasComponent implements OnInit {
         this.commonService.getMultipleCombosPromise([
             'TIPO_MONEDA_TRAMA',
             'TIPO_SOLUCION_TRX_OBS'
-        ]).then((resp:any[]) => {
+        ]).then((resp: any[]) => {
             this.tipoMonedas = resp[0]['data'];
             this.tipoSoluciones = resp[1]['data']
                 .filter((item: any) =>
@@ -199,7 +200,7 @@ export class TransaccionesObservadasComponent implements OnInit {
         });
     }
 
-    onPageChange(event:any) {
+    onPageChange(event: any) {
         this.rows = event.rows;
         this.first = event.first;
         this.getTransaccionesObservadas();
@@ -216,34 +217,22 @@ export class TransaccionesObservadasComponent implements OnInit {
         });
     }
 
-    filterElementOrigen(event:any, data:any) {
+    filterElementOrigen(event: any, data: any) {
         this.filteredElementOrigen = [];
-        const query = event.query;
-        for (const element of data) {
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementOrigen.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementOrigen = UtilService.filterByField(data, query, 'descripcion');
     }
 
-    filterElementTipoSolucion(event:any, data:any) {
+    filterElementTipoSolucion(event: any, data: any) {
         this.filteredElementTipoSolucion = [];
-        const query = event.query;
-        for (const element of data) {
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementTipoSolucion.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementTipoSolucion = UtilService.filterByField(data, query, 'descripcion');        
     }
 
-    filterElementEstado(event:any, data:any) {
+    filterElementEstado(event: any, data: any) {
         this.filteredElementEstado = [];
-        const query = event.query;
-        for (const element of data) {
-            if (element.descripcion.toLowerCase().indexOf(query.toLowerCase()) >= 0) {
-                this.filteredElementEstado.push(element);
-            }
-        }
+        const query = event?.query ?? '';
+        this.filteredElementEstado = UtilService.filterByField(data, query, 'descripcion');        
     }
 
     onRowMenuClick(event: Event, rowData: any, menu: any) {
@@ -298,7 +287,7 @@ export class TransaccionesObservadasComponent implements OnInit {
     }
 
     openDialogDetalle(data: any): void {
-        
+
         this.dialog.open(DetalleTrxObservadaComponent, {
             header: 'Detalle Transacción',
             width: '60vw',
@@ -328,7 +317,7 @@ export class TransaccionesObservadasComponent implements OnInit {
             }
         });
 
-        dialogRef?.onClose.subscribe((resp:any) => {
+        dialogRef?.onClose.subscribe((resp: any) => {
             if (resp?.data?.['codigo'] === 0) {
                 this.search();
             }
@@ -340,7 +329,7 @@ export class TransaccionesObservadasComponent implements OnInit {
         const token = row.data.entrada.MCD4TARE;
 
         this.transaccionesObservadasService.getCuentaPorTokenTarjeta(token)
-            .subscribe(async (resp:any) => {
+            .subscribe(async (resp: any) => {
                 if (resp['codigo'] == 0) {
 
                     const tipoDocumento = this.tipoDocumentos.find((item: any) => item.id === resp['data'].tipoDocIdent);
@@ -461,9 +450,9 @@ export class TransaccionesObservadasComponent implements OnInit {
         const date = new Date();
         const excelName = 'Reporte consultas transacciones observadas ' + moment(date).format('DD/MM/YYYY') + '.xlsx';
         const sheetName = 'Datos';
-        const datos :any[]= [];
-        const header:any[] = [];
-        const isCurrency:any[] = [];
+        const datos: any[] = [];
+        const header: any[] = [];
+        const isCurrency: any[] = [];
         const filterLavel = 'Fecha de Reporte';
 
         const form = this.formObservedTransaction.value;
