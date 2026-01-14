@@ -497,5 +497,5 @@ export const REQUEST_PARAMETERS = {
         }
     ]
 }
-// 👇 exporta el tipo derivado
+// �� exporta el tipo derivado
 export type RequestParameterKey = keyof typeof REQUEST_PARAMETERS;

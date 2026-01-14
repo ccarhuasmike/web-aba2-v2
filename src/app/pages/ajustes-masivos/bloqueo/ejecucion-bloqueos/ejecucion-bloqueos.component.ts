@@ -156,19 +156,21 @@ export class EjecucionBloqueosComponent implements OnInit {
         this.counter = 0;
     }
 
-    uploader(event: any) {
+    async uploader(event: any) {
         this.removeAll();
         this.loadingRecords = true;
         this.files = event.files;
-        const reader: FileReader = new FileReader();
-        reader.onload = (e: any) => {
 
-            const bstr: string = e.target.result;
+        try {
+            const arrayBuffer = await this.files[0].arrayBuffer();
+            const uint8Array = new Uint8Array(arrayBuffer);
+            const bstr: string = String.fromCodePoint(...Array.from(uint8Array));
             const dataExcel = <any[]>this.excelService.importFromFile(bstr);
             this.headers = dataExcel[0];
 
             if (JSON.stringify(this.headers) !== JSON.stringify(this.baseHeaders)) {
                 this.counter = 1;
+                this.loadingRecords = false;
                 return this.toastr.add({ severity: 'error', summary: 'Error al importar', detail: 'Cabeceras no válidas, por favor descargue la estructura del formato' });
             }
 
@@ -179,167 +181,23 @@ export class EjecucionBloqueosComponent implements OnInit {
                 return;
             }
 
-            this.data = this.body.map((arr, index) => {
-
-                const obj: any = {};
-                obj['id'] = index;
-
-                let msgError = '<ul>';
-                let flagBloqueoCuenta = false;
-                let codigoEstadoCuenta = '';
-
-                for (const key in this.headers) {
-
-                    const element = this.headers[key];
-
-                    let error = false;
-
-                    if (key == '0') {
-                        if (this.ejecucionBloqueosService.validateUUIDCliente(arr[key])) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El UUID de cliente es requerido.</li>';
-                        }
-                        obj[element] = {
-                            valor: arr[key].trim(),
-                            error: error ? msgError : ''
-                        }
-                    }
-
-                    if (key == '1') {
-                        if (this.ejecucionBloqueosService.validateUUIDCuenta(arr[key])) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El UUID de cuenta es requerido.</li>'
-                        }
-                        obj[element] = {
-                            valor: arr[key].trim(),
-                            error: error ? msgError : ''
-                        }
-                    }
-
-                    if (key == '2') {
-                        if (arr[key] == undefined || arr[key] == null) {
-                            flagBloqueoCuenta = true;
-                        }
-
-                        obj[element] = {
-                            valor: arr[key] != undefined && arr[key] != null ? arr[key].trim() : '',
-                            error: ''
-                        }
-                    }
-
-                    if (key == '3') {
-
-                        codigoEstadoCuenta = arr[key];
-                        const codigosBloqueo = flagBloqueoCuenta ? this.codigosBloqueoCuenta : this.codigosBloqueoTarjeta;
-
-                        if (this.ejecucionBloqueosService.validateCodigoBloqueo(arr[key], codigosBloqueo)) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El código de bloqueo es incorrecto.</li>'
-                        }
-
-                        obj[element] = {
-                            valor: arr[key].trim(),
-                            error: error ? msgError : ''
-                        }
-
-                        if (!error) {
-                            const valor = codigosBloqueo.find(item => item.codigo === arr[key])
-                            obj['DESCRIPCIONBLOQUEO'] = {
-                                valor: valor.descripcion,
-                                error: ''
-                            }
-                        }
-                    }
-
-                    if (key == '4') {
-
-                        const motivosBloqueo = flagBloqueoCuenta ? this.motivosBloqueoCuenta : this.motivosBloqueoTarjeta;
-
-                        if (this.ejecucionBloqueosService.validateCodigoBloqueo(arr[key], motivosBloqueo)) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo es incorrecto.</li>'
-                        }
-
-                        if (!flagBloqueoCuenta && this.ejecucionBloqueosService.validateRelacionBloqueoTarjeta(arr[key], codigoEstadoCuenta, motivosBloqueo)) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo no corresponde al estado de bloqueo.</li>'
-                        }
-
-                        if (flagBloqueoCuenta && this.ejecucionBloqueosService.validateRelacionBloqueoCuenta(arr[key], codigoEstadoCuenta, this.codigosMotivosBloqueoCuenta)) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo no corresponde al estado de bloqueo.</li>'
-                        }
-
-                        obj[element] = {
-                            valor: arr[key].trim(),
-                            error: error ? msgError : ''
-                        }
-
-                        if (!error) {
-                            const valor = motivosBloqueo.find(item => item.codigo === arr[key])
-                            obj['DESCRIPCIONMOTIVO'] = {
-                                valor: valor.descripcion,
-                                error: ''
-                            }
-                        }
-                    }
-
-                    if (key == '5') {
-                        if (this.ejecucionBloqueosService.validateDescripcion(arr[key])) {
-                            this.counter++;
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El tamaño máximo del mensaje es de 255 caracteres.</li>'
-                        }
-
-                        if (arr[key] == undefined || arr[key] == null) {
-                            flagBloqueoCuenta = true;
-                        }
-
-                        obj[element] = {
-                            valor: arr[key] != undefined && arr[key] != null ? arr[key].trim() : '',
-                            error: error ? msgError : ''
-                        }
-                    }
-                }
-
-                msgError = msgError + '</ul>';
-
-                return obj;
+            this.data = this.body.map((arr, index): any => {
+                return this.buildRowObject(arr, index);
             })
 
             this.data.forEach(arr => {
-                let count = 0;
-                let valor = '';
-                for (const key in arr) {
-                    const element = arr[key];
-                    if (element.error !== undefined && element.error) {
-                        count++
-                        valor = element.error;
-                    }
-                }
-
-                arr['ERROR'] = {
-                    valor: valor,
-                    error: false
-                }
-
-                if (count > 0) {
-                    arr['ERROR'].error = true;
-                }
+                this.setErrorField(arr);
             });
 
             this.rowsPerPageOptions = this.commonService.getRowsPerPageOptions(this.rows, this.data.length);
 
-            this.loadingRecords = false;
-
             this.leakedData = this.data;
-        };
+        } catch (error) {
+            console.error('Error processing file:', error);
+            this.toastr.add({ severity: 'error', summary: 'Error al procesar archivo', detail: 'Error al leer el archivo' });
+        } finally {
+            this.loadingRecords = false;
+        }
 
         this.fakeHeaders.forEach(element => {
             this.cols.push({
@@ -347,13 +205,17 @@ export class EjecucionBloqueosComponent implements OnInit {
                 header: element
             })
         });
-
-        reader.readAsBinaryString(this.files[0]);
     }
 
-    filter(event: any, header: any) {
-        this.data = this.leakedData.filter((item) => String(item[header].valor) == undefined || null ? [] : String(item[header].valor).toLowerCase().startsWith(event.toLowerCase()))
+    filter(event: string, header: any) {
+        const search = event?.toLowerCase() ?? '';
+
+        this.data = this.leakedData.filter(item =>
+            item?.[header]?.valor != null &&
+            String(item[header].valor).toLowerCase().startsWith(search)
+        );
     }
+
 
     filterGlobal(event: any) {
         this.data = this.leakedData.filter((item) =>
@@ -384,7 +246,6 @@ export class EjecucionBloqueosComponent implements OnInit {
             },
             accept: () => {
                 const usuario = JSON.parse(localStorage.getItem('userABA')!);
-
                 const headerBloqueoApi = ['customerUid', 'accountUid', 'status', 'reasonCode', 'token', 'description'];
 
                 const dataBloqueosApi = this.dataExcelToApi(this.data);
@@ -427,5 +288,168 @@ export class EjecucionBloqueosComponent implements OnInit {
     downloadFormat() {
         const fileUrl = encodeURI('/assets/documents/Formato ajustes masivos - bloqueos.xlsx');
         this.commonService.downloadFile(fileUrl, 'Formato ajustes masivos - bloqueos.xlsx');
+    }
+
+    private buildRowObject(arr: any[], index: number): any {
+        const obj: any = { id: index };
+        let msgError = '<ul>';
+        let flagBloqueoCuenta = false;
+        let codigoEstadoCuenta = '';
+
+        for (const key in this.headers) {
+            const element = this.headers[key];
+            const keyNum = Number.parseInt(key);
+
+            switch (keyNum) {
+                case 0:
+                    this.validateAndSetUUIDCliente(obj, element, arr[key], msgError);
+                    break;
+                case 1:
+                    this.validateAndSetUUIDCuenta(obj, element, arr[key], msgError);
+                    break;
+                case 2:
+                    flagBloqueoCuenta = this.setTokenField(obj, element, arr[key]);
+                    break;
+                case 3:
+                    codigoEstadoCuenta = arr[key];
+                    this.validateAndSetCodigoBloqueo(obj, element, arr[key], flagBloqueoCuenta, msgError);
+                    break;
+                case 4:
+                    this.validateAndSetMotivoBloqueo(obj, element, arr[key], flagBloqueoCuenta, codigoEstadoCuenta, msgError);
+                    break;
+                case 5:
+                    this.validateAndSetDescripcion(obj, element, arr[key], msgError);
+                    break;
+            }
+        }
+
+        return obj;
+    }
+
+    private validateAndSetUUIDCliente(obj: any, element: string, value: string, msgError: string): void {
+        let error = false;
+        if (this.ejecucionBloqueosService.validateUUIDCliente(value)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El UUID de cliente es requerido.</li>';
+        }
+        obj[element] = {
+            valor: value.trim(),
+            error: error ? msgError : ''
+        };
+    }
+
+    private validateAndSetUUIDCuenta(obj: any, element: string, value: string, msgError: string): void {
+        let error = false;
+        if (this.ejecucionBloqueosService.validateUUIDCuenta(value)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El UUID de cuenta es requerido.</li>';
+        }
+        obj[element] = {
+            valor: value.trim(),
+            error: error ? msgError : ''
+        };
+    }
+
+    private setTokenField(obj: any, element: string, value: any): boolean {
+        const flagBloqueoCuenta = value == null || value === undefined;
+        obj[element] = {
+            valor: value != null && value !== undefined ? value.trim() : '',
+            error: ''
+        };
+        return flagBloqueoCuenta;
+    }
+
+    private validateAndSetCodigoBloqueo(obj: any, element: string, value: string, flagBloqueoCuenta: boolean, msgError: string): void {
+        const codigosBloqueo = flagBloqueoCuenta ? this.codigosBloqueoCuenta : this.codigosBloqueoTarjeta;
+        let error = false;
+
+        if (this.ejecucionBloqueosService.validateCodigoBloqueo(value, codigosBloqueo)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El código de bloqueo es incorrecto.</li>';
+        }
+
+        obj[element] = {
+            valor: value.trim(),
+            error: error ? msgError : ''
+        };
+
+        if (!error) {
+            const codigo = codigosBloqueo.find(item => item.codigo === value);
+            obj['DESCRIPCIONBLOQUEO'] = {
+                valor: codigo.descripcion,
+                error: ''
+            };
+        }
+    }
+
+    private validateAndSetMotivoBloqueo(obj: any, element: string, value: string, flagBloqueoCuenta: boolean, codigoEstadoCuenta: string, msgError: string): void {
+        const motivosBloqueo = flagBloqueoCuenta ? this.motivosBloqueoCuenta : this.motivosBloqueoTarjeta;
+        let error = false;
+
+        if (this.ejecucionBloqueosService.validateCodigoBloqueo(value, motivosBloqueo)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo es incorrecto.</li>';
+        }
+
+        if (!flagBloqueoCuenta && this.ejecucionBloqueosService.validateRelacionBloqueoTarjeta(value, codigoEstadoCuenta, motivosBloqueo)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo no corresponde al estado de bloqueo.</li>';
+        }
+
+        if (flagBloqueoCuenta && this.ejecucionBloqueosService.validateRelacionBloqueoCuenta(value, codigoEstadoCuenta, this.codigosMotivosBloqueoCuenta)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El motivo de bloqueo no corresponde al estado de bloqueo.</li>';
+        }
+
+        obj[element] = {
+            valor: value.trim(),
+            error: error ? msgError : ''
+        };
+
+        if (!error) {
+            const motivo = motivosBloqueo.find(item => item.codigo === value);
+            obj['DESCRIPCIONMOTIVO'] = {
+                valor: motivo.descripcion,
+                error: ''
+            };
+        }
+    }
+
+    private validateAndSetDescripcion(obj: any, element: string, value: any, msgError: string): void {
+        let error = false;
+        if (this.ejecucionBloqueosService.validateDescripcion(value)) {
+            this.counter++;
+            error = true;
+            msgError = msgError + '<li><i class="pi pi-times-circle" style="color: red;"></i>El tamaño máximo del mensaje es de 255 caracteres.</li>';
+        }
+
+        obj[element] = {
+            valor: value != null && value !== undefined ? value.trim() : '',
+            error: error ? msgError : ''
+        };
+    }
+
+    private setErrorField(arr: any): void {
+        let count = 0;
+        let valor = '';
+
+        for (const key in arr) {
+            const element = arr[key];
+            if (element.error !== undefined && element.error) {
+                count++;
+                valor = element.error;
+            }
+        }
+
+        arr['ERROR'] = {
+            valor: valor,
+            error: count > 0
+        };
     }
 }

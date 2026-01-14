@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
@@ -25,7 +25,7 @@ import { CALENDAR_DETAIL } from '@/layout/Utils/constants/aba.constants';
     imports: [
         AutoCompleteModule,
         ButtonModule,
-   
+
         CommonModule,
         DividerModule,
         ReactiveFormsModule,
@@ -62,12 +62,13 @@ export class SolucionTrxObservadaComponent implements OnInit {
         public config: DynamicDialogConfig,
         private readonly messageService: MessageService,
         private readonly commonService: CommonService,
-        private readonly transaccionesObservadasService: TransaccionesObservadasService
+        private readonly transaccionesObservadasService: TransaccionesObservadasService,
+        private readonly fb: FormBuilder,
     ) {
         this.dataTrxObservada = config.data?.datosTrxObservadas;
         this.token = this.dataTrxObservada?.data?.entrada?.MCD4TARE;
 
-        this.formSolucionTransaccion = new FormGroup({
+        this.formSolucionTransaccion = this.fb.group({
             tipoSolucion: new FormControl(null, [this.requireMatch, Validators.required]),
             autorizacion: new FormControl(null),
             fechaRangoAutorizaciones: new FormControl(null)
@@ -135,7 +136,7 @@ export class SolucionTrxObservadaComponent implements OnInit {
         });
         if (dialogRef) {
             dialogRef.onClose.subscribe((resp: any) => {
-                if (resp?.data && resp.data['codigo'] === 0) {
+                if (resp?.data?.['codigo'] === 0) {
                     this.dialogRef.close(resp);
                 }
             });
@@ -162,12 +163,13 @@ export class SolucionTrxObservadaComponent implements OnInit {
 
         this.formSolucionTransaccion.get('autorizacion')?.updateValueAndValidity();
     }
+    requireMatch(control: AbstractControl): ValidationErrors | null {
+        const selection = control.value;
 
-    requireMatch(control: FormControl): ValidationErrors | null {
-        const selection: any = control.value;
         if (selection && typeof selection === 'string') {
             return { requireMatch: true };
         }
+
         return null;
     }
 
@@ -235,8 +237,7 @@ export class SolucionTrxObservadaComponent implements OnInit {
                             severity: 'error',
                             summary: 'Error getCliente',
                             detail: 'Error en el servicio de obtener datos del cliente'
-                        });
-                        reject();
+                        });                  
                     }
                 );
         });
@@ -278,8 +279,7 @@ export class SolucionTrxObservadaComponent implements OnInit {
                         severity: 'error',
                         summary: 'Error getCuenta',
                         detail: 'Error en el servicio de obtener datos de la cuenta'
-                    });
-                    reject();
+                    });                    
                 });
         });
     }
@@ -313,6 +313,47 @@ export class SolucionTrxObservadaComponent implements OnInit {
         }
     }
 
+    private processAutorizacionData(dato: any): any {
+        dato['fechaTransaccion'] = this.dateTzPipe.transform(dato.fechaTransaccion, 'DD/MM/YYYY HH:mm:ss');
+        dato['fechaConfirmacion'] = this.datepipe.transform(dato.fechaConfirmacion, 'dd/MM/yyyy');
+
+        if (dato.transaccionRequest.dataElements) {
+            dato['referencia'] = (dato.transaccionRequest.dataElements.retrievalReferenceNumber) ? dato.transaccionRequest.dataElements.retrievalReferenceNumber : dato.uIdreferenciaExterna;
+        } else {
+            dato['referencia'] = dato.uIdreferenciaExterna;
+        }
+
+        if (dato.estadoAutorizacion === 'REJECTED') {
+            dato['codigoRechazo'] = dato.codigoEstadoOrigen ? dato.codigoEstadoOrigen : dato.codEstadoTransaccion;
+            dato.transaccionResponse['ftcCode'] = `${dato.transaccionRequest.messageType}${dato.transaccionRequest.operationCode}${dato.transaccionRequest.groupingCode}${dato.transaccionRequest.entryCode}`;
+        }
+
+        dato['estadoReversado'] = dato.reversado ? 'SI' : 'NO';
+
+        const red = this.tipoRedes.find((x: any) => x.id === dato.descOrigen);
+        dato.descOrigenInt = red ? red.descripcion : '';
+
+        return dato;
+    }
+
+    private filterAutorizacionData(dato: any): boolean {
+        return dato.estadoConfirmacion === 'PENDING' && dato.descOrigen === '02';
+    }
+
+    private handleAutorizacionesSuccess(resp: any): void {
+        if (resp['codigo'] === 0) {
+            this.datosAutorizaciones = resp['data'].content
+                .map((dato: any) => this.processAutorizacionData(dato))
+                .filter((dato: any) => this.filterAutorizacionData(dato));
+        } else if (resp['codigo'] === -1) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error getAutorizaciones',
+                detail: resp['mensaje'] || 'Error inesperado'
+            });
+        }
+    }
+
     getAutorizaciones(): Promise<any> {
         return new Promise((resolve, reject) => {
             this.datosAutorizaciones = [];
@@ -336,48 +377,14 @@ export class SolucionTrxObservadaComponent implements OnInit {
                 pagina,
                 tamanio
             ).subscribe((resp: any) => {
-                if (resp['codigo'] === 0) {
-                    this.datosAutorizaciones = resp['data'].content.map((dato: any) => {
-                        dato['fechaTransaccion'] = this.dateTzPipe.transform(dato.fechaTransaccion, 'DD/MM/YYYY HH:mm:ss');
-                        dato['fechaConfirmacion'] = this.datepipe.transform(dato.fechaConfirmacion, 'dd/MM/yyyy');
-
-                        if (dato.transaccionRequest.dataElements) {
-                            dato['referencia'] = (dato.transaccionRequest.dataElements.retrievalReferenceNumber) ? dato.transaccionRequest.dataElements.retrievalReferenceNumber : dato.uIdreferenciaExterna;
-                        } else {
-                            dato['referencia'] = dato.uIdreferenciaExterna;
-                        }
-
-                        if (dato.estadoAutorizacion === 'REJECTED') {
-                            dato['codigoRechazo'] = dato.codigoEstadoOrigen ? dato.codigoEstadoOrigen : dato.codEstadoTransaccion;
-                            dato.transaccionResponse['ftcCode'] = `${dato.transaccionRequest.messageType}${dato.transaccionRequest.operationCode}${dato.transaccionRequest.groupingCode}${dato.transaccionRequest.entryCode}`;
-                        }
-
-                        dato['estadoReversado'] = !dato.reversado ? 'NO' : 'SI';
-
-                        const red = this.tipoRedes.find((x: any) => x.id === dato.descOrigen);
-                        dato.descOrigenInt = red ? red.descripcion : '';
-
-                        return dato;
-                    }).filter((dato: any) =>
-                        dato.estadoConfirmacion === 'PENDING' &&
-                        dato.descOrigen === '02'
-                    );
-
-                } else if (resp['codigo'] === -1) {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error getAutorizaciones',
-                        detail: resp['mensaje'] || 'Error inesperado'
-                    });
-                }
+                this.handleAutorizacionesSuccess(resp);
                 resolve(true);
             }, () => {
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error getAutorizaciones',
                     detail: 'Error en el servicio de obtener autorizaciones de la cuenta'
-                });
-                reject();
+                });                
             });
         });
     }

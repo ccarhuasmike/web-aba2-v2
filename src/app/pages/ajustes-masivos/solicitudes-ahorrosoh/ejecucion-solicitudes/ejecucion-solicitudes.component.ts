@@ -188,6 +188,72 @@ export class EjecucionSolicitudesComponent implements OnInit {
         return { valor: value || '', error: msgError, fieldIndex };
     }
 
+    private processFieldValidation(key: string, arr: any, element: string, tipoDocumento: string, tieneRuc: boolean, msgError: string): { valor: any; error: string; tieneRuc: boolean; msgError: string } {
+        let error = false;
+        let updatedMsgError = msgError;
+        let updatedTieneRuc = tieneRuc;
+
+        const addError = (message: string, shouldFlagError: boolean = true) => {
+            updatedMsgError = updatedMsgError + '<li><i class="pi pi-times-circle"></i>' + message + '</li>';
+            if (shouldFlagError) {
+                error = true;
+            }
+        };
+
+        const validationMap: { [key: string]: () => void } = {
+            '0': () => {
+                if (arr[key] == undefined || this.solicitudesService.validateTipoDoc(arr[key], this.tipoDocumentos)) {
+                    addError('El tipo de documento es inválido.');
+                }
+            },
+            '20': () => {
+                if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
+                    addError('El Flag de Pep debe ser valido (Si/No).');
+                } else {
+                    updatedTieneRuc = (arr[key].toUpperCase() == 'SI');
+                }
+            },
+            '24': () => {
+                if (arr[key]) {
+                    const hasError = this.solicitudesService.validateFecha(arr[key]);
+                    if (hasError) {
+                        addError('La fecha de ingreso laboral debe ser valido.');
+                    }
+                }
+            },
+            '27': () => {
+                if (arr[key] != undefined) {
+                    const hasError = this.solicitudesService.validateFlagSiNo(arr[key]);
+                    if (hasError) {
+                        addError('El Flag de Negocio propio debe ser valido (Si/No).');
+                    }
+                }
+            },
+            '30': () => {
+                if (arr[key] == undefined) {
+                    addError('El Flag de tiene ruc propio debe ser valido (Si/No).', false);
+                } else {
+                    error = this.solicitudesService.validateFlagSiNo(arr[key]);
+                    updatedTieneRuc = (arr[key].toUpperCase() == 'SI');
+                }
+            },
+            '31': () => {
+                if (tieneRuc) {
+                    if (arr[key] == undefined || this.solicitudesService.validateRUC(arr[key])) {
+                        addError('El numero de RUC no es valido.');
+                    }
+                }
+            }
+        };
+
+        const validator = validationMap[key];
+        if (validator) {
+            validator();
+        }
+
+        return { valor: arr[key], error: error ? updatedMsgError : '', tieneRuc: updatedTieneRuc, msgError: updatedMsgError };
+    }
+
     enviarListaSolicitudes() {
         const usuario = JSON.parse(localStorage.getItem('userABA')!);
 
@@ -223,15 +289,14 @@ export class EjecucionSolicitudesComponent implements OnInit {
         })
     }
 
-    uploaderSolicitudes(event: any) {
+    async uploaderSolicitudes(event: any) {
         this.existError = false;
         this.filesSolicitud = event.files;
-        const reader: FileReader = new FileReader();
-
-        reader.onload = (e: any) => {
-            const bstr: string = e.target.result;
-            const dataExcel = <any[]>this.excelService.importFromFile(bstr);
-            this.headerSolicitud = dataExcel[0];
+        const arrayBuffer = await this.filesSolicitud[0].arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const bstr: string = String.fromCodePoint(...Array.from(uint8Array));
+        const dataExcel = <any[]>this.excelService.importFromFile(bstr);
+        this.headerSolicitud = dataExcel[0];
 
             if (JSON.stringify(this.headerSolicitud) !== JSON.stringify(this.headersExcel)) {
                 this.counterSolicitud = 1;
@@ -267,60 +332,24 @@ export class EjecucionSolicitudesComponent implements OnInit {
 
                 for (const key in this.headerSolicitud) {
                     const element = this.headerSolicitud[key];
-                    let error = false;
-
-                    // Handle special cases with conditional logic
+                    
+                    const result = this.processFieldValidation(key, arr, element, tipoDocumento, tieneRuc, msgError);
+                    
                     if (key === "0") {
-                        if (arr[key] == undefined || this.solicitudesService.validateTipoDoc(arr[key], this.tipoDocumentos)) {
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El tipo de documento es inválido.</li>';
-                        }
                         tipoDocumento = arr[key];
-                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
-                    } else if (key === "20") {
-                        if (arr[key] == undefined || this.solicitudesService.validateFlagSiNo(arr[key])) {
-                            error = true;
-                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Pep debe ser valido (Si/No).</li>';
-                        } else {
-                            tieneRuc = (arr[key].toUpperCase() == 'SI');
-                        }
-                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
-                    } else if (key === "24") {
-                        if (arr[key]) {
-                            error = this.solicitudesService.validateFecha(arr[key]);
-                            msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>La fecha de ingreso laboral debe ser valido.</li>' : msgError;
-                        }
-                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
-                    } else if (key === "27") {
-                        if (arr[key] != undefined) {
-                            error = this.solicitudesService.validateFlagSiNo(arr[key]);
-                            msgError = (error) ? msgError + '<li><i class="pi pi-times-circle"></i>El Flag de Negocio propio debe ser valido (Si/No).</li>' : msgError;
-                        }
-                        obj[element] = { valor: arr[key] || '', error: error ? msgError : '' }
-                    } else if (key === "30") {
-                        if (arr[key] == undefined) {
-                            msgError = msgError + '<li><i class="pi pi-times-circle"></i>El Flag de tiene ruc propio debe ser valido (Si/No).</li>';
-                        } else {
-                            error = this.solicitudesService.validateFlagSiNo(arr[key])
-                            tieneRuc = ((arr[key]).toUpperCase() == 'SI');
-                        }
-                        obj[element] = { valor: arr[key], error: error ? msgError : '' }
-                    } else if (key === "31") {
-                        if (tieneRuc) {
-                            if (arr[key] == undefined || this.solicitudesService.validateRUC(arr[key])) {
-                                error = true;
-                                msgError = msgError + '<li><i class="pi pi-times-circle"></i>El numero de RUC no es valido.</li>';
-                            }
-                            obj[element] = { valor: arr[key], error: error ? msgError : '' }
-                        } else {
-                            obj[element] = { valor: '', error: error ? msgError : '' }
-                        }
-                    } else {
-                        // Use validation map for remaining cases
-                        const validation = this.validateField(key, arr[key], element, tipoDocumento, tieneRuc, msgError);
-                        obj[element] = { valor: validation.valor, error: validation.error }
-                        msgError = validation.error;
                     }
+                    
+                    if (key === "20" || key === "30") {
+                        tieneRuc = result.tieneRuc;
+                    }
+                    
+                    if (key === "31" && !tieneRuc) {
+                        obj[element] = { valor: '', error: '' };
+                    } else {
+                        obj[element] = { valor: result.valor, error: result.error };
+                    }
+                    
+                    msgError = result.msgError;
                 }
 
                 return obj;
@@ -353,7 +382,6 @@ export class EjecucionSolicitudesComponent implements OnInit {
             this.rowsPerPageOptions = this.commonService.getRowsPerPageOptions(this.rows, this.dataSolicitudes.length);
             this.loadingRecordsSolicitud = false;
             this.leakedDataSolicitud = this.dataSolicitudes;
-        }
 
         this.fakeHeadersSolicitud.forEach(element => {
             this.colsSolicitud.push({
@@ -362,7 +390,6 @@ export class EjecucionSolicitudesComponent implements OnInit {
             })
         });
 
-        reader.readAsBinaryString(this.filesSolicitud[0]);
     }
 
     filter(event: any, header: any) {
@@ -399,3 +426,5 @@ export class EjecucionSolicitudesComponent implements OnInit {
         this.commonService.downloadFile(fileUrl, 'Formato carga trama solicitudes.xlsx');
     }
 }
+
+

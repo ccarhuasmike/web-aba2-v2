@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -55,7 +55,7 @@ export interface DataElements {
     imports: [CommonModule, ButtonModule, DividerModule],
     providers: [MessageService]
 })
-export class ActualizacionSolucionComponent implements OnInit {
+export class ActualizacionSolucionComponent {
 
     dataElements!: DataElements;
     uidCliente: any;
@@ -83,9 +83,7 @@ export class ActualizacionSolucionComponent implements OnInit {
         this.autorizacion = data.dataAutorizacion;
 
         this.initializeDataElements();
-    }
-
-    ngOnInit(): void { }
+    }    
 
     private initializeDataElements(): void {
         this.dataElements = {
@@ -144,7 +142,7 @@ export class ActualizacionSolucionComponent implements OnInit {
                 || this.dataTrxObservada.data.entrada.MCTIAREN?.trim().slice(-6)
                 || '';
 
-            this.commerceName = `VISA ${this.dataTrxObservada.data.entrada.MCTIMOADDesc} - ${codAutorizacion} - ${this.dataTrxObservada.data.entrada.MCTIFTRAConvert?.replace(/\//g, "")} - ${this.dataTrxObservada.data.entrada.MCTINEST.trim()}`;
+            this.commerceName = `VISA ${this.dataTrxObservada.data.entrada.MCTIMOADDesc} - ${codAutorizacion} - ${this.dataTrxObservada.data.entrada.MCTIFTRAConvert?.replaceAll("/", "")} - ${this.dataTrxObservada.data.entrada.MCTINEST.trim()}`;
 
             this.pasos = [
                 `Se registrará un ajuste de abono en la cuenta por el monto de ${this.dataTrxObservada.data.entrada.MCTIIMPOConvert}. Código comercio: 100000000000014 - Nombre comercio: ${this.commerceName}`

@@ -54,10 +54,10 @@ export class AuthService {
     }
 
     private resolveStorage(useLocalStorage: boolean): Storage | null {
-        if (typeof window === 'undefined') {
+        if (typeof globalThis === 'undefined') {
             return null;
         }
 
-        return useLocalStorage ? window.localStorage : window.sessionStorage;
+        return useLocalStorage ? globalThis.localStorage : globalThis.sessionStorage;
     }
 }

@@ -30,7 +30,7 @@ export class HistorialSolicitudesService {
 
         if (value && type) {
             const size = (type === 'DNI') ? 8 : 9;
-            error = !!((isNaN(Number(value)) || String(value).length != size));
+            error = !!((Number.isNaN(Number(value)) || String(value).length != size));
         }
 
         return error;
@@ -64,7 +64,7 @@ export class HistorialSolicitudesService {
         let error = false;
 
         let date = new Date(fecha);
-        if (isNaN(date.getTime())) { error = true; };
+        if (Number.isNaN(date.getTime())) { error = true; };
 
         return error;
     }
@@ -85,7 +85,7 @@ export class HistorialSolicitudesService {
         let error = false;
 
         if (telefono) {
-            error = !!(isNaN(Number(telefono)));
+            error = !!(Number.isNaN(Number(telefono)));
         } else {
             error = true;
         }
@@ -122,8 +122,7 @@ export class HistorialSolicitudesService {
         let error = false;
 
         if (ruc) {
-            error = !(((ruc.toString()).length > 8 && (ruc.toString()).length < 13));
-            error = !!(isNaN(Number(ruc)));
+            error = !(((ruc.toString()).length > 8 && (ruc.toString()).length < 13)) || !!(Number.isNaN(Number(ruc)));
         } else {
             error = true;
         }

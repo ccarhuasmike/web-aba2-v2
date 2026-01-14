@@ -75,10 +75,4 @@ export default [
         data: { roles: [ROLES.ADMINISTRADOR, ROLES.OPERACION_PASIVA] },
         component: OpeCampaniasComponent
     },
-    // { path: 'parametro/debito', data: { breadcrumb: 'Button' }, component: ParametroDebitoComponent },
-    // { path: 'parametro/tipo-cambio', data: { breadcrumb: 'Button' }, component: ParametroTipoCambioComponent },
-    // { path: 'banco', data: { breadcrumb: 'Button' }, component: BancoComponent },
-    // { path: 'feriado', data: { breadcrumb: 'Button' }, component: FeriadoComponent },
-    // { path: 'proveedor', data: { breadcrumb: 'Button' }, component: ProveedorComponent },
-    // { path: 'cambiomoneda', data: { breadcrumb: 'Button' }, component: CambioMonedaComponent }, 
 ] as Routes;

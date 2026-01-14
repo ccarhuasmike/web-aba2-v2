@@ -9,7 +9,7 @@ export class ParametroAhorroService {
 
     APIUtilAho = environment.APIUtilAho;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     postParametro(data: any) {
         const url = `${this.APIUtilAho}/v1/parametro`;
